@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "444632099644",
+    "firebase_url": "https://classmate-6971f-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "classmate-6971f",
+    "storage_bucket": "classmate-6971f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444632099644:android:f02aaab18dc0d0b9e3cc39",
+        "android_client_info": {
+          "package_name": "mangbaam.classmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444632099644-ibjsbb9jf322ds4sieepubf9kbrqglu4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9ktP_4SYqGrgx-8dsDPjk1M4RxfGuYt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444632099644-ibjsbb9jf322ds4sieepubf9kbrqglu4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
