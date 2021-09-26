@@ -5,4 +5,6 @@
     <string name="check_task">과제가 있습니다! 확인하세요</string>
     <string name="class_over">수업이 끝났습니다!</string>
     <string name="class_over_register_for_task">수업이 끝났습니다! 과제를 등록하세요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

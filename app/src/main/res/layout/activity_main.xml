@@ -10,7 +10,7 @@
         android:id="@+id/topLectureInfoPanel"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:background="@color/light_gray"
+        android:background="@color/white"
         android:elevation="10dp"
         android:padding="20dp"
         app:layout_constraintBottom_toTopOf="@+id/addLectureButton"
@@ -39,7 +39,6 @@
         android:layout_marginVertical="20dp"
         android:layout_marginStart="30dp"
         android:text="강의 추가"
-        app:layout_constraintBottom_toTopOf="@+id/lecturesRecyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLectureInfoPanel"
         tools:ignore="HardcodedText" />
@@ -51,6 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
         tools:listitem="@layout/item_lecture"
         app:layout_constraintTop_toBottomOf="@+id/addLectureButton" />
 
