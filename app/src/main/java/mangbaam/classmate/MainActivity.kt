@@ -1,7 +1,7 @@
 package mangbaam.classmate
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
 import androidx.core.view.isGone
@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import mangbaam.classmate.adapter.LectureAdapter
 import mangbaam.classmate.databinding.ActivityMainBinding
+import mangbaam.classmate.fragment.AddLectureFragment
 import mangbaam.classmate.model.Lecture
 
 class MainActivity : AppCompatActivity() {
@@ -40,23 +41,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initLectureRecyclerView()
+        connectDB()
 
-        binding.noLectureTextView.text = "강의를 등록해라!!"
-
-        initAddLectureFragment()
+        setAddLectureFragment(lectureList)
 
         addLectureButton.setOnClickListener {
             if (lecturesRecyclerView.isVisible) {
-                lecturesRecyclerView.isGone = true
+                //lecturesRecyclerView.isGone = true
+                    binding.addLectureContainer.isGone = true
                 addLectureButton.text = "강의 등록"
             } else {
-                lecturesRecyclerView.isGone = false
+                //lecturesRecyclerView.isGone = false
+                supportFragmentManager.beginTransaction().replace(R.id.addLectureContainer, AddLectureFragment()).commit()
+                binding.addLectureContainer.isGone = false
                 addLectureButton.text = "닫기"
             }
         }
 
-        connectDB()
     }
 
     private fun connectDB() {
@@ -82,10 +83,15 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun initAddLectureFragment() {
+    private fun setAddLectureFragment(lectureList: ArrayList<Lecture>) {
         addLectureFragment = AddLectureFragment()
-        val transaction = supportFragmentManager.beginTransaction()
+        val bundle = Bundle()
+        bundle.putParcelableArrayList("lectures", lectureList)
+        addLectureFragment.arguments = bundle
 
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.addLectureContainer, addLectureFragment)
+        transaction.commit()
     }
 
     private fun initLectureRecyclerView() {

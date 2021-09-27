@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">클래스메이트</string>
 
+    <string name="USW">수원대학교</string>
     <string name="no_lecture_registered">등록된 강의가 없습니다</string>
     <string name="check_task">과제가 있습니다! 확인하세요</string>
     <string name="class_over">수업이 끝났습니다!</string>
