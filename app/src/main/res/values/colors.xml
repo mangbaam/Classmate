@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="light_gray">#FFEEEEEE</color>
+    <color name="light_gray">#FEEE</color>
+    <color name="light_gray888">#F888</color>
 </resources>

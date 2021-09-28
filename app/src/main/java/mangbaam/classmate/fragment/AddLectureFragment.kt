@@ -6,29 +6,76 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import mangbaam.classmate.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import mangbaam.classmate.MainActivity
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
 
 class AddLectureFragment : Fragment() {
-    private lateinit var adapter: AddLectureAdapter
     private lateinit var binding: FragmentAddLectureBinding
-    private lateinit var lectureList: ArrayList<Lecture>
+    private lateinit var db: FirebaseFirestore
+    private lateinit var adapter: AddLectureAdapter
+    private var lectureList: ArrayList<Lecture> = arrayListOf()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        connectDB()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAddLectureBinding.inflate(inflater, container, false)
-        lectureList = arguments?.getParcelableArrayList<Lecture>("lectureList") as ArrayList<Lecture>
-        lectureList.forEach {
-            Log.d("AddLectureFragment", it.toString())
-        }
+        initViews(binding)
+        initLectureRecyclerView()
+
         return binding.root
     }
 
-    private fun initRecyclerView() {
+    private fun initViews(binding: FragmentAddLectureBinding) {
+        binding.closeImageView.setOnClickListener {
+            (activity as MainActivity).closeAddLecture()
+        }
+    }
+
+    private fun connectDB() {
+        db = Firebase.firestore
+        db.collection("USW_2021_2")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(MainActivity.TAG, "${document.id} => ${document.data}")
+                    val lecture = Lecture(
+                        document.id.toInt(),
+                        document.data["name"].toString(),
+                        document.data["time"].toString(),
+                        document.data["place"].toString(),
+                        document.data["professor"].toString(),
+                        document.data["classify"].toString()
+                    )
+                    lectureList.add(lecture)
+                }
+
+                Log.d(TAG, "DB connect Success")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }
+
+    private fun initLectureRecyclerView() {
         adapter = AddLectureAdapter()
+        adapter.submitList(lectureList)
+        binding.resultRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.resultRecyclerView.adapter = adapter
+    }
+
+    companion object {
+        const val TAG = "AddLectureFragment"
     }
 }
