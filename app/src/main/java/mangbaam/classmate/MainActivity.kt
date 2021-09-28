@@ -1,5 +1,6 @@
 package mangbaam.classmate
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
@@ -22,27 +23,10 @@ class MainActivity : AppCompatActivity() {
         // 상단 강의 정보
         binding.lectureInfoTextView.text = "강의 없음"
 
-        // 강의 추가 프래그먼트
-        setAddLectureFragment()
-
-        // 강의 추가 버튼
-        binding.addLectureButton.setOnClickListener {
-            if (binding.lecturesRecyclerView.isVisible) {
-                closeAddLecture()
-            } else {
-                binding.addLectureContainer.isGone = false
-                binding.addLectureButton.text = "닫기"
-            }
+        binding.timetableButton.setOnClickListener {
+            val intent = Intent(this, TimetableActivity::class.java)
+            startActivity(intent)
         }
-    }
-
-    fun closeAddLecture() {
-        binding.addLectureContainer.isGone = true
-        binding.addLectureButton.text = "강의 등록"
-    }
-
-    private fun setAddLectureFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.addLectureContainer, AddLectureFragment()).commit()
     }
 
     companion object {

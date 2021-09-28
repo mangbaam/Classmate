@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import mangbaam.classmate.MainActivity
+import mangbaam.classmate.TimetableActivity
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
@@ -39,7 +40,8 @@ class AddLectureFragment : Fragment() {
 
     private fun initViews(binding: FragmentAddLectureBinding) {
         binding.closeImageView.setOnClickListener {
-            (activity as MainActivity).closeAddLecture()
+            (activity as TimetableActivity).closeAddLecture()
+            // TODO 키보드 내리기
         }
     }
 
