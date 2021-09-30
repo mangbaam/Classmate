@@ -3,18 +3,20 @@ package mangbaam.classmate.adapter
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import mangbaam.classmate.OnItemClick
 import mangbaam.classmate.TimetableActivity
 import mangbaam.classmate.databinding.ItemLectureBinding
+import mangbaam.classmate.fragment.AddLectureFragment
 import mangbaam.classmate.model.Lecture
 
 class AddLectureAdapter: ListAdapter<Lecture, AddLectureAdapter.LectureItemViewHolder>(diffUtil) {
 
     inner class LectureItemViewHolder(private val binding: ItemLectureBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(lectureModel: Lecture) {
+        fun bind(lectureModel: Lecture, position: Int) {
             binding.lectureName.text = lectureModel.name
             binding.lectureTime.text = lectureModel.time
             binding.lecturePlace.text = lectureModel.place
@@ -22,6 +24,7 @@ class AddLectureAdapter: ListAdapter<Lecture, AddLectureAdapter.LectureItemViewH
 
             binding.itemView.setOnClickListener {
                 // TODO 선택된 과목 Room에 저장, List에 추가
+                Toast.makeText(binding.root.context, "${currentList[position].name} 선택됨", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -34,7 +37,7 @@ class AddLectureAdapter: ListAdapter<Lecture, AddLectureAdapter.LectureItemViewH
     }
 
     override fun onBindViewHolder(holder: LectureItemViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        holder.bind(currentList[position], position)
     }
 
     companion object {
