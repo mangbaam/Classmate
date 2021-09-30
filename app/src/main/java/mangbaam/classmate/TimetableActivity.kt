@@ -2,6 +2,8 @@ package mangbaam.classmate
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -24,6 +26,7 @@ class TimetableActivity : AppCompatActivity(), OnItemClick {
         initViews()
         connectRoomDB()
 
+        getLectureData()
     }
 
     private fun initViews() {
@@ -49,6 +52,12 @@ class TimetableActivity : AppCompatActivity(), OnItemClick {
             .replace(R.id.recyclerViewContainer, AddLectureFragment()).commit()
     }
 
+    private fun getLectureData() {
+        val addedLecture = intent.getSerializableExtra("selectedLecture") as? Lecture ?: return
+        Log.d(TAG, "${addedLecture.name}가 Activity로 전달됨")
+        Toast.makeText(this, "${addedLecture.name}가 Activity로 전달됨", Toast.LENGTH_SHORT).show()
+    }
+
     private fun initRecyclerView() {
         adapter = MyLectureAdapter()
         binding.myLecturesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -66,5 +75,9 @@ class TimetableActivity : AppCompatActivity(), OnItemClick {
 
     override fun onClick(item: Lecture) {
         addLecture(item)
+    }
+
+    companion object {
+        const val TAG = "TimetableActivity"
     }
 }
