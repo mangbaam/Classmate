@@ -24,11 +24,11 @@ import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
 
 class AddLectureFragment : Fragment() {
-    private lateinit var binding: FragmentAddLectureBinding
+    private var mBinding : FragmentAddLectureBinding? = null
+    private val binding get() = mBinding!!
     private lateinit var db: FirebaseFirestore
     private lateinit var adapter: AddLectureAdapter
     private var lectureList: ArrayList<Lecture> = arrayListOf()
-    private var searchResultList: ArrayList<Lecture> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class AddLectureFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAddLectureBinding.inflate(inflater, container, false)
+        mBinding = FragmentAddLectureBinding.inflate(inflater, container, false)
         initViews(binding)
         initLectureRecyclerView()
 
@@ -47,6 +47,7 @@ class AddLectureFragment : Fragment() {
     }
 
     private fun initViews(binding: FragmentAddLectureBinding) {
+
         binding.closeImageView.setOnClickListener {
             (activity as TimetableActivity).closeAddLecture()
             // TODO 키보드 내리기
@@ -78,37 +79,17 @@ class AddLectureFragment : Fragment() {
             }
     }
 
-    private fun searchOnDB(keyword: String) {
-        db = Firebase.firestore
-        db.collection("USW_2021_2")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d(MainActivity.TAG, "${document.id} => ${document.data}")
-                    val lecture = Lecture(
-                        document.id.toInt(),
-                        document.data["name"].toString(),
-                        document.data["time"].toString(),
-                        document.data["place"].toString(),
-                        document.data["professor"].toString(),
-                        document.data["classify"].toString()
-                    )
-                    lectureList.add(lecture)
-                }
-
-                Log.d(TAG, "DB connect Success")
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-            }
-    }
-
     private fun initLectureRecyclerView() {
         adapter = AddLectureAdapter()
         adapter.submitList(lectureList)
         binding.resultRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         binding.resultRecyclerView.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
     }
 
     companion object {

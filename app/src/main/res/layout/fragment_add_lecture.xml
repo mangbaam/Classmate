@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:paddingHorizontal="18dp"
     android:paddingVertical="10dp"
-    tools:context="fragment.AddLectureFragment">
+    tools:context="mangbaam.classmate.fragment.AddLectureFragment">
 
     <ImageView
         android:id="@+id/handle"

@@ -11,4 +11,9 @@
     <string name="handle">handle</string>
     <string name="closebutton">closeButton</string>
     <string name="timetable">시간표</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_home">홈</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">알림</string>
+    <string name="title_timetable">시간표</string>
 </resources>

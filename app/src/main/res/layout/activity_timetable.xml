@@ -39,8 +39,9 @@
         app:layout_constraintTop_toBottomOf="@+id/timetableTextView"
         tools:listitem="@layout/item_lecture" />
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/recyclerViewContainer"
+        android:name="mangbaam.classmate.fragment.AddLectureFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
@@ -49,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_add_lecture" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

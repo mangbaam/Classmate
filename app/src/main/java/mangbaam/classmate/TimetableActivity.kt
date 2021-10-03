@@ -32,7 +32,8 @@ class TimetableActivity : AppCompatActivity(), OnItemClick {
     private fun initViews() {
         // 강의 추가 프래그먼트
         setAddLectureFragment()
-
+        // RecyclerView 어댑터 연결
+        initRecyclerView()
         // 강의 추가 버튼
         binding.addLectureButton.setOnClickListener {
             if (binding.recyclerViewContainer.isVisible.not()) {
