@@ -1,14 +1,10 @@
 package mangbaam.classmate
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import mangbaam.classmate.databinding.ActivityBaseBinding
 
 class BaseActivity : AppCompatActivity() {
@@ -18,6 +14,7 @@ class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "BaseActivity - onCreate() called")
 
         mBinding = ActivityBaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -30,7 +27,11 @@ class BaseActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mBinding = null
         super.onDestroy()
+        mBinding = null
+    }
+
+    companion object {
+        const val TAG: String = "로그"
     }
 }

@@ -19,10 +19,7 @@
         <action
             android:id="@+id/action_navigation_timetable_to_navigation_add_lecture"
             app:destination="@id/navigation_add_lecture"
-            app:popUpTo="@id/navigation_timetable"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:launchSingleTop="true" />
+            app:launchSingleTop="false" />
     </fragment>
 
     <fragment
@@ -36,4 +33,10 @@
         android:name="mangbaam.classmate.fragment.AddLectureFragment"
         android:label="fragment_add_lecture"
         tools:layout="@layout/fragment_add_lecture" />
+
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="mangbaam.classmate.ui.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

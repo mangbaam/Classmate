@@ -16,4 +16,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">알림</string>
     <string name="title_timetable">시간표</string>
+    <string name="setting">설정</string>
 </resources>

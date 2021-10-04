@@ -6,20 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import mangbaam.classmate.AppDatabase
-import mangbaam.classmate.MainActivity
-import mangbaam.classmate.OnItemClick
-import mangbaam.classmate.TimetableActivity
 import mangbaam.classmate.adapter.AddLectureAdapter
-import mangbaam.classmate.adapter.MyLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
 
@@ -39,6 +31,7 @@ class AddLectureFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "AddLectureFragment - onCreateView() called")
         mBinding = FragmentAddLectureBinding.inflate(inflater, container, false)
         initViews(binding)
         initLectureRecyclerView()
@@ -47,11 +40,8 @@ class AddLectureFragment : Fragment() {
     }
 
     private fun initViews(binding: FragmentAddLectureBinding) {
-
-        binding.closeImageView.setOnClickListener {
-            (activity as TimetableActivity).closeAddLecture()
-            // TODO 키보드 내리기
-        }
+        // TODO: TimetableFragment의 myLectureRecyclerView에 Lecture 추가
+        // TODO: 키보드 내리기
     }
 
     private fun connectDB() {
@@ -60,7 +50,7 @@ class AddLectureFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    Log.d(MainActivity.TAG, "${document.id} => ${document.data}")
+                    Log.d(TAG, "${document.id} => ${document.data}")
                     val lecture = Lecture(
                         document.id.toInt(),
                         document.data["name"].toString(),
@@ -93,6 +83,6 @@ class AddLectureFragment : Fragment() {
     }
 
     companion object {
-        const val TAG = "AddLectureFragment"
+        const val TAG: String = "로그"
     }
 }

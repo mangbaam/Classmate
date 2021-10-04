@@ -1,13 +1,11 @@
 package mangbaam.classmate.adapter
 
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import mangbaam.classmate.TimetableActivity
 import mangbaam.classmate.databinding.ItemLectureBinding
 import mangbaam.classmate.model.Lecture
 
@@ -29,13 +27,13 @@ class AddLectureAdapter: ListAdapter<Lecture, AddLectureAdapter.LectureItemViewH
     override fun onBindViewHolder(holder: LectureItemViewHolder, position: Int) {
         holder.bind(currentList[position])
         holder.itemView.setOnClickListener {
-            val intent = Intent(it.context, TimetableActivity::class.java)
-            intent.putExtra("selectedLecture", currentList[position])
-            ContextCompat.startActivity(it.context, intent, null)
+            Log.d(TAG, "AddLectureAdapter - ${currentList[position]}선택")
         }
     }
 
     companion object {
+        const val TAG: String = "로그"
+
         val diffUtil = object: DiffUtil.ItemCallback<Lecture>() {
             override fun areItemsTheSame(oldItem: Lecture, newItem: Lecture): Boolean {
                 return oldItem.id == newItem.id

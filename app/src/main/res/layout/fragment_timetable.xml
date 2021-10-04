@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/navigation_add_lecture"
+            android:id="@+id/addLectureButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="강의 추가"

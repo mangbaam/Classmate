@@ -1,6 +1,7 @@
 package mangbaam.classmate.ui.notifications
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "NotificationsFragment - onCreateView() called")
         notificationsViewModel =
             ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
@@ -39,7 +41,17 @@ class NotificationsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        Log.d(TAG, "NotificationsFragment - onDestroyView() called")
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "NotificationsFragment - onDestroy() called")
+        super.onDestroy()
+    }
+
+    companion object {
+        const val TAG: String = "로그"
     }
 }
