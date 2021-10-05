@@ -15,7 +15,7 @@
         android:id="@+id/navigation_timetable"
         android:name="mangbaam.classmate.ui.timetable.TimetableFragment"
         android:label="@string/title_timetable"
-        tools:layout="@layout/fragment_timetable" >
+        tools:layout="@layout/fragment_timetable">
         <action
             android:id="@+id/action_navigation_timetable_to_navigation_add_lecture"
             app:destination="@id/navigation_add_lecture"
@@ -32,7 +32,13 @@
         android:id="@+id/navigation_add_lecture"
         android:name="mangbaam.classmate.fragment.AddLectureFragment"
         android:label="fragment_add_lecture"
-        tools:layout="@layout/fragment_add_lecture" />
+        tools:layout="@layout/fragment_add_lecture">
+        <action
+            android:id="@+id/action_navigation_add_lecture_to_navigation_timetable"
+            app:destination="@id/navigation_timetable"
+            app:launchSingleTop="false">
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_setting"

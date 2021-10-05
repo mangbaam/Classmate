@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import mangbaam.classmate.OnLectureItemClick
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
 
-class AddLectureFragment : Fragment() {
+class AddLectureFragment : Fragment(), OnLectureItemClick {
     private var mBinding : FragmentAddLectureBinding? = null
     private val binding get() = mBinding!!
     private lateinit var db: FirebaseFirestore
@@ -70,7 +71,7 @@ class AddLectureFragment : Fragment() {
     }
 
     private fun initLectureRecyclerView() {
-        adapter = AddLectureAdapter()
+        adapter = AddLectureAdapter(this)
         adapter.submitList(lectureList)
         binding.resultRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -80,6 +81,12 @@ class AddLectureFragment : Fragment() {
     override fun onDestroyView() {
         mBinding = null
         super.onDestroyView()
+    }
+
+    override fun onLectureClicked(position: Int) {
+        Log.d(TAG, "AddLectureFragment - onLectureClicked() : ${lectureList[position]} 선택됨")
+        val lecture = lectureList[position]
+//        val action = AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable()
     }
 
     companion object {
