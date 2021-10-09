@@ -33,7 +33,7 @@ class AddLectureAdapter(onItemClick: OnLectureItemClick) :
 
         override fun onClick(v: View?) {
             Log.d(TAG, "LectureItemViewHolder - onClick() called")
-            this.onItemClick?.onLectureClicked(adapterPosition)
+            this.onItemClick?.onLectureClicked(currentList[adapterPosition])
         }
 
         fun bind(lectureModel: Lecture) {

@@ -20,6 +20,11 @@
             android:id="@+id/action_navigation_timetable_to_navigation_add_lecture"
             app:destination="@id/navigation_add_lecture"
             app:launchSingleTop="false" />
+        <argument
+            android:name="selectedLecture"
+            app:argType="mangbaam.classmate.model.Lecture"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
@@ -35,9 +40,7 @@
         tools:layout="@layout/fragment_add_lecture">
         <action
             android:id="@+id/action_navigation_add_lecture_to_navigation_timetable"
-            app:destination="@id/navigation_timetable"
-            app:launchSingleTop="false">
-        </action>
+            app:destination="@id/navigation_timetable" />
     </fragment>
 
     <fragment

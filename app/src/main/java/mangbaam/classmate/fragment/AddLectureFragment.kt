@@ -2,29 +2,30 @@ package mangbaam.classmate.fragment
 
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_add_lecture.*
+import kotlinx.android.synthetic.main.item_lecture.*
 import mangbaam.classmate.OnLectureItemClick
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
 import mangbaam.classmate.model.Lecture
 
 class AddLectureFragment : Fragment(), OnLectureItemClick {
-    private var mBinding : FragmentAddLectureBinding? = null
+    private var mBinding: FragmentAddLectureBinding? = null
     private val binding get() = mBinding!!
-    private lateinit var db: FirebaseFirestore
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private lateinit var adapter: AddLectureAdapter
     private var lectureList: ArrayList<Lecture> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "AddLectureFragment - onCreate() called")
         connectDB()
     }
 
@@ -46,7 +47,6 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
     }
 
     private fun connectDB() {
-        db = Firebase.firestore
         db.collection("USW_2021_2")
             .get()
             .addOnSuccessListener { result ->
@@ -70,12 +70,41 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
             }
     }
 
+    private fun search(keyword: String) {
+        db.collection("USW_2021_2").addSnapshotListener { value, error ->
+            lectureList.clear()
+
+            for (snapshot in value!!.documents) {
+                val item = snapshot.toObject(Lecture::class.java)
+                lectureList.add(item!!)
+            }
+
+        }
+    }
+
+    private fun initSearchEditText() {
+        binding.searchEditText.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN) {
+                search(binding.searchEditText.text.toString())
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+    }
+
     private fun initLectureRecyclerView() {
         adapter = AddLectureAdapter(this)
         adapter.submitList(lectureList)
-        binding.resultRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         binding.resultRecyclerView.adapter = adapter
+        binding.resultRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.resultRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+        binding.resultRecyclerView.refreshDrawableState()
+        Log.d(TAG, "AddLectureFragment - initLectureRecyclerView() called")
     }
 
     override fun onDestroyView() {
@@ -83,13 +112,15 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
         super.onDestroyView()
     }
 
-    override fun onLectureClicked(position: Int) {
-        Log.d(TAG, "AddLectureFragment - onLectureClicked() : ${lectureList[position]} 선택됨")
-        val lecture = lectureList[position]
-//        val action = AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable()
+    override fun onLectureClicked(item: Lecture) {
+        Log.d(TAG, "AddLectureFragment - onLectureClicked() : $item 선택됨")
+        val action = AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable(item)
+
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
     companion object {
         const val TAG: String = "로그"
     }
+
 }
