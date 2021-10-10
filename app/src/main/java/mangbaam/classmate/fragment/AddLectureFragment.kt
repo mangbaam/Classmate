@@ -1,5 +1,6 @@
 package mangbaam.classmate.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -11,22 +12,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_add_lecture.*
 import kotlinx.android.synthetic.main.item_lecture.*
+import mangbaam.classmate.AppDatabase
 import mangbaam.classmate.OnLectureItemClick
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.databinding.FragmentAddLectureBinding
+import mangbaam.classmate.getAppDatabase
 import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.model.LectureData
 
 class AddLectureFragment : Fragment(), OnLectureItemClick {
     private var mBinding: FragmentAddLectureBinding? = null
     private val binding get() = mBinding!!
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var appDB: AppDatabase
     private lateinit var adapter: AddLectureAdapter
     private var lectureList: ArrayList<Lecture> = arrayListOf()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "AddLectureFragment - onAttach() called")
+        appDB = getAppDatabase(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "AddLectureFragment - onCreate() called")
         connectDB()
+
     }
 
     override fun onCreateView(
@@ -78,7 +90,6 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
                 val item = snapshot.toObject(Lecture::class.java)
                 lectureList.add(item!!)
             }
-
         }
     }
 
@@ -114,6 +125,13 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
 
     override fun onLectureClicked(item: Lecture) {
         Log.d(TAG, "AddLectureFragment - onLectureClicked() : $item 선택됨")
+        val lecture = LectureData(item.id, item.name, item.place, item.time, item.professor, item.classify, null)
+
+        // TODO: Room에 item 저장
+        Thread {
+            appDB.lectureDao().insertLecture(lecture)
+        }.start()
+
         val action = AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable(item)
 
         Navigation.findNavController(requireView()).navigate(action)

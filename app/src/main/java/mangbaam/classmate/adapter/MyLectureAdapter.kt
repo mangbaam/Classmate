@@ -6,14 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import mangbaam.classmate.databinding.ItemLectureAddedBinding
-import mangbaam.classmate.databinding.ItemLectureBinding
-import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.model.LectureData
 
 
-class MyLectureAdapter: ListAdapter<Lecture, MyLectureAdapter.LectureItemViewHolder>(diffUtil) {
+class MyLectureAdapter: ListAdapter<LectureData, MyLectureAdapter.LectureItemViewHolder>(diffUtil) {
 
     inner class LectureItemViewHolder(private val binding: ItemLectureAddedBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(lectureModel: Lecture) {
+        fun bind(lectureModel: LectureData) {
             binding.lectureName.text = lectureModel.name
             binding.lectureTime.text = lectureModel.time
             binding.lecturePlace.text = lectureModel.place
@@ -21,7 +20,7 @@ class MyLectureAdapter: ListAdapter<Lecture, MyLectureAdapter.LectureItemViewHol
         }
     }
 
-    fun addItem(item: Lecture) {
+    fun addItem(item: LectureData) {
         currentList.add(item)
     }
 
@@ -34,12 +33,12 @@ class MyLectureAdapter: ListAdapter<Lecture, MyLectureAdapter.LectureItemViewHol
     }
 
     companion object {
-        val diffUtil = object: DiffUtil.ItemCallback<Lecture>() {
-            override fun areItemsTheSame(oldItem: Lecture, newItem: Lecture): Boolean {
+        val diffUtil = object: DiffUtil.ItemCallback<LectureData>() {
+            override fun areItemsTheSame(oldItem: LectureData, newItem: LectureData): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Lecture, newItem: Lecture): Boolean {
+            override fun areContentsTheSame(oldItem: LectureData, newItem: LectureData): Boolean {
                 return oldItem == newItem
             }
         }
