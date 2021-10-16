@@ -4,12 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_add_lecture.*
 import kotlinx.android.synthetic.main.item_lecture.*
 import mangbaam.classmate.AppDatabase
@@ -20,13 +23,16 @@ import mangbaam.classmate.getAppDatabase
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.LectureData
 
-class AddLectureFragment : Fragment(), OnLectureItemClick {
+class AddLectureFragment : Fragment() {
     private var mBinding: FragmentAddLectureBinding? = null
     private val binding get() = mBinding!!
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var lectureDB: DatabaseReference
     private lateinit var appDB: AppDatabase
     private lateinit var adapter: AddLectureAdapter
-    private var lectureList: ArrayList<Lecture> = arrayListOf()
+    // private var lectureList: ArrayList<Lecture> = arrayListOf()
+    private val lectureList = mutableMapOf<String, Lecture>()
+    private lateinit var lectures: MutableMap<String, HashMap<String, Any>>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,7 +44,6 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "AddLectureFragment - onCreate() called")
         connectDB()
-
     }
 
     override fun onCreateView(
@@ -48,7 +53,7 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
         Log.d(TAG, "AddLectureFragment - onCreateView() called")
         mBinding = FragmentAddLectureBinding.inflate(inflater, container, false)
         initViews(binding)
-        initLectureRecyclerView()
+        //initLectureRecyclerView()
 
         return binding.root
     }
@@ -59,7 +64,7 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
     }
 
     private fun connectDB() {
-        db.collection("USW_2021_2")
+        /*db.collection("USW_2021_2")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -79,31 +84,67 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
-            }
+            }*/
+
+        lectureDB = Firebase.database.reference.child("USW").child("2021_2")
+        lectureDB.get().addOnSuccessListener { task ->
+            lectures = task.value as MutableMap<String, HashMap<String, Any>>
+            Log.d(TAG, "Firebase.database - ${lectures.keys}")
+            Log.d(TAG, "Firebase.database - ${lectures.javaClass.name}")
+            Log.d(TAG, "Firebase Connect Successful")
+            bindData(lectures)
+        }.addOnFailureListener {
+            Log.d(TAG, "AddLectureFragment - lectureDB Fail : $it")
+        }
+
     }
 
-    private fun search(keyword: String) {
-        db.collection("USW_2021_2").addSnapshotListener { value, error ->
-            lectureList.clear()
-
-            for (snapshot in value!!.documents) {
-                val item = snapshot.toObject(Lecture::class.java)
-                lectureList.add(item!!)
+    private fun bindData(lectures: MutableMap<String, HashMap<String, Any>>) {
+        val lectureList = mutableMapOf<String, Lecture>()
+        val matchingKeys: Map<String, String> = mapOf(
+            "과목 코드" to "id",
+            "과목명" to "name",
+            "학점" to "point",
+            "시간 및 장소" to "timeAndPlace",
+            "교수자" to "professor",
+            "분류" to "classify",
+            "부서" to "department",
+            "개설 학년" to "targetGrade"
+        )
+        lectures.forEach { item ->
+            // Log.d(TAG, "bindData($item) called")
+            val lectureKey = item.key
+            val lectureValue = item.value
+            val lectureItem = Lecture(
+                lectureValue["과목 코드"] as String,
+                lectureValue["과목명"] as String, null,
+                null, null, null, null, null
+            )
+            for (k in matchingKeys.keys) {
+                if (lectureValue.containsKey(k)) {
+                    lectureItem[matchingKeys[k]] = lectureValue[k]
+                }
             }
+            lectureList[lectureKey] = lectureItem
+        }
+        Log.d(TAG, "AddLectureFragment - bindData() called")
+        Log.d(TAG, "$lectureList")
+        lectureList.forEach {
+            Log.d(TAG, "과목 - $it")
         }
     }
 
     private fun initSearchEditText() {
         binding.searchEditText.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN) {
-                search(binding.searchEditText.text.toString())
+                // search(binding.searchEditText.text.toString())
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
     }
 
-    private fun initLectureRecyclerView() {
+    /*private fun initLectureRecyclerView() {
         adapter = AddLectureAdapter(this)
         adapter.submitList(lectureList)
         binding.resultRecyclerView.adapter = adapter
@@ -116,26 +157,42 @@ class AddLectureFragment : Fragment(), OnLectureItemClick {
         )
         binding.resultRecyclerView.refreshDrawableState()
         Log.d(TAG, "AddLectureFragment - initLectureRecyclerView() called")
-    }
+    }*/
 
     override fun onDestroyView() {
         mBinding = null
         super.onDestroyView()
     }
 
-    override fun onLectureClicked(item: Lecture) {
+    /*override fun onLectureClicked(item: Lecture) {
         Log.d(TAG, "AddLectureFragment - onLectureClicked() : $item 선택됨")
-        val lecture = LectureData(item.id, item.name, item.place, item.time, item.professor, item.classify, null)
+        val lecture = LectureData(
+            item.id,
+            item.name,
+            item.place,
+            item.time,
+            item.professor,
+            item.classify,
+            null
+        )
 
-        // TODO: Room에 item 저장
+        // TODO: Room에 이미 저장된 강의 선택하면 앱 죽음
         Thread {
-            appDB.lectureDao().insertLecture(lecture)
+            val isIn = appDB.lectureDao().check(lecture.id)
+            if (isIn) {
+                activity?.runOnUiThread {
+                    Toast.makeText(context, "이미 추가된 과목입니다", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                appDB.lectureDao().insertLecture(lecture)
+            }
         }.start()
 
-        val action = AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable(item)
+        val action =
+            AddLectureFragmentDirections.actionNavigationAddLectureToNavigationTimetable(item)
 
         Navigation.findNavController(requireView()).navigate(action)
-    }
+    }*/
 
     companion object {
         const val TAG: String = "로그"

@@ -57,7 +57,6 @@ class TimetableFragment : Fragment() {
             Log.d(TAG, "TimetableFragment - $myLectures 받아오니...?")
             activity?.runOnUiThread {
                 adapter.submitList(myLectures)
-                adapter.notifyDataSetChanged()
             }
         }.start()
 

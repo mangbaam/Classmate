@@ -38,8 +38,8 @@ class AddLectureAdapter(onItemClick: OnLectureItemClick) :
 
         fun bind(lectureModel: Lecture) {
             binding.lectureName.text = lectureModel.name
-            binding.lectureTime.text = lectureModel.time
-            binding.lecturePlace.text = lectureModel.place
+//            binding.lectureTime.text = lectureModel.time
+//            binding.lecturePlace.text = lectureModel.place
             binding.professor.text = lectureModel.professor
         }
     }
