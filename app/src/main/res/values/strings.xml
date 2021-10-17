@@ -16,4 +16,14 @@
     <string name="title_notifications">알림</string>
     <string name="title_timetable">시간표</string>
     <string name="setting">설정</string>
+
+<!--    timetableView 관련 -->
+    <string-array name="timetable_header_title">
+        <item></item>
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+    </string-array>
 </resources>

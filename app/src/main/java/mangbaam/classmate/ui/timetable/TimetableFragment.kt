@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.tlaabs.timetableview.Schedule
+import com.github.tlaabs.timetableview.Time
+import com.github.tlaabs.timetableview.TimetableView
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import mangbaam.classmate.AppDatabase
 import mangbaam.classmate.adapter.MyLectureAdapter
@@ -24,6 +27,7 @@ class TimetableFragment : Fragment() {
     private lateinit var adapter: MyLectureAdapter
     private lateinit var appDB: AppDatabase
     private val myLectureList: ArrayList<Lecture> = arrayListOf()
+    private val schedules = arrayListOf<Schedule>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,6 +43,16 @@ class TimetableFragment : Fragment() {
         Log.d(TAG, "TimetableFragment - onCreateView() called")
         mBinding = FragmentTimetableBinding.inflate(inflater, container, false)
 
+        val testSchedule = Schedule()
+        testSchedule.classTitle = "테스트 과목"
+        testSchedule.classPlace = "IT-102"
+        testSchedule.professorName = "김대엽"
+        testSchedule.startTime = Time(10, 30)
+        testSchedule.endTime = Time(13, 20)
+        schedules.add(testSchedule)
+
+        binding.timetableView.add(schedules)
+        binding.timetableView.setHeaderHighlight(1)
 
         binding.addLectureButton.setOnClickListener {
             Log.d(TAG, "TimetableFragment - onCreateView() called : 과목 추가 버튼 눌림")

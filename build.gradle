@@ -15,7 +15,12 @@ buildscript {
         // Navigation Safe Args
         def nav_version = "2.3.5"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
+}
 
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
     }
 }
 
