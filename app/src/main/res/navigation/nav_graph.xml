@@ -15,33 +15,13 @@
         android:id="@+id/navigation_timetable"
         android:name="mangbaam.classmate.ui.timetable.TimetableFragment"
         android:label="@string/title_timetable"
-        tools:layout="@layout/fragment_timetable">
-        <action
-            android:id="@+id/action_navigation_timetable_to_navigation_add_lecture"
-            app:destination="@id/navigation_add_lecture"
-            app:launchSingleTop="false" />
-        <argument
-            android:name="selectedLecture"
-            app:argType="mangbaam.classmate.model.Lecture"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
+        tools:layout="@layout/fragment_timetable"/>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="mangbaam.classmate.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
-
-    <fragment
-        android:id="@+id/navigation_add_lecture"
-        android:name="mangbaam.classmate.fragment.AddLectureFragment"
-        android:label="fragment_add_lecture"
-        tools:layout="@layout/fragment_add_lecture">
-        <action
-            android:id="@+id/action_navigation_add_lecture_to_navigation_timetable"
-            app:destination="@id/navigation_timetable" />
-    </fragment>
 
     <fragment
         android:id="@+id/navigation_setting"

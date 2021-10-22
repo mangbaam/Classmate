@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/schoolNameTextView"
         app:layout_constraintTop_toTopOf="@+id/schoolNameTextView"
-        android:contentDescription="@string/closebutton" />
+        android:contentDescription="@string/close_button" />
 
     <EditText
         android:id="@+id/searchEditText"

@@ -1,22 +1,22 @@
 package mangbaam.classmate.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import mangbaam.classmate.model.LectureData
+import androidx.room.*
+import mangbaam.classmate.model.Lecture
 
 @Dao
 interface LectureDao {
-    @Query("SELECT * FROM LectureData")
-    fun getAll(): List<LectureData>
+    @Query("SELECT * FROM lectureTable")
+    fun getAll(): Array<Lecture>
 
-    @Query("SELECT EXISTS(SELECT * FROM LectureData WHERE id = :id)")
-    fun check(id: Int): Boolean
-
-    @Insert
-    fun insertLecture(lecture: LectureData)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLecture(vararg lecture: Lecture)
 
     @Delete
-    fun deleteLecture(lecture: LectureData)
+    fun deleteLecture(lecture: Lecture)
+
+    @Query("SELECT * FROM lectureTable WHERE lectureName LIKE '%'+:keyword+'%'")
+    fun search(keyword: String): List<Lecture>
+
+    @Query("DELETE FROM lectureTable")
+    fun clear()
 }

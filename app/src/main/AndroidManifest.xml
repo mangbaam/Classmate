@@ -12,9 +12,12 @@
         android:theme="@style/Theme.Classmate"
         tools:ignore="AllowBackup">
         <activity
+            android:name=".AddLectureActivity"
+            android:exported="false" />
+        <activity
             android:name=".BaseActivity"
             android:exported="true"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

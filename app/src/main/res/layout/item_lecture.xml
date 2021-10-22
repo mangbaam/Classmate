@@ -5,55 +5,43 @@
     android:id="@+id/itemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="30dp">
+    app:cardElevation="24dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/lectureName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/lectureTime"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="안드로이드 앱 개발" />
 
         <TextView
-            android:id="@+id/lectureTime"
+            android:id="@+id/lectureTimeAndPlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/lecturePlace"
-            app:layout_constraintStart_toStartOf="@+id/lectureName"
             app:layout_constraintTop_toBottomOf="@+id/lectureName"
-            tools:text="월,수,금 9:30 - 12:20" />
-
-        <TextView
-            android:id="@+id/lecturePlace"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/lectureTime"
+            app:layout_constraintStart_toStartOf="@+id/lectureName"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lectureTime"
-            app:layout_constraintTop_toTopOf="@+id/lectureTime"
-            tools:text="ICT융합대학" />
+            tools:text="월,수,금 9:30 - 12:20 ICT 융합대학" />
 
         <TextView
             android:id="@+id/professor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lectureTimeAndPlace"
+            app:layout_constraintStart_toStartOf="@+id/lectureName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/lectureTime"
-            app:layout_constraintTop_toBottomOf="@+id/lecturePlace"
             tools:text="박명범" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
