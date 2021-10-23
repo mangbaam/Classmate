@@ -17,6 +17,7 @@
     <string name="title_timetable">시간표</string>
     <string name="setting">설정</string>
     <string name="class_title">과목명</string>
+    <string name="search">검색</string>
 
     <!--    timetableView 관련 -->
     <string-array name="timetable_header_title">

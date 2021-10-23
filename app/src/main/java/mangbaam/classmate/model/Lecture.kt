@@ -18,6 +18,7 @@ data class Lecture(
 ) {
     operator fun set(key: String, value: Any?) {
         when (key) {
+            "name" -> this.name = value.toString()
             "point" -> this.point = value.toString()
             "timeAndPlace" -> this.timeAndPlace = value.toString()
             "professor" -> this.professor = value.toString()

@@ -11,9 +11,12 @@
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/class_title"
+        android:layout_marginTop="8dp"
+        android:hint="@string/search"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,5 +31,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchEditText"
         tools:listitem="@layout/item_lecture" />
+
+    <LinearLayout
+        android:id="@+id/informView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:text="과목명, 교수명, 부서명으로 과목을 검색하세요\n\n찾는 과목이 없다면 직접 입력하여 추가 버튼을 눌러 추가하세요"
+            android:textAlignment="center"
+            android:textColor="@color/blue"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/addCustomLectureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:text="직접 입력하여 추가" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

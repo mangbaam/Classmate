@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mangbaam.classmate.adapter.AddLectureAdapter
@@ -42,7 +45,6 @@ class AddLectureActivity : AppCompatActivity() {
         val r = Runnable {
             val lectures = lectureDAO.getAll()
             for (lectureModel in lectures) {
-                Log.d(TAG, "AddLectureActivity - onCreate($lectureModel) called")
                 lectureList.add(lectureModel)
             }
         }
@@ -55,21 +57,22 @@ class AddLectureActivity : AppCompatActivity() {
             Log.d(TAG, "AddLectureActivity : $it 선택됨")
         })
         resultRecyclerView.adapter = adapter
-        resultRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        resultRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun search() {
         resultList.clear()
         val keyword = searchEditText.text.toString()
-        if (keyword == "") {
-            resultList.addAll(lectureList)
-        } else {
-            lectureList.forEach {
-                if (it.name.lowercase().contains(keyword)) {
-                    resultList.add(it)
-                }
+
+        lectureList.forEach {
+            if (it.name.lowercase().contains(keyword) ||
+                it.professor?.lowercase()?.contains(keyword) == true ||
+                it.department?.lowercase()?.contains(keyword) == true) {
+                resultList.add(it)
             }
         }
+
         adapter.submitList(resultList)
         adapter.notifyDataSetChanged()
     }
@@ -81,9 +84,11 @@ class AddLectureActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                search()
-                for (result in resultList) {
-                    Log.d(TAG, "afterTextChanged($result) called")
+                if (s.isNullOrBlank()) {
+                    findViewById<LinearLayout>(R.id.informView).isGone = false
+                } else {
+                    findViewById<LinearLayout>(R.id.informView).isGone = true
+                    search()
                 }
             }
         })
