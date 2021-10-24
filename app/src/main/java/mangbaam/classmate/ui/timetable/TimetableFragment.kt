@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +18,7 @@ import com.github.tlaabs.timetableview.TimetableView
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.AppDatabase
+import mangbaam.classmate.BaseActivity
 import mangbaam.classmate.adapter.MyLectureAdapter
 import mangbaam.classmate.databinding.FragmentTimetableBinding
 import mangbaam.classmate.getAppDatabase
@@ -26,9 +29,7 @@ class TimetableFragment : Fragment() {
 
     private var mBinding: FragmentTimetableBinding? = null
     private val binding get() = mBinding!!
-    private lateinit var adapter: MyLectureAdapter
     private lateinit var appDB: AppDatabase
-    private val myLectureList: ArrayList<Lecture> = arrayListOf()
     private val schedules = arrayListOf<Schedule>()
 
     override fun onAttach(context: Context) {
@@ -62,10 +63,6 @@ class TimetableFragment : Fragment() {
             val intent = Intent(context, AddLectureActivity::class.java)
             startActivity(intent)
         }
-
-        adapter = MyLectureAdapter()
-        binding.timetableRecyclerView.adapter = adapter
-        binding.timetableRecyclerView.layoutManager = LinearLayoutManager(context)
 
         return binding.root
     }

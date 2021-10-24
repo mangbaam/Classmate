@@ -22,7 +22,7 @@ data class Lecture(
             "point" -> this.point = value.toString()
             "timeAndPlace" -> this.timeAndPlace = value.toString()
             "professor" -> this.professor = value.toString()
-            "classify" -> this.professor = value.toString()
+            "classify" -> this.classify = value.toString()
             "electives" -> this.electives = value.toString()
             "department" -> this.department = value.toString()
             "link" -> this.link = value.toString()

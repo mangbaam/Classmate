@@ -1,5 +1,7 @@
 package mangbaam.classmate
 
+import android.app.Dialog
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,10 +11,14 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.model.Lecture
@@ -55,10 +61,12 @@ class AddLectureActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         adapter = AddLectureAdapter(onItemClicked = {
             Log.d(TAG, "AddLectureActivity : $it 선택됨")
+            checkAddition(it)
         })
         resultRecyclerView.adapter = adapter
         resultRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        resultRecyclerView.addItemDecoration(DividerItemDecoration(this, 1))
     }
 
     private fun search() {
@@ -92,6 +100,41 @@ class AddLectureActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun addCustomLecture(item: Lecture) {
+        // TODO 과목 직접 입력 구현
+
+    }
+
+    private fun checkAddition(item: Lecture) {
+        val listener = object: DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    Log.d(TAG, "AddLectureActivity - ${item.name} 추가 버튼 클릭")
+                    // TODO 나의 과목 Room에 추가
+                    finish()
+                }
+            }
+            override fun onCancel(dialog: DialogInterface?) {
+                dialog?.cancel()
+            }
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("과목을 추가하시겠습니까")
+            .setIcon(R.drawable.ic_library_add)
+            .setMessage("과목명: ${item.name}\n" +
+                    "시간 및 장소: ${item.timeAndPlace}\n" +
+                    "교수명: ${item.professor}\n" +
+                    "개설 부서: ${item.department}\n" +
+                    "이수 구분: ${item.classify}\n" +
+                    "학점: ${item.point}\n\n" +
+                    "선택된 과목을 추가하려면 추가 버튼을 누르세요")
+            .setPositiveButton("추가", listener)
+            .setOnCancelListener(listener)
+            .create()
+            .show()
     }
 
     companion object {

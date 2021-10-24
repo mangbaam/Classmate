@@ -1,65 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#009688"
-    android:padding="30dp"
     tools:context=".ui.timetable.TimetableFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/timetableTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:gravity="center"
+        android:text="@string/timetable"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/addLectureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="addLectureButton"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/timetableTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timetableTextView"
+        tools:ignore="HardcodedText" />
+
+    <com.github.tlaabs.timetableview.TimetableView
+        android:id="@+id/timetableView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        app:column_count="6"
+        app:header_highlight_color="@color/colorPrimary"
+        app:header_highlight_type="color"
+        app:header_title="@array/timetable_header_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timetableTextView"
+        app:row_count="12"
+        app:start_time="9" />
 
-        <TextView
-            android:id="@+id/timetableTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/timetable"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/addLectureButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="강의 추가"
-            app:layout_constraintBottom_toBottomOf="@+id/timetableTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/timetableTextView"
-            tools:ignore="HardcodedText" />
-
-        <com.github.tlaabs.timetableview.TimetableView
-            android:id="@+id/timetableView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@color/white"
-            app:column_count="6"
-            app:start_time="9"
-            app:cell_height="30dp"
-            app:header_highlight_color="@color/light_gray888"
-            app:header_highlight_type="color"
-            app:header_title="@array/timetable_header_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timetableTextView"
-            app:row_count="12" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/timetableRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timetableView"
-            tools:listitem="@layout/item_lecture" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

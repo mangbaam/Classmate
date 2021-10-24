@@ -3,18 +3,17 @@ package mangbaam.classmate
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import mangbaam.classmate.DB_keys.Companion.LECTURES
 import mangbaam.classmate.DB_keys.Companion.SCHOOL_NAME
-import mangbaam.classmate.DB_keys.Companion.수원대
+import mangbaam.classmate.DB_keys.Companion.TERM
+import mangbaam.classmate.DB_keys.Companion.SUWON_UNIV
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
@@ -44,9 +43,8 @@ class BaseActivity : AppCompatActivity() {
         if (term != getThisTerm()) { // if (term != getThisTerm())
             Log.d(TAG, "새로운 강의 업데이트 중...")
             updateLectures()
-            Log.d(TAG, "업데이트 완료!")
             sharedPreference.edit(true) {
-                putString("TERM", getThisTerm())
+                putString(TERM, getThisTerm())
             }
         } else {
             Log.d(TAG, "업데이트 항목이 없습니다")
@@ -63,7 +61,7 @@ class BaseActivity : AppCompatActivity() {
     }
 
     private fun updateLectures() {
-        val schoolName = sharedPreference.getString(SCHOOL_NAME, 수원대).toString()
+        val schoolName = sharedPreference.getString(SCHOOL_NAME, SUWON_UNIV).toString()
         Log.d(TAG, ">> SchoolName: $schoolName")
         Log.d(TAG, ">> Term: ${getThisTerm()}")
 
@@ -92,6 +90,10 @@ class BaseActivity : AppCompatActivity() {
                 }
             } else {
                 Log.d(TAG, "BaseActivity -  lectureDB Fail: $it")
+                sharedPreference.edit(true) {
+                    putString(TERM, "")
+                }
+                Toast.makeText(this, "과목 업데이트에 실패했습니다. 네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show()
             }
         }
     }
