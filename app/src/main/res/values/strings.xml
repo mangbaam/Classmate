@@ -7,7 +7,6 @@
     <string name="class_over">수업이 끝났습니다!</string>
     <string name="class_over_register_for_task">수업이 끝났습니다! 과제를 등록하세요</string>
 
-    <string name="handle">handle</string>
     <string name="close_button">closeButton</string>
     <string name="timetable">시간표</string>
     <string name="title_activity_base">BaseActivity</string>
@@ -27,5 +26,21 @@
         <item>수</item>
         <item>목</item>
         <item>금</item>
+        <item>토</item>
     </string-array>
+
+    <string-array name="days">
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+        <item>토</item>
+    </string-array>
+
+    <string name="cancel">취소</string>
+    <string name="add">추가</string>
+    <string name="professorName">교수명</string>
+    <string name="action_settings">Settings</string>
+    <string name="place">장소</string>
 </resources>

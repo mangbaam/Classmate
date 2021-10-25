@@ -15,4 +15,10 @@
 <!--        <item name="android:windowBackground">@color/light_gray</item>-->
         <!-- Customize your theme here. -->
     </style>
+    <style name="Theme.Classmate.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Classmate.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Classmate.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

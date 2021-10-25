@@ -10,8 +10,7 @@ import mangbaam.classmate.model.Lecture
 
 class AddLectureAdapter(val onItemClicked: (Lecture) -> Unit) : ListAdapter<Lecture, AddLectureAdapter.ViewHolder>(diffUtil) {
 
-    inner class ViewHolder(
-        private val binding: ItemLectureBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemLectureBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(lectureModel: Lecture) {
             binding.root.setOnClickListener {

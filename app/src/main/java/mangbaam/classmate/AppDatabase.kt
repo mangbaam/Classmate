@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.model.Lecture
-import mangbaam.classmate.model.LectureData
 
 @Database(entities = [Lecture::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {

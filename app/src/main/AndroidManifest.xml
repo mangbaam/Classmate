@@ -15,6 +15,9 @@
             android:name=".AddLectureActivity"
             android:exported="false" />
         <activity
+            android:name=".AddCustomLectureActivity"
+            android:exported="false" />
+        <activity
             android:name=".BaseActivity"
             android:exported="true"
             android:label="@string/app_name">

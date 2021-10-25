@@ -7,22 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.tlaabs.timetableview.Schedule
 import com.github.tlaabs.timetableview.Time
-import com.github.tlaabs.timetableview.TimetableView
-import kotlinx.android.synthetic.main.fragment_timetable.*
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.AppDatabase
-import mangbaam.classmate.BaseActivity
-import mangbaam.classmate.adapter.MyLectureAdapter
 import mangbaam.classmate.databinding.FragmentTimetableBinding
 import mangbaam.classmate.getAppDatabase
-import mangbaam.classmate.model.Lecture
 
 
 class TimetableFragment : Fragment() {
