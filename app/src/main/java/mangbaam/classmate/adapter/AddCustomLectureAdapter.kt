@@ -3,16 +3,16 @@ package mangbaam.classmate.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import mangbaam.classmate.databinding.ItemTimeAndPlaceBinding
 import mangbaam.classmate.model.TimeAndPlace
+import mangbaam.classmate.model.TimeItem
 import mangbaam.classmate.model.TimeModel
 
 class AddCustomLectureAdapter(
-    private val onItemClicked: (Int, TextView) -> Unit,
+    private val onItemClicked: (Int, TimeItem) -> Unit,
     private val onCloseButtonClicked: (Int) -> (Unit)
 ) : ListAdapter<TimeAndPlace, AddCustomLectureAdapter.ViewHolder>(diffUtil) {
 
@@ -25,13 +25,13 @@ class AddCustomLectureAdapter(
             binding.endTime.text = TimeModel(item.endHour, item.endMinute).timeText
 
             binding.dayOfWeek.setOnClickListener {
-                onItemClicked(layoutPosition, binding.dayOfWeek)
+                onItemClicked(layoutPosition, TimeItem.DAY_OF_WEEK)
             }
             binding.startTime.setOnClickListener {
-                onItemClicked(layoutPosition, binding.startTime)
+                onItemClicked(layoutPosition, TimeItem.START_TIME)
             }
             binding.endTime.setOnClickListener {
-                onItemClicked(layoutPosition, binding.endTime)
+                onItemClicked(layoutPosition, TimeItem.END_TIME)
             }
             binding.closeButton.setOnClickListener {
                 onCloseButtonClicked(layoutPosition)
