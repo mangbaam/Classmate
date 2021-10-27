@@ -77,5 +77,4 @@ dependencies {
 
     // TimetableView
     implementation 'com.github.islandparadise14:Mintable:1.5.1'
-    implementation 'com.github.tlaabs:TimetableView:1.0.3-fx1'
 }

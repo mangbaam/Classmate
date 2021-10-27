@@ -12,4 +12,35 @@
     <color name="light_gray">#FEEE</color>
     <color name="light_gray888">#F888</color>
     <color name="blue">#3F51B5</color>
+
+    <!-- timetable colors -->
+    <!-- https://flatuicolors.com/palette/us -->
+    <color name="light_greenish_blue">#7355efc4</color>
+    <color name="faded_poster">#7381ecec</color>
+    <color name="mint_leaf">#7300b894</color>
+    <color name="robins_egg_blue">#7300cec9</color>
+    <color name="green_darner_tail">#7374b9ff</color>
+    <color name="shy_moment">#73a29bfe</color>
+    <color name="electron_blue">#730984e3</color>
+    <color name="exodus_fruit">#736c5ce7</color>
+    <color name="sour_lemon">#73ffeaa7</color>
+    <color name="first_date">#73fab1a0</color>
+    <color name="bright_yarrow">#73fdcb6e</color>
+    <color name="orangeville">#73e17055</color>
+    <color name="pink_glamour">#73ff7675</color>
+    <color name="pico_8_pink">#73fd79a8</color>
+    <color name="chi_gong">#73d63031</color>
+    <color name="prunus_avium">#73e84393</color>
+
+    <string-array name="cell_colors">
+        <item>#7300b894</item>
+        <item>#730984e3</item>
+        <item>#73fdcb6e</item>
+        <item>#73d63031</item>
+        <item>#7300cec9</item>
+        <item>#736c5ce7</item>
+        <item>#73e17055</item>
+        <item>#73e84393</item>
+    </string-array>
+
 </resources>

@@ -1,4 +1,4 @@
-package mangbaam.classmate
+package mangbaam.classmate.database
 
 import android.content.Context
 import androidx.room.Database
@@ -8,14 +8,14 @@ import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.model.Lecture
 
 @Database(entities = [Lecture::class], version = 1)
-abstract class AppDatabase: RoomDatabase() {
-    abstract fun lectureDao(): LectureDao
+abstract class TableDB: RoomDatabase() {
+    abstract fun tableDao(): LectureDao
 }
 
-fun getAppDatabase(context: Context): AppDatabase {
+fun getTableDB(context: Context): TableDB {
     return Room.databaseBuilder(
         context,
-        AppDatabase::class.java,
-        "ClassmateDB"
-    ).build()
+        TableDB::class.java,
+        "TableDB"
+    ).allowMainThreadQueries().build()
 }

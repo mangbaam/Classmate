@@ -9,8 +9,8 @@ import java.io.Serializable
 data class Lecture(
     @ColumnInfo(name = "lectureName") var name: String,
     var point: String,
-    var timeAndPlace: String?,
-    var professor: String?,
+    var timeAndPlace: String,
+    var professor: String,
     var classify: String?,
     var electives: String?,
     var department: String?,

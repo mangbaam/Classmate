@@ -1,4 +1,4 @@
-package mangbaam.classmate
+package mangbaam.classmate.database
 
 class DB_keys {
     companion object {

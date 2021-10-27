@@ -1,49 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.timetable.TimetableFragment">
 
-    <TextView
-        android:id="@+id/timetableTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
-        android:gravity="center"
-        android:text="@string/timetable"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/addLectureButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:background="#00FFFFFF"
-        android:contentDescription="addLectureButton"
-        android:src="@drawable/ic_plus"
-        app:layout_constraintBottom_toBottomOf="@+id/timetableTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/timetableTextView"
-        tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/timetableTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:gravity="center"
+            android:text="@string/timetable"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.islandparadise14.mintable.MinTimeTableView
-        android:id="@+id/timetableView"
-        android:layout_width="413dp"
-        android:layout_height="605dp"
-        android:layout_marginTop="30dp"
-        app:isFullWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timetableTextView"
-        app:radiusOption="right" />
+        <ImageButton
+            android:id="@+id/addLectureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="addLectureButton"
+            android:src="@drawable/ic_plus"
+            app:layout_constraintBottom_toBottomOf="@+id/timetableTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/timetableTextView"
+            tools:ignore="HardcodedText" />
+
+        <com.islandparadise14.mintable.MinTimeTableView
+            android:id="@+id/timetableView"
+            android:layout_width="413dp"
+            android:layout_height="605dp"
+            android:layout_marginTop="30dp"
+            app:isFullWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timetableTextView"
+            app:radiusOption="round" />
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

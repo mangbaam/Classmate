@@ -1,7 +1,6 @@
 package mangbaam.classmate
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -11,11 +10,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import mangbaam.classmate.DB_keys.Companion.LECTURES
-import mangbaam.classmate.DB_keys.Companion.SCHOOL_NAME
-import mangbaam.classmate.DB_keys.Companion.TERM
-import mangbaam.classmate.DB_keys.Companion.SUWON_UNIV
+import mangbaam.classmate.database.DB_keys.Companion.LECTURES
+import mangbaam.classmate.database.DB_keys.Companion.SCHOOL_NAME
+import mangbaam.classmate.database.DB_keys.Companion.TERM
+import mangbaam.classmate.database.DB_keys.Companion.SUWON_UNIV
 import mangbaam.classmate.dao.LectureDao
+import mangbaam.classmate.database.AppDatabase
+import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
 import java.text.SimpleDateFormat

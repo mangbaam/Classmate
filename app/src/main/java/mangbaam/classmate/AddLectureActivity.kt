@@ -1,6 +1,5 @@
 package mangbaam.classmate
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -19,12 +17,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.dao.LectureDao
+import mangbaam.classmate.database.*
 import mangbaam.classmate.model.Lecture
 
 class AddLectureActivity : AppCompatActivity() {
     private lateinit var adapter: AddLectureAdapter
     private lateinit var appDB: AppDatabase
+    private lateinit var tableDB: TableDB
     private lateinit var lectureDAO: LectureDao
+    private lateinit var tableDao: LectureDao
 
     private var lectureList = mutableListOf<Lecture>()
     private val resultList = mutableListOf<Lecture>()
@@ -44,8 +45,13 @@ class AddLectureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_lecture)
 
+        // 전체 강의 DB
         appDB = getAppDatabase(this)
         lectureDAO = appDB.lectureDao()
+
+        // 시간표에 추가된 강의 DB
+        tableDB = getTableDB(this)
+        tableDao = tableDB.tableDao()
 
         addCustomLectureButton.setOnClickListener {
             val intent = Intent(this, AddCustomLectureActivity::class.java)
@@ -81,15 +87,14 @@ class AddLectureActivity : AppCompatActivity() {
 
         lectureList.forEach {
             if (it.name.lowercase().contains(keyword) ||
-                it.professor?.lowercase()?.contains(keyword) == true ||
+                it.professor.lowercase().contains(keyword) ||
                 it.department?.lowercase()?.contains(keyword) == true
             ) {
                 resultList.add(it)
             }
         }
-
         adapter.submitList(resultList)
-        adapter.notifyDataSetChanged()
+//        adapter.notifyDataSetChanged()
     }
 
     private fun initSearchEditText() {
@@ -114,10 +119,8 @@ class AddLectureActivity : AppCompatActivity() {
         val listener = DialogInterface.OnClickListener { _, which ->
             if (which == DialogInterface.BUTTON_POSITIVE) {
                 Log.d(TAG, "AddLectureActivity - ${item.name} 추가 버튼 클릭")
-                // TODO 나의 과목 Room에 추가
-                val intent = Intent(this, BaseActivity::class.java)
-                intent.putExtra("newLecture", item)
-                startActivity(intent)
+
+                tableDao.insertLecture(item) // TableDB에 저장, 이미 추가된 강의라면 무시
                 finish()
             }
         }

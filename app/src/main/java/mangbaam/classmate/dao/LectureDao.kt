@@ -8,15 +8,15 @@ interface LectureDao {
     @Query("SELECT * FROM lectureTable")
     fun getAll(): Array<Lecture>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertLecture(vararg lecture: Lecture)
 
     @Delete
     fun deleteLecture(lecture: Lecture)
 
-    @Query("SELECT * FROM lectureTable WHERE lectureName LIKE '%'+:keyword+'%'")
-    fun search(keyword: String): List<Lecture>
-
     @Query("DELETE FROM lectureTable")
     fun clear()
+
+    @Query("SELECT COUNT(*) FROM LectureTable")
+    fun getSize(): Int
 }
