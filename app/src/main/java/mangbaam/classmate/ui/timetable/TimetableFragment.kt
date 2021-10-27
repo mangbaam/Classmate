@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.tlaabs.timetableview.Schedule
 import com.github.tlaabs.timetableview.Time
+import com.islandparadise14.mintable.MinTimeTableView
+import com.islandparadise14.mintable.model.ScheduleDay
+import com.islandparadise14.mintable.model.ScheduleEntity
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.AppDatabase
+import mangbaam.classmate.R
 import mangbaam.classmate.databinding.FragmentTimetableBinding
 import mangbaam.classmate.getAppDatabase
 
@@ -21,7 +25,8 @@ class TimetableFragment : Fragment() {
     private var mBinding: FragmentTimetableBinding? = null
     private val binding get() = mBinding!!
     private lateinit var appDB: AppDatabase
-    private val schedules = arrayListOf<Schedule>()
+    private val schedules = arrayListOf<ScheduleEntity>()
+    private lateinit var table: MinTimeTableView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -37,17 +42,19 @@ class TimetableFragment : Fragment() {
         Log.d(TAG, "TimetableFragment - onCreateView() called")
         mBinding = FragmentTimetableBinding.inflate(inflater, container, false)
 
-        val testSchedule = Schedule()
-        testSchedule.classTitle = "테스트 과목"
-        testSchedule.classPlace = "IT-102"
-        testSchedule.professorName = "김대엽"
-        testSchedule.startTime = Time(10, 30)
-        testSchedule.endTime = Time(13, 20)
-        testSchedule.day = 2
-        schedules.add(testSchedule)
-
-        binding.timetableView.add(schedules)
-        binding.timetableView.setHeaderHighlight(1)
+        // TODO 테스트 과목 추가. 나중에 제거
+        val schedule = ScheduleEntity(
+            32,
+            "Database",
+            "IT-302",
+            ScheduleDay.TUESDAY,
+            "8:20",
+            "10:30",
+            "#73FCAE68",
+            "#000000"
+        )
+        schedules.add(schedule)
+        initTimeTable()
 
         binding.addLectureButton.setOnClickListener {
             Log.d(TAG, "TimetableFragment - onCreateView() called : 과목 추가 버튼 눌림")
@@ -56,6 +63,17 @@ class TimetableFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initTimeTable() {
+        val day = resources.getStringArray(R.array.days)
+        table = binding.timetableView
+        table.initTable(day)
+        table.updateSchedules(schedules)
+    }
+
+    private fun updateTimeTable(schedules: ArrayList<ScheduleEntity>) {
+        table.updateSchedules(schedules)
     }
 
     override fun onDestroyView() {

@@ -110,10 +110,14 @@ class AddLectureActivity : AppCompatActivity() {
     }
 
     private fun showAddLectureDialog(item: Lecture) {
+
         val listener = DialogInterface.OnClickListener { _, which ->
             if (which == DialogInterface.BUTTON_POSITIVE) {
                 Log.d(TAG, "AddLectureActivity - ${item.name} 추가 버튼 클릭")
                 // TODO 나의 과목 Room에 추가
+                val intent = Intent(this, BaseActivity::class.java)
+                intent.putExtra("newLecture", item)
+                startActivity(intent)
                 finish()
             }
         }

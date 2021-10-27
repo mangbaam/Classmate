@@ -3,6 +3,7 @@ package mangbaam.classmate.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "lectureTable")
 data class Lecture(
@@ -15,7 +16,7 @@ data class Lecture(
     var department: String?,
     var link: String?,
     @PrimaryKey(autoGenerate = true) val id: Long
-) {
+): Serializable {
     operator fun set(key: String, value: Any?) {
         when (key) {
             "name" -> this.name = value.toString()

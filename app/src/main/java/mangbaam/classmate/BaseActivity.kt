@@ -1,6 +1,7 @@
 package mangbaam.classmate
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -51,6 +52,13 @@ class BaseActivity : AppCompatActivity() {
         }
 
         initNavigation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = intent
+        val newLecture = intent.getSerializableExtra("newLecture")
+        Log.d(TAG, "BaseActivity - onResume($newLecture)")
     }
 
     private fun initNavigation() {

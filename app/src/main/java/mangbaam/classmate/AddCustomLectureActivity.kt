@@ -1,26 +1,18 @@
 package mangbaam.classmate
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_add_custom_lecture.*
-import kotlinx.android.synthetic.main.item_time_and_place.*
 import mangbaam.classmate.adapter.AddCustomLectureAdapter
 import mangbaam.classmate.databinding.ActivityAddCustomLectureBinding
 import mangbaam.classmate.databinding.DialogDayOfWeekBinding
-import mangbaam.classmate.model.DayOfWeekItem
 import mangbaam.classmate.model.TimeAndPlace
 import mangbaam.classmate.model.TimeItem
-import java.util.*
 
 class AddCustomLectureActivity : AppCompatActivity() {
     private var mBinding: ActivityAddCustomLectureBinding? = null

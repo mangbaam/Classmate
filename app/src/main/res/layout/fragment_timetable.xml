@@ -32,20 +32,18 @@
         app:layout_constraintTop_toTopOf="@+id/timetableTextView"
         tools:ignore="HardcodedText" />
 
-    <com.github.tlaabs.timetableview.TimetableView
+    <com.islandparadise14.mintable.MinTimeTableView
         android:id="@+id/timetableView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="413dp"
+        android:layout_height="605dp"
         android:layout_marginTop="30dp"
-        android:background="@color/white"
-        app:column_count="6"
-        app:header_highlight_color="@color/colorPrimary"
-        app:header_highlight_type="color"
-        app:header_title="@array/timetable_header_title"
+        app:isFullWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/timetableTextView"
-        app:row_count="12"
-        app:start_time="9" />
+        app:radiusOption="right" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
