@@ -102,7 +102,7 @@ class TimetableFragment : Fragment() {
             object: OnScheduleLongClickListener {
                 override fun scheduleLongClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 롱클릭")
-                    Toast.makeText(context, "${entity.scheduleName}, ${entity.scheduleDay}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${entity.scheduleName}, ${entity.roomInfo}", Toast.LENGTH_SHORT).show()
                 }
             }
         )

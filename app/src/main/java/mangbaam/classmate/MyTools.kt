@@ -1,5 +1,10 @@
 package mangbaam.classmate
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.model.TimeAndPlace
+
 class MyTools {
     fun parseTimeAndPlace(timeAndPlace: String): List<List<String>> {
         val result = mutableListOf<List<String>>()
@@ -19,7 +24,7 @@ class MyTools {
                 val timesOfDay = day.substring(1) // 교시
                 val timeList = timesOfDay.split(",") // 교시 분리 3,4,7 -> [3, 4, 7]
                 // 4.2 연속되지 않는 교시 분리
-                var startIndex = 0;
+                var startIndex = 0
                 var index = 1
                 val timeInfos = mutableListOf<List<String>>()
                 while (index < timeList.size) {
@@ -41,5 +46,73 @@ class MyTools {
             }
         }
         return result
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun timeAndPlaceToLecture(
+        lectureName: String,
+        professor: String,
+        tapList: List<TimeAndPlace>
+    ): Lecture {
+        val tapBlocks = mutableListOf<List<String>>()
+        tapList.forEach { tapInfo ->
+            tapBlocks.add(
+                listOf(
+                    tapInfo.place,
+                    tapInfo.dayOfWeek,
+                    "${tapInfo.startHour}:${tapInfo.startMinute}",
+                    "${tapInfo.endHour}:${tapInfo.endMinute}"
+                )
+            )
+        }
+        val placeGroup = mutableMapOf<String, MutableList<List<String>>>()
+        tapBlocks.forEach {
+            if (placeGroup.containsKey(it[0])) {
+                placeGroup[it[0]]?.add(it.subList(1, 4))
+            } else {
+                placeGroup[it[0]] = mutableListOf(it.subList(1, 4))
+            }
+        }
+        val resultList = mutableListOf<String>()
+
+        placeGroup.forEach { (place, timeList) ->
+            val dayGroup = mutableMapOf<String, MutableList<Int>>()
+            timeList.forEach { timeInfo ->
+                val day = timeInfo[0]
+                val startTime = timeInfo[1].split(":")[0].toInt() - 8
+                val endTime = timeInfo[2].split(":")[0].toInt() - 9
+
+                if (dayGroup.containsKey(day)) {
+                    dayGroup[day]?.addAll(startTime..endTime)
+                } else {
+                    dayGroup[day] = (startTime..endTime).toMutableList()
+                }
+            }
+            val placeGroupStringList = mutableListOf<String>()
+            dayGroup.forEach { (day, times) ->
+                placeGroupStringList.add("$day${times.joinToString(separator = ",")}")
+            }
+            val placeGroupString = "$place${
+                placeGroupStringList.joinToString(
+                    prefix = "(",
+                    postfix = ")",
+                    separator = " "
+                )
+            }"
+            resultList.add(placeGroupString)
+        }
+        val timeAndPlaceValue = resultList.joinToString(separator = ",")
+
+        return Lecture(
+            lectureName,
+            "",
+            timeAndPlaceValue,
+            professor,
+            "",
+            "",
+            "",
+            "",
+            0
+        )
     }
 }

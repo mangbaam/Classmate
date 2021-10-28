@@ -121,9 +121,7 @@ class AddLectureActivity : AppCompatActivity() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showAddLectureDialog(item: Lecture) {
-
         val listener = DialogInterface.OnClickListener { _, which ->
             if (which == DialogInterface.BUTTON_POSITIVE) {
                 Log.d(TAG, "AddLectureActivity - ${item.name} 추가 버튼 클릭")
