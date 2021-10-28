@@ -1,6 +1,7 @@
 package mangbaam.classmate
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.TimeAndPlace
@@ -48,7 +49,6 @@ class MyTools {
         return result
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun timeAndPlaceToLecture(
         lectureName: String,
         professor: String,
@@ -65,6 +65,7 @@ class MyTools {
                 )
             )
         }
+        Log.d(TAG, "MyTools - tapBlocks: $tapBlocks")
         val placeGroup = mutableMapOf<String, MutableList<List<String>>>()
         tapBlocks.forEach {
             if (placeGroup.containsKey(it[0])) {
@@ -73,6 +74,8 @@ class MyTools {
                 placeGroup[it[0]] = mutableListOf(it.subList(1, 4))
             }
         }
+        Log.d(TAG, "MyTools - placeGroup: $placeGroup")
+
         val resultList = mutableListOf<String>()
 
         placeGroup.forEach { (place, timeList) ->
@@ -102,6 +105,7 @@ class MyTools {
             resultList.add(placeGroupString)
         }
         val timeAndPlaceValue = resultList.joinToString(separator = ",")
+        Log.d(TAG, "MyTools - $timeAndPlaceValue")
 
         return Lecture(
             lectureName,
@@ -114,5 +118,9 @@ class MyTools {
             "",
             0
         )
+    }
+
+    companion object {
+        const val TAG: String = "로그"
     }
 }

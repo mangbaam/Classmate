@@ -24,6 +24,7 @@ import mangbaam.classmate.model.TimeItem
 class AddCustomLectureActivity : AppCompatActivity() {
     private var mBinding: ActivityAddCustomLectureBinding? = null
     private val binding get() = mBinding!!
+    private val places: MutableMap<Int, String> = mutableMapOf()
     private val timeAndPlaceList: MutableList<TimeAndPlace> = mutableListOf()
     private lateinit var adapter: AddCustomLectureAdapter
     private lateinit var tableDB: TableDB
@@ -53,6 +54,8 @@ class AddCustomLectureActivity : AppCompatActivity() {
             // TODO Snakbar를 띄워 삭제를 취소할 수 있는 기능
             timeAndPlaceList.removeAt(position)
             adapter.notifyItemRemoved(position)
+        }, { position, text ->
+            places[position] = text
         })
 
         /* 과목명 required!! (추가 버튼 활성화) */
@@ -111,6 +114,7 @@ class AddCustomLectureActivity : AppCompatActivity() {
             }
             val originLectures = tableDao.getAll()
 
+            places.forEach { (position, text) -> timeAndPlaceList[position].place = text } // 장소 데이터 이 시점에 추가
             val newCustomLecture = tools.timeAndPlaceToLecture(getLectureName(), getProfessorName(), timeAndPlaceList)
             if(verify.verifyTime(originLectures, newCustomLecture)) {
                 Log.d(TAG, "Custom 시간표 추가")
