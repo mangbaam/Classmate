@@ -7,10 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleDay
 import com.islandparadise14.mintable.model.ScheduleEntity
+import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
+import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
+import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.R
 import mangbaam.classmate.dao.LectureDao
@@ -44,7 +48,7 @@ class TimetableFragment : Fragment() {
         Log.d(TAG, "TimetableFragment - onCreateView() called")
         mBinding = FragmentTimetableBinding.inflate(inflater, container, false)
 
-        initTimeTable()
+        initTimeTable() // 시간표 초기화 (시간표 로딩 및 이벤트 리스너 부착)
 
         binding.addLectureButton.setOnClickListener {
             Log.d(TAG, "TimetableFragment - onCreateView() called : 과목 추가 버튼 눌림")
@@ -57,10 +61,12 @@ class TimetableFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "TimetableFragment - onResume() called")
         if (tableDao.getSize() != tableSize) {
+            Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : tableSize: $tableSize")
             updateSchedules()
-            Log.d(TAG, "TimetableFragment - 시간표 업데이트 called")
         }
+        table.updateSchedules(schedules)
     }
 
     override fun onDestroyView() {
@@ -78,7 +84,34 @@ class TimetableFragment : Fragment() {
         val day = resources.getStringArray(R.array.days)
         table = binding.timetableView
         table.initTable(day)
+        /* 시간표 Room에서 불러와 초기와 */
         updateSchedules()
+        /* 클릭 리스너 */
+        table.setOnScheduleClickListener(
+            object: OnScheduleClickListener {
+                override fun scheduleClicked(entity: ScheduleEntity) {
+                    Log.d(TAG, "${entity.scheduleName} 클릭")
+                    Toast.makeText(context, entity.scheduleName, Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+        /* 롱클릭 리스너 */
+        table.setOnScheduleLongClickListener(
+            object: OnScheduleLongClickListener {
+                override fun scheduleLongClicked(entity: ScheduleEntity) {
+                    Log.d(TAG, "${entity.scheduleName} 롱클릭")
+                    Toast.makeText(context, "${entity.scheduleName}, ${entity.scheduleDay}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+        /* 셀 클릭 리스너 */
+        table.setOnTimeCellClickListener(
+            object: OnTimeCellClickListener {
+                override fun timeCellClicked(scheduleDay: Int, time: Int) {
+                    Log.d(TAG, "scheduleDay: ${scheduleDay}, time: $time")
+                }
+            }
+        )
     }
 
     private fun updateSchedules() {
@@ -88,18 +121,21 @@ class TimetableFragment : Fragment() {
         schedules.clear()
         myLectures.forEach { lecture ->
             val timeAndPlaceData = parseTimeAndPlace(lecture.timeAndPlace)
+            Log.d(TAG, "시간표 업데이트: ${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
-                val schedule = ScheduleEntity(
-                    lecture.id.toInt(),
-                    lecture.name,
-                    timeInfo[0],
-                    ScheduleDay.getDay(timeInfo[1]),
-                    timeInfo[2],
-                    timeInfo[3],
-                    colors[(colors.size-1)% index]
-                )
-                schedules.add(schedule)
+                if(timeInfo.isNotEmpty()) {
+                    val schedule = ScheduleEntity(
+                        (lecture.id % 2_100_000_000).toInt(),
+                        lecture.name,
+                        timeInfo[0],
+                        ScheduleDay.getDay(timeInfo[1]),
+                        timeInfo[2],
+                        timeInfo[3],
+                        colors[index % (colors.size - 1)]
+                    )
+                    schedules.add(schedule)
+                }
             }
         }
         tableSize = tableDao.getSize()
@@ -107,7 +143,6 @@ class TimetableFragment : Fragment() {
     }
 
     private fun parseTimeAndPlace(timeAndPlace: String): List<List<String>> {
-        Log.d(TAG, "시간표: $timeAndPlace")
         val result = mutableListOf<List<String>>()
         if (timeAndPlace.isEmpty()) return listOf(emptyList())
         // 1. 장소 분리
@@ -146,7 +181,6 @@ class TimetableFragment : Fragment() {
                 }
             }
         }
-        Log.d(TAG, "시간표: ->$result")
         return result
     }
 

@@ -55,13 +55,6 @@ class BaseActivity : AppCompatActivity() {
         initNavigation()
     }
 
-    override fun onResume() {
-        super.onResume()
-        val intent = intent
-        val newLecture = intent.getSerializableExtra("newLecture")
-        Log.d(TAG, "BaseActivity - onResume($newLecture)")
-    }
-
     private fun initNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment

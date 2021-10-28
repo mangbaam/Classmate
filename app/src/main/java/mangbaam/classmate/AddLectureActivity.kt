@@ -94,7 +94,7 @@ class AddLectureActivity : AppCompatActivity() {
             }
         }
         adapter.submitList(resultList)
-//        adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     private fun initSearchEditText() {
