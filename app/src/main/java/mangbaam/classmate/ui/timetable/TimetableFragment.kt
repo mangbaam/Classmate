@@ -16,6 +16,7 @@ import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import mangbaam.classmate.AddLectureActivity
+import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.TableDB
@@ -32,6 +33,7 @@ class TimetableFragment : Fragment() {
     private lateinit var table: MinTimeTableView
     private lateinit var tableDao: LectureDao
     private var tableSize = 0
+    private val tools = MyTools()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -120,7 +122,7 @@ class TimetableFragment : Fragment() {
         var index = 0
         schedules.clear()
         myLectures.forEach { lecture ->
-            val timeAndPlaceData = parseTimeAndPlace(lecture.timeAndPlace)
+            val timeAndPlaceData = tools.parseTimeAndPlace(lecture.timeAndPlace)
             Log.d(TAG, "시간표 업데이트: ${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
@@ -142,7 +144,7 @@ class TimetableFragment : Fragment() {
         table.updateSchedules(schedules)
     }
 
-    private fun parseTimeAndPlace(timeAndPlace: String): List<List<String>> {
+    /*private fun parseTimeAndPlace(timeAndPlace: String): List<List<String>> {
         val result = mutableListOf<List<String>>()
         if (timeAndPlace.isEmpty()) return listOf(emptyList())
         // 1. 장소 분리
@@ -182,7 +184,7 @@ class TimetableFragment : Fragment() {
             }
         }
         return result
-    }
+    }*/
 
     // 확장 함수
     private fun ScheduleDay.getDay(day: String): Int {

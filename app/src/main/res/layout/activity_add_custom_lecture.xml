@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:hint="@string/class_title"
+            android:hint="@string/class_title_bold"
             android:inputType="text" />
 
         <EditText

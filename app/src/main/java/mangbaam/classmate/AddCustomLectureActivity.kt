@@ -40,11 +40,7 @@ class AddCustomLectureActivity : AppCompatActivity() {
 
         /* 과목명, 교수명 required!! (추가 버튼 활성화) */
         binding.lectureNameEditText.addTextChangedListener {
-            val enbled = binding.lectureNameEditText.text.isNotEmpty() && binding.professorNameEditText.text.isNotEmpty()
-            binding.updateButton.isEnabled = enbled
-        }
-        binding.professorNameEditText.addTextChangedListener {
-            val enbled = binding.lectureNameEditText.text.isNotEmpty() && binding.professorNameEditText.text.isNotEmpty()
+            val enbled = binding.lectureNameEditText.text.isNotEmpty()
             binding.updateButton.isEnabled = enbled
         }
 
