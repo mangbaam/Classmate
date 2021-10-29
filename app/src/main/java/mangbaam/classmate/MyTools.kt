@@ -1,8 +1,6 @@
 package mangbaam.classmate
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.TimeAndPlace
 
@@ -60,12 +58,12 @@ class MyTools {
                 listOf(
                     tapInfo.place,
                     tapInfo.dayOfWeek,
-                    "${tapInfo.startHour}:${tapInfo.startMinute}",
-                    "${tapInfo.endHour}:${tapInfo.endMinute}"
+                    tapInfo.startTime,
+                    tapInfo.endTime
                 )
             )
         }
-        Log.d(TAG, "MyTools - tapBlocks: $tapBlocks")
+
         val placeGroup = mutableMapOf<String, MutableList<List<String>>>()
         tapBlocks.forEach {
             if (placeGroup.containsKey(it[0])) {
@@ -74,7 +72,6 @@ class MyTools {
                 placeGroup[it[0]] = mutableListOf(it.subList(1, 4))
             }
         }
-        Log.d(TAG, "MyTools - placeGroup: $placeGroup")
 
         val resultList = mutableListOf<String>()
 

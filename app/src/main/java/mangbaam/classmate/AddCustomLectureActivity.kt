@@ -1,16 +1,12 @@
 package mangbaam.classmate
 
 import android.app.AlertDialog
-import android.app.TimePickerDialog
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.islandparadise14.mintable.model.ScheduleDay
 import kotlinx.android.synthetic.main.activity_add_custom_lecture.*
 import mangbaam.classmate.adapter.AddCustomLectureAdapter
 import mangbaam.classmate.dao.LectureDao
@@ -18,6 +14,8 @@ import mangbaam.classmate.database.TableDB
 import mangbaam.classmate.database.getTableDB
 import mangbaam.classmate.databinding.ActivityAddCustomLectureBinding
 import mangbaam.classmate.databinding.DialogDayOfWeekBinding
+import mangbaam.classmate.databinding.DialogEndTimeBinding
+import mangbaam.classmate.databinding.DialogStartTimeBinding
 import mangbaam.classmate.model.TimeAndPlace
 import mangbaam.classmate.model.TimeItem
 
@@ -33,7 +31,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
     private val verify = Verify()
     private val tools = MyTools()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityAddCustomLectureBinding.inflate(layoutInflater)
@@ -60,13 +57,13 @@ class AddCustomLectureActivity : AppCompatActivity() {
 
         /* 과목명 required!! (추가 버튼 활성화) */
         binding.lectureNameEditText.addTextChangedListener {
-            val enbled = binding.lectureNameEditText.text.isNotEmpty()
-            binding.updateButton.isEnabled = enbled
+            val enabled = binding.lectureNameEditText.text.isNotEmpty()
+            binding.updateButton.isEnabled = enabled
         }
 
         /* 시간 및 장소 추가*/
         binding.addCustomLectureTextView.setOnClickListener {
-            val item = TimeAndPlace("월", 9, 30, 12, 20, "")
+            val item = TimeAndPlace("월", "9:30", "12:20", "")
             timeAndPlaceList.add(item)
             adapter.submitList(timeAndPlaceList)
             adapter.notifyDataSetChanged()
@@ -80,7 +77,14 @@ class AddCustomLectureActivity : AppCompatActivity() {
         /* 추가 버튼 */
         binding.updateButton.setOnClickListener {
             timeAndPlaceList.forEach {
-                if (it.startHour * 60 + it.startMinute > it.endHour * 60 + it.endMinute) {
+                val splitedStartList = it.startTime.split(":")
+                val splitedEndList = it.endTime.split(":")
+                val startHour = splitedStartList[0].toInt()
+                val startMinute = splitedStartList[1].toInt()
+                val endHour = splitedEndList[0].toInt()
+                val endMinute = splitedEndList[1].toInt()
+
+                if (startHour * 60 + startMinute > endHour * 60 + endMinute) {
                     Snackbar.make(
                         this.timeAndPlaceRecyclerView,
                         "종료 시간이 시작 시간보다 빠를 수 없습니다.",
@@ -93,10 +97,19 @@ class AddCustomLectureActivity : AppCompatActivity() {
             for ((outer, value1) in timeAndPlaceList.withIndex()) {
                 for ((inner, value2) in timeAndPlaceList.withIndex()) {
                     if (outer != inner && value1.dayOfWeek == value2.dayOfWeek) {
-                        val startTime1 = value1.startHour * 60 + value1.startMinute
-                        val endTime1 = value1.endHour * 60 + value1.endMinute
-                        val startTime2 = value2.startHour * 60 + value2.startMinute
-                        val endTime2 = value2.endHour * 60 + value2.endMinute
+                        val value1StartList = value1.startTime.split(":")
+                        val value2StartList = value2.startTime.split(":")
+                        val value1endList = value1.endTime.split(":")
+                        val value2EndList = value2.endTime.split(":")
+                        val value1StartHour = value1StartList[0].toInt(); val value1StartMinute = value1StartList[1].toInt()
+                        val value2StartHour = value2StartList[0].toInt(); val value2StartMinute = value2StartList[1].toInt()
+                        val value1EndHour = value1endList[0].toInt(); val value1EndMinute = value1endList[1].toInt()
+                        val value2EndHour = value2EndList[0].toInt(); val value2EndMinute = value2EndList[1].toInt()
+
+                        val startTime1 = value1StartHour * 60 + value1StartMinute
+                        val endTime1 = value1EndHour * 60 + value1EndMinute
+                        val startTime2 = value2StartHour * 60 + value2StartMinute
+                        val endTime2 = value2EndHour * 60 + value2EndMinute
                         if (startTime1 in startTime2..endTime2 ||
                             endTime1 in startTime2..endTime2 ||
                             (startTime2 in startTime1..endTime1 && endTime2 in startTime1..endTime1)
@@ -142,8 +155,8 @@ class AddCustomLectureActivity : AppCompatActivity() {
             wrapSelectorWheel = false
         }
         val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this).apply {
-            setTitle("요일 선택")
-            setMessage("요일을 선택하세요")
+            setTitle(getString(R.string.day_of_week_choice))
+            setMessage(getString(R.string.choose_day_of_week))
             setView(dialogView.root)
             setPositiveButton(R.string.ok) { _, _ ->
                 val index = dialogView.picker.value
@@ -155,41 +168,79 @@ class AddCustomLectureActivity : AppCompatActivity() {
         dialogBuilder.create().show()
     }
 
+    // TODO 스피너 형식으로 변경
     private fun showStartTimeDialog(position: Int) {
-        val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        val startTimesArray = resources.getStringArray(R.array.start_times)
+        val startClocksArray  = resources.getStringArray(R.array.start_clock)
+        val dialogView = DialogStartTimeBinding.inflate(layoutInflater)
+        val picker = dialogView.startTimePicker
+        with(picker) {
+            minValue = 0
+            maxValue = startTimesArray.size - 1
+            displayedValues = startTimesArray
+            wrapSelectorWheel = false
+        }
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.start_time_choice))
+            setMessage(getString(R.string.choose_start_time))
+            setView(dialogView.root)
+            setPositiveButton(R.string.ok) { _, _ ->
+                val index = dialogView.startTimePicker.value
+                timeAndPlaceList[position].startTime = startClocksArray[index]
+                adapter.notifyItemChanged(position)
+            }
+            setNegativeButton(R.string.cancel) { _, _ -> }
+        }
+        dialogBuilder.create().show()
+
+        /*val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             timeAndPlaceList[position].startHour = hourOfDay
             timeAndPlaceList[position].startMinute = minute
             adapter.notifyItemChanged(position)
         }
         val dialog = TimePickerDialog(this, listener, 9, 30, false)
         dialog.setTitle("시작 시간 설정")
-        dialog.show()
+        dialog.show()*/
     }
 
+    // TODO 스피너 형식으로 변경
     private fun showEndTimeDialog(position: Int) {
-        val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        val endTimesArray = resources.getStringArray(R.array.end_times)
+        val endClocksArray = resources.getStringArray(R.array.end_clock)
+
+        val dialogView = DialogEndTimeBinding.inflate(layoutInflater)
+        val picker = dialogView.endTimePicker
+        with(picker) {
+            minValue = 0
+            maxValue = endTimesArray.size - 1
+            displayedValues = endTimesArray
+            wrapSelectorWheel = false
+        }
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.end_time_choice))
+            setMessage(getString(R.string.choose_end_time))
+            setView(dialogView.root)
+            setPositiveButton(R.string.ok) { _, _ ->
+                val index = dialogView.endTimePicker.value
+                timeAndPlaceList[position].startTime = endClocksArray[index]
+                adapter.notifyItemChanged(position)
+            }
+            setNegativeButton(R.string.cancel) { _, _ -> }
+        }
+        dialogBuilder.create().show()
+
+        /*val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             timeAndPlaceList[position].endHour = hourOfDay
             timeAndPlaceList[position].endMinute = minute
             adapter.notifyItemChanged(position)
         }
         val dialog = TimePickerDialog(this, listener, 12, 20, false)
         dialog.setTitle("종료 시간 설정")
-        dialog.show()
+        dialog.show()*/
     }
 
     private fun getLectureName(): String = binding.lectureNameEditText.text.toString()
     private fun getProfessorName(): String = binding.professorNameEditText.text.toString()
-    private fun ScheduleDay.getDay(day: String): Int {
-        return when (day.uppercase()) {
-            "월", "월요일", "MONDAY", "MON" -> MONDAY
-            "화", "화요일", "TUESDAY", "TUE" -> TUESDAY
-            "수", "수요일", "WEDNESDAY", "WED" -> WEDNESDAY
-            "목", "목요일", "THURSDAY", "THU" -> THURSDAY
-            "금", "금요일", "FRIDAY", "FRI" -> FRIDAY
-            "토", "토요일", "SATURDAY", "SAT" -> SATURDAY
-            else -> 9999
-        }
-    }
 
     companion object {
         const val TAG: String = "로그"

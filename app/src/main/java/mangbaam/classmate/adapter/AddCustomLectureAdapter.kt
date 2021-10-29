@@ -26,8 +26,8 @@ class AddCustomLectureAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(item: TimeAndPlace) {
             binding.dayOfWeek.text = item.dayOfWeek
-            binding.startTime.text = TimeModel(item.startHour, item.startMinute).timeText
-            binding.endTime.text = TimeModel(item.endHour, item.endMinute).timeText
+            binding.startTime.text = TimeModel(item.startTime).timeText
+            binding.endTime.text = TimeModel(item.endTime).timeText
 
             binding.dayOfWeek.setOnClickListener {
                 onItemClicked(layoutPosition, TimeItem.DAY_OF_WEEK)

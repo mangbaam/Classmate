@@ -20,16 +20,6 @@
     <string name="search">검색</string>
 
     <!--    timetableView 관련 -->
-    <string-array name="timetable_header_title">
-        <item></item>
-        <item>월</item>
-        <item>화</item>
-        <item>수</item>
-        <item>목</item>
-        <item>금</item>
-        <item>토</item>
-    </string-array>
-
     <string-array name="days">
         <item>월</item>
         <item>화</item>
@@ -39,10 +29,88 @@
         <item>토</item>
     </string-array>
 
+    <string-array name="start_times">
+        <item>1교시 (09:30~)</item>
+        <item>2교시 (10:30~)</item>
+        <item>3교시 (11:30~)</item>
+        <item>4교시 (12:30~)</item>
+        <item>5교시 (13:30~)</item>
+        <item>6교시 (14:30~)</item>
+        <item>7교시 (15:30~)</item>
+        <item>8교시 (16:30~)</item>
+        <item>9교시 (17:30~)</item>
+        <item>10교시 (18:30~)</item>
+        <item>11교시 (19:30~)</item>
+        <item>12교시 (20:30~)</item>
+        <item>13교시 (21:30~)</item>
+        <item>14교시 (22:30~)</item>
+        <item>15교시 (23:30~)</item>
+    </string-array>
+
+    <string-array name="start_clock">
+        <item>09:30</item>
+        <item>10:30</item>
+        <item>11:30</item>
+        <item>12:30</item>
+        <item>13:30</item>
+        <item>14:30</item>
+        <item>15:30</item>
+        <item>16:30</item>
+        <item>17:30</item>
+        <item>18:30</item>
+        <item>19:30</item>
+        <item>20:30</item>
+        <item>21:30</item>
+        <item>22:30</item>
+        <item>23:30</item>
+    </string-array>
+
+    <string-array name="end_clock">
+        <item>10:20</item>
+        <item>11:20</item>
+        <item>12:20</item>
+        <item>13:20</item>
+        <item>14:20</item>
+        <item>15:20</item>
+        <item>16:20</item>
+        <item>17:20</item>
+        <item>18:20</item>
+        <item>19:20</item>
+        <item>20:20</item>
+        <item>21:20</item>
+        <item>22:20</item>
+        <item>23:20</item>
+        <item>00:20</item>
+    </string-array>
+
+    <string-array name="end_times">
+        <item>1교시 (~10:20)</item>
+        <item>2교시 (~11:20)</item>
+        <item>3교시 (~12:20)</item>
+        <item>4교시 (~13:20)</item>
+        <item>5교시 (~14:20)</item>
+        <item>6교시 (~15:20)</item>
+        <item>7교시 (~16:20)</item>
+        <item>8교시 (~17:20)</item>
+        <item>9교시 (~18:20)</item>
+        <item>10교시 (~19:20)</item>
+        <item>11교시 (~20:20)</item>
+        <item>12교시 (~21:20)</item>
+        <item>13교시 (~22:20)</item>
+        <item>14교시 (~23:20)</item>
+        <item>15교시 (~00:20)</item>
+    </string-array>
+
     <string name="cancel">취소</string>
     <string name="add">추가</string>
     <string name="ok">완료</string>
     <string name="professorName">교수명</string>
     <string name="action_settings">Settings</string>
     <string name="place">장소</string>
+    <string name="choose_day_of_week">요일을 선택하세요</string>
+    <string name="day_of_week_choice">요일 선택</string>
+    <string name="start_time_choice">시작 시간 선택</string>
+    <string name="choose_start_time">시작 교시(시간) 선택을 선택하세요</string>
+    <string name="end_time_choice">종료 시간 선택</string>
+    <string name="choose_end_time">종료 교시(시간) 선택을 선택하세요</string>
 </resources>
