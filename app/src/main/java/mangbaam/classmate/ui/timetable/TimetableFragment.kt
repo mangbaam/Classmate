@@ -2,14 +2,15 @@ package mangbaam.classmate.ui.timetable
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleDay
@@ -17,7 +18,6 @@ import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
-import kotlinx.coroutines.selects.select
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
@@ -106,6 +106,7 @@ class TimetableFragment : Fragment() {
         /* 롱클릭 리스너 */
         table.setOnScheduleLongClickListener(
             object: OnScheduleLongClickListener {
+                @RequiresApi(Build.VERSION_CODES.N)
                 override fun scheduleLongClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 롱클릭")
                     Toast.makeText(context, "${entity.scheduleName}, ${entity.roomInfo}", Toast.LENGTH_SHORT).show()
@@ -158,7 +159,10 @@ class TimetableFragment : Fragment() {
         val message = "id: ${selectedLecture.id}\n" +
                 "과목명: ${selectedLecture.name}\n" +
                 "교수명: ${selectedLecture.professor}\n" +
-                "시간 및 장소: ${selectedLecture.timeAndPlace}"
+                "시간 및 장소: ${selectedLecture.timeAndPlace}\n" +
+                "학점: ${selectedLecture.point}\n" +
+                "이수 구분: ${selectedLecture.classify}\n" +
+                "교양 영역: ${selectedLecture.electives}"
         val dialog = AlertDialog.Builder(context).apply {
             setTitle("강의 세부 정보")
             setMessage(message)
@@ -167,8 +171,27 @@ class TimetableFragment : Fragment() {
         dialog.create().show()
     }
     /* Schedule long clicked */
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun showTableMenuDialog(entity: ScheduleEntity) {
-
+        val dialog = AlertDialog.Builder(context).apply {
+            setTitle("울랄라~")
+            setMessage("삭제하시겠습니까?")
+            setNegativeButton(getString(R.string.delete)) {_, _ ->
+                deleteSchedule(entity)
+                Log.d(TAG, "$entity 삭제 완료")
+            }
+            setNeutralButton("닫기") { dialog, which -> dialog?.dismiss() }
+        }
+        dialog.create().show()
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun deleteSchedule(entity: ScheduleEntity) {
+        schedules.removeIf {
+            it.originId == entity.originId
+        }
+        tableDao.deleteLecture(tools.findLectureById(entity.originId, myLectures))
+        myLectures = tableDao.getAll()
+        table.updateSchedules(schedules)
     }
 
     // 확장 함수

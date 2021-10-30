@@ -113,4 +113,5 @@
     <string name="choose_start_time">시작 교시(시간) 선택을 선택하세요</string>
     <string name="end_time_choice">종료 시간 선택</string>
     <string name="choose_end_time">종료 교시(시간) 선택을 선택하세요</string>
+    <string name="delete">삭제</string>
 </resources>

@@ -104,11 +104,12 @@ class MyTools {
         val timeAndPlaceValue = resultList.joinToString(separator = ",")
         Log.d(TAG, "MyTools - $timeAndPlaceValue")
 
-        val resultLecture = Lecture()
-        resultLecture["lectureName"] = lectureName
+        val resultLecture = Lecture(0, "", "", "", "", "", "", "", "")
+        resultLecture["name"] = lectureName
         resultLecture["timeAndPlace"] = timeAndPlaceValue
         resultLecture["professor"] = professor
 
+        Log.d(TAG, "timeAndPlaceToLecture - $resultLecture 추가")
         return resultLecture
     }
 
