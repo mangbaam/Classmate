@@ -1,6 +1,8 @@
 package mangbaam.classmate.ui.timetable
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
+import kotlinx.coroutines.selects.select
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
@@ -22,6 +25,7 @@ import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.TableDB
 import mangbaam.classmate.database.getTableDB
 import mangbaam.classmate.databinding.FragmentTimetableBinding
+import mangbaam.classmate.model.Lecture
 
 
 class TimetableFragment : Fragment() {
@@ -32,6 +36,7 @@ class TimetableFragment : Fragment() {
     private val schedules = arrayListOf<ScheduleEntity>()
     private lateinit var table: MinTimeTableView
     private lateinit var tableDao: LectureDao
+    private lateinit var myLectures: Array<Lecture>
     private var tableSize = 0
     private val tools = MyTools()
 
@@ -86,7 +91,7 @@ class TimetableFragment : Fragment() {
         val day = resources.getStringArray(R.array.days)
         table = binding.timetableView
         table.initTable(day)
-        /* 시간표 Room에서 불러와 초기와 */
+        /* 시간표 Room에서 불러와 초기화 */
         updateSchedules()
         /* 클릭 리스너 */
         table.setOnScheduleClickListener(
@@ -94,6 +99,7 @@ class TimetableFragment : Fragment() {
                 override fun scheduleClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 클릭")
                     Toast.makeText(context, entity.scheduleName, Toast.LENGTH_SHORT).show()
+                    showTableDetailDialog(entity.originId)
                 }
             }
         )
@@ -103,6 +109,7 @@ class TimetableFragment : Fragment() {
                 override fun scheduleLongClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 롱클릭")
                     Toast.makeText(context, "${entity.scheduleName}, ${entity.roomInfo}", Toast.LENGTH_SHORT).show()
+                    showTableMenuDialog(entity)
                 }
             }
         )
@@ -118,17 +125,17 @@ class TimetableFragment : Fragment() {
 
     private fun updateSchedules() {
         val colors = resources.getStringArray(R.array.cell_colors)
-        val myLectures = tableDao.getAll()
+        myLectures = tableDao.getAll()
         var index = 0
         schedules.clear()
         myLectures.forEach { lecture ->
             val timeAndPlaceData = tools.parseTimeAndPlace(lecture.timeAndPlace)
-            Log.d(TAG, "시간표 업데이트: ${lecture.name} - $timeAndPlaceData")
+            Log.d(TAG, "시간표 업데이트: [${lecture.id}]${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
                 if(timeInfo.isNotEmpty()) {
                     val schedule = ScheduleEntity(
-                        (lecture.id % 2_100_000_000).toInt(),
+                        lecture.id,
                         lecture.name,
                         timeInfo[0],
                         ScheduleDay.getDay(timeInfo[1]),
@@ -144,47 +151,25 @@ class TimetableFragment : Fragment() {
         table.updateSchedules(schedules)
     }
 
-    /*private fun parseTimeAndPlace(timeAndPlace: String): List<List<String>> {
-        val result = mutableListOf<List<String>>()
-        if (timeAndPlace.isEmpty()) return listOf(emptyList())
-        // 1. 장소 분리
-        val myData = timeAndPlace.dropLast(1).split("),")
-        for (tmpData in myData) {
-            // 2. 장소와 시간 분리
-            val tmp = tmpData.split("(")
-            val place = tmp[0] // 장소
-            val dayAndTime = tmp[1] // 여러 요일, 교시 데이터
-            // 3. 여러 요일 분리
-            val days = dayAndTime.split(" ")
-            for (day in days) {
-                // 4.1 요일과 교시 분리
-                val dayOfWeek = day[0].toString() // 요일
-                val timesOfDay = day.substring(1) // 교시
-                val timeList = timesOfDay.split(",") // 교시 분리 3,4,7 -> [3, 4, 7]
-                // 4.2 연속되지 않는 교시 분리
-                var startIndex = 0;
-                var index = 1
-                val timeInfos = mutableListOf<List<String>>()
-                while (index < timeList.size) {
-                    if (timeList[index-1].toInt()+1 != timeList[index].toInt()) {
-                        println("${timeList[index-1].toInt()+1} != ${timeList[index]}")
-                        timeInfos.add(listOf(timeList[startIndex], timeList[index-1]))
-                        startIndex=index
-                    }
-                    index++
-                }
-                timeInfos.add(listOf(timeList[startIndex], timeList[index-1]))
-                // 4.3 교시 -> 시간 데이터로 변경하여 저장
-                for (info in timeInfos) {
-                    val startTime = "${info[0].toInt() + 8}:30"
-                    val endTime = "${info[1].toInt() + 9}:20"
-                    // 4.4 [[장소, 요일, 시작시간, 종료시작], [...], ...] 의 형태로 저장
-                    result.add(listOf(place, dayOfWeek, startTime, endTime))
-                }
-            }
+    /* Schedule clicked */
+    private fun showTableDetailDialog(id: Int) {
+        val selectedLecture = tools.findLectureById(id, myLectures)
+        Log.d(TAG, "[${selectedLecture.id}]$selectedLecture show")
+        val message = "id: ${selectedLecture.id}\n" +
+                "과목명: ${selectedLecture.name}\n" +
+                "교수명: ${selectedLecture.professor}\n" +
+                "시간 및 장소: ${selectedLecture.timeAndPlace}"
+        val dialog = AlertDialog.Builder(context).apply {
+            setTitle("강의 세부 정보")
+            setMessage(message)
+            setNeutralButton("닫기") { dialog, which -> dialog?.dismiss() }
         }
-        return result
-    }*/
+        dialog.create().show()
+    }
+    /* Schedule long clicked */
+    private fun showTableMenuDialog(entity: ScheduleEntity) {
+
+    }
 
     // 확장 함수
     private fun ScheduleDay.getDay(day: String): Int {

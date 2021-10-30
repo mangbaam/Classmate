@@ -79,7 +79,7 @@ class AddLectureActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         adapter = AddLectureAdapter(onItemClicked = {
-            Log.d(TAG, "AddLectureActivity : $it 선택됨")
+            Log.d(TAG, "AddLectureActivity : [${it.id}]$it 추가 중...")
             showAddLectureDialog(it)
         })
         resultRecyclerView.adapter = adapter
@@ -124,7 +124,7 @@ class AddLectureActivity : AppCompatActivity() {
     private fun showAddLectureDialog(item: Lecture) {
         val listener = DialogInterface.OnClickListener { _, which ->
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                Log.d(TAG, "AddLectureActivity - ${item.name} 추가 버튼 클릭")
+                Log.d(TAG, "AddLectureActivity - [${item.id}]${item.name} 추가 버튼 클릭")
                 val originLectures = tableDao.getAll()
                 if(verify.verifyTime(originLectures, item)) {
                     tableDao.insertLecture(item) // TableDB에 저장, 이미 추가된 강의라면 무시

@@ -104,17 +104,22 @@ class MyTools {
         val timeAndPlaceValue = resultList.joinToString(separator = ",")
         Log.d(TAG, "MyTools - $timeAndPlaceValue")
 
-        return Lecture(
-            lectureName,
-            "",
-            timeAndPlaceValue,
-            professor,
-            "",
-            "",
-            "",
-            "",
-            0
-        )
+        val resultLecture = Lecture()
+        resultLecture["lectureName"] = lectureName
+        resultLecture["timeAndPlace"] = timeAndPlaceValue
+        resultLecture["professor"] = professor
+
+        return resultLecture
+    }
+
+    fun findLectureById(id: Int, lectureList: Array<Lecture>):Lecture {
+        for(item in lectureList) {
+            if(item.id == id) {
+                return item
+            }
+        }
+        Log.d(TAG, "MyTools - id가 ${id}인 강의를 발견하지 못했습니다.")
+        return Lecture()
     }
 
     companion object {

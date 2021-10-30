@@ -7,6 +7,8 @@ import java.io.Serializable
 
 @Entity(tableName = "lectureTable")
 data class Lecture(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     @ColumnInfo(name = "lectureName") var name: String,
     var point: String,
     var timeAndPlace: String,
@@ -15,7 +17,7 @@ data class Lecture(
     var electives: String?,
     var department: String?,
     var link: String?,
-    @PrimaryKey(autoGenerate = true) val id: Long
+    //@PrimaryKey(autoGenerate = true) val id: Int
 ): Serializable {
     operator fun set(key: String, value: Any?) {
         when (key) {
@@ -30,5 +32,5 @@ data class Lecture(
         }
     }
 
-    constructor(): this("", "", "", "", "", "", "", "", 0)
+    constructor(): this(0, "", "", "", "", "", "", "", "")
 }

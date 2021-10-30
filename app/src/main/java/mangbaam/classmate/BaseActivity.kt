@@ -101,7 +101,7 @@ class BaseActivity : AppCompatActivity() {
     }
 
     private fun lectureBinding(map: HashMap<String, Any>): Lecture {
-        val lecture = Lecture()
+        val lecture = Lecture(0, "", "", "", "", "", "", "", "")
         for (key in map.keys) {
             lecture[key] = map[key]
         }

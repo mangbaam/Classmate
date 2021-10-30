@@ -131,6 +131,7 @@ class AddCustomLectureActivity : AppCompatActivity() {
             val newCustomLecture = tools.timeAndPlaceToLecture(getLectureName(), getProfessorName(), timeAndPlaceList)
             if(verify.verifyTime(originLectures, newCustomLecture)) {
                 Log.d(TAG, "Custom 시간표 추가")
+                Log.d(TAG, "-> [${newCustomLecture.id}] $newCustomLecture")
                 tableDao.insertLecture(newCustomLecture) // TableDB에 저장, 이미 추가된 강의라면 무시
                 finish()
             } else {
@@ -192,15 +193,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
             setNegativeButton(R.string.cancel) { _, _ -> }
         }
         dialogBuilder.create().show()
-
-        /*val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            timeAndPlaceList[position].startHour = hourOfDay
-            timeAndPlaceList[position].startMinute = minute
-            adapter.notifyItemChanged(position)
-        }
-        val dialog = TimePickerDialog(this, listener, 9, 30, false)
-        dialog.setTitle("시작 시간 설정")
-        dialog.show()*/
     }
 
     // TODO 스피너 형식으로 변경
@@ -222,21 +214,12 @@ class AddCustomLectureActivity : AppCompatActivity() {
             setView(dialogView.root)
             setPositiveButton(R.string.ok) { _, _ ->
                 val index = dialogView.endTimePicker.value
-                timeAndPlaceList[position].startTime = endClocksArray[index]
+                timeAndPlaceList[position].endTime = endClocksArray[index]
                 adapter.notifyItemChanged(position)
             }
             setNegativeButton(R.string.cancel) { _, _ -> }
         }
         dialogBuilder.create().show()
-
-        /*val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            timeAndPlaceList[position].endHour = hourOfDay
-            timeAndPlaceList[position].endMinute = minute
-            adapter.notifyItemChanged(position)
-        }
-        val dialog = TimePickerDialog(this, listener, 12, 20, false)
-        dialog.setTitle("종료 시간 설정")
-        dialog.show()*/
     }
 
     private fun getLectureName(): String = binding.lectureNameEditText.text.toString()
