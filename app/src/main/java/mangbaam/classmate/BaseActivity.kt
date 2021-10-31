@@ -2,12 +2,16 @@ package mangbaam.classmate
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import mangbaam.classmate.database.DB_keys.Companion.LECTURES
@@ -28,6 +32,13 @@ class BaseActivity : AppCompatActivity() {
     private val binding get() = mBinding!!
     private lateinit var appDB: AppDatabase
     private lateinit var lectureDAO: LectureDao
+
+    private val animationContainer: RelativeLayout by lazy {
+        findViewById(R.id.splashAnimationContainer)
+    }
+    private val splashAnimation: LottieAnimationView by lazy {
+        findViewById(R.id.splashAnimation)
+    }
     private val sharedPreference by lazy {
         getSharedPreferences("APP_SETTINGS", Context.MODE_PRIVATE)
     }
@@ -36,6 +47,8 @@ class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Handler().postDelayed({animationContainer.isGone = true}, 5000)
 
         appDB = getAppDatabase(this)
         lectureDAO = appDB.lectureDao()

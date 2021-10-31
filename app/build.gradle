@@ -77,4 +77,8 @@ dependencies {
 
     // TimetableView
     implementation 'com.github.islandparadise14:Mintable:1.5.1'
+
+    // Lottie
+    def lottieVersion = "4.2.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }

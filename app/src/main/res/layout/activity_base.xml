@@ -30,4 +30,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+    <RelativeLayout
+        android:id="@+id/splashAnimationContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/splashAnimation"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/permanent_marker"
+            android:text="@string/app_name_en"
+            android:textColor="@color/black"
+            android:textSize="50dp"
+            tools:ignore="SpUsage" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/splashAnimation"
+            android:layout_centerInParent="true"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/bell_animation"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+        />
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

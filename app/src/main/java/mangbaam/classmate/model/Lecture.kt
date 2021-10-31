@@ -17,7 +17,6 @@ data class Lecture(
     var electives: String?,
     var department: String?,
     var link: String?,
-    //@PrimaryKey(autoGenerate = true) val id: Int
 ): Serializable {
     operator fun set(key: String, value: Any?) {
         when (key) {
