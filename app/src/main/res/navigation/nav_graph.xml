@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_timetable">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="mangbaam.classmate.ui.home.HomeFragment"
+        android:id="@+id/navigation_todo"
+        android:name="mangbaam.classmate.ui.todo.TodoFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_todo" />
 
     <fragment
         android:id="@+id/navigation_timetable"
@@ -24,8 +24,8 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_setting"
-        android:name="mangbaam.classmate.ui.setting.SettingFragment"
+        android:id="@+id/navigation_more"
+        android:name="mangbaam.classmate.ui.more.MoreFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_more" />
 </navigation>

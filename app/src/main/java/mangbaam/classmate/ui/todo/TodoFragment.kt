@@ -1,19 +1,15 @@
-package mangbaam.classmate.ui.home
+package mangbaam.classmate.ui.todo
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import mangbaam.classmate.R
-import mangbaam.classmate.databinding.FragmentHomeBinding
+import mangbaam.classmate.databinding.FragmentTodoBinding
 
-class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
+class TodoFragment : Fragment() {
+    private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,7 +18,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "HomeFragment - onCreateView() called")
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentTodoBinding.inflate(inflater, container, false)
         binding.lectureInfoTextView.text = "강의가 없습니다"
         return binding.root
     }

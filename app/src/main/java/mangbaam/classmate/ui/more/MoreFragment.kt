@@ -1,4 +1,4 @@
-package mangbaam.classmate.ui.setting
+package mangbaam.classmate.ui.more
 
 import android.os.Bundle
 import android.util.Log
@@ -6,11 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import mangbaam.classmate.R
-import mangbaam.classmate.databinding.FragmentSettingBinding
+import mangbaam.classmate.databinding.FragmentMoreBinding
 
-class SettingFragment : Fragment() {
-    private var mBinding: FragmentSettingBinding? = null
+class MoreFragment : Fragment() {
+    private var mBinding: FragmentMoreBinding? = null
     private val binding get() = mBinding!!
 
     override fun onCreateView(
@@ -18,7 +17,7 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "SettingFragment - onCreateView() called")
-        mBinding = FragmentSettingBinding.inflate(inflater)
+        mBinding = FragmentMoreBinding.inflate(inflater)
 
         return binding.root
     }

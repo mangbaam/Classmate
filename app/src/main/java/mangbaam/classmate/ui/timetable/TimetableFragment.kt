@@ -97,8 +97,6 @@ class TimetableFragment : Fragment() {
         table.setOnScheduleClickListener(
             object: OnScheduleClickListener {
                 override fun scheduleClicked(entity: ScheduleEntity) {
-                    Log.d(TAG, "${entity.scheduleName} 클릭")
-                    Toast.makeText(context, entity.scheduleName, Toast.LENGTH_SHORT).show()
                     showTableDetailDialog(entity.originId)
                 }
             }
@@ -109,7 +107,6 @@ class TimetableFragment : Fragment() {
                 @RequiresApi(Build.VERSION_CODES.N)
                 override fun scheduleLongClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 롱클릭")
-                    Toast.makeText(context, "${entity.scheduleName}, ${entity.roomInfo}", Toast.LENGTH_SHORT).show()
                     showTableMenuDialog(entity)
                 }
             }

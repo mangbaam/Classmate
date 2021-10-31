@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFEB3B"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.todo.TodoFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topLectureInfoPanel"

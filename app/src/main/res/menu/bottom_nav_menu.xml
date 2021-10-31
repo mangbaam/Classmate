@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home"
-        android:title="@string/title_home" />
+        android:id="@+id/navigation_timetable"
+        android:icon="@drawable/ic_timetable"
+        android:title="@string/timetable" />
 
     <item
-        android:id="@+id/navigation_timetable"
-        android:icon="@drawable/ic_dashboard"
-        android:title="@string/timetable" />
+        android:id="@+id/navigation_todo"
+        android:icon="@drawable/ic_task"
+        android:title="@string/title_todo" />
 
     <item
         android:id="@+id/navigation_notifications"
@@ -17,8 +17,8 @@
         android:title="@string/title_notifications" />
 
     <item
-        android:id="@+id/navigation_setting"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/setting" />
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/title_more" />
 
 </menu>
