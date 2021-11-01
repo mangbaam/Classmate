@@ -36,12 +36,6 @@ class BaseActivity : AppCompatActivity() {
     private val animationContainer: RelativeLayout by lazy {
         findViewById(R.id.splashAnimationContainer)
     }
-    private val splashAnimation: LottieAnimationView by lazy {
-        findViewById(R.id.splashAnimation)
-    }
-    private val sharedPreference by lazy {
-        getSharedPreferences("APP_SETTINGS", Context.MODE_PRIVATE)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,14 +47,12 @@ class BaseActivity : AppCompatActivity() {
         appDB = getAppDatabase(this)
         lectureDAO = appDB.lectureDao()
 
-        val term = sharedPreference.getString("TERM", "").toString()
+        val term = PreferenceHelper.getString(this, TERM).toString()
         Log.d(TAG, "SharedPreference - $term")
-        if (term != getThisTerm()) { // if (term != getThisTerm())
+        if (term != getThisTerm()) {
             Log.d(TAG, "새로운 강의 업데이트 중...")
             updateLectures()
-            sharedPreference.edit(true) {
-                putString(TERM, getThisTerm())
-            }
+            PreferenceHelper.setString(this, TERM, getThisTerm())
         } else {
             Log.d(TAG, "업데이트 항목이 없습니다")
         }
@@ -76,7 +68,7 @@ class BaseActivity : AppCompatActivity() {
     }
 
     private fun updateLectures() {
-        val schoolName = sharedPreference.getString(SCHOOL_NAME, SUWON_UNIV).toString()
+        val schoolName = PreferenceHelper.getString(this, SCHOOL_NAME).toString()
         Log.d(TAG, ">> SchoolName: $schoolName")
         Log.d(TAG, ">> Term: ${getThisTerm()}")
 
@@ -105,9 +97,7 @@ class BaseActivity : AppCompatActivity() {
                 }
             } else {
                 Log.d(TAG, "BaseActivity -  lectureDB Fail: $it")
-                sharedPreference.edit(true) {
-                    putString(TERM, "")
-                }
+                PreferenceHelper.setString(this, TERM, "")
                 Toast.makeText(this, "과목 업데이트에 실패했습니다. 네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show()
             }
         }

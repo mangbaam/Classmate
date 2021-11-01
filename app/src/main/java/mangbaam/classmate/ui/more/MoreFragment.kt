@@ -15,11 +15,15 @@ class MoreFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "SettingFragment - onCreateView() called")
         mBinding = FragmentMoreBinding.inflate(inflater)
 
         return binding.root
+    }
+
+    private fun initSwitchLayout() {
+
     }
 
     override fun onDestroyView() {
