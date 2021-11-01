@@ -118,4 +118,8 @@
     <string name="delete">삭제</string>
     <string name="app_name_en">classmate</string>
     <string name="alarm_on">알람 켜기</string>
+    <string name="address_blog">latte-is-horse.tistory.com</string>
+    <string name="address_email">pmb0836+classmate@gmail.com</string>
+    <string name="address_github">github.com/mangbaam</string>
+    <string name="developer_information">개발자 정보</string>
 </resources>

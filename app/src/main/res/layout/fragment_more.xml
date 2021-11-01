@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:paddingHorizontal="8dp"
     tools:context=".ui.more.MoreFragment">
 
     <LinearLayout
@@ -53,6 +53,7 @@
                 android:weightSum="5">
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/before_30_switch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -64,6 +65,7 @@
                     android:layout_weight="1" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/before_10_switch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -84,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="개발자 정보"
+                android:text="@string/developer_information"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -99,15 +101,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="pmb0836+classmate@gmail.com"
-                android:textColor="@color/electron_blue" />
+                android:drawablePadding="8dp"
+                android:text="@string/address_email"
+                android:textColor="@color/electron_blue"
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/logo_gmail" />
 
             <TextView
                 android:id="@+id/blogAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="latte-is-horse.tistory.com"
-                android:textColor="@color/exodus_fruit" />
+                android:drawablePadding="8dp"
+                android:text="@string/address_blog"
+                android:textColor="@color/exodus_fruit"
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/logo_tistory" />
+
+            <TextView
+                android:id="@+id/githubAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:text="@string/address_github"
+                android:textColor="@color/orangeville"
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/logo_github" />
         </LinearLayout>
 
         <LinearLayout
@@ -130,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="라이선스 정보이 들어갈 공간입니다." />
+                android:text="라이선스 정보가 들어갈 공간입니다." />
         </LinearLayout>
     </LinearLayout>
 
