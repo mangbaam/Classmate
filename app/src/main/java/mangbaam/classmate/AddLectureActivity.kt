@@ -21,6 +21,7 @@ import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.*
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
+import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.notification.NotificationHelper.Companion.registerAlarm
 
@@ -125,17 +126,6 @@ class AddLectureActivity : AppCompatActivity() {
                 val originLectures = tableDao.getAll()
                 if (verifyTime(originLectures, item)) {
                     tableDao.insertLecture(item) // TableDB에 저장, 이미 추가된 강의라면 무시
-                    // TODO 알람 등록
-                    if (PreferenceHelper.getBoolean(this, ALARM_ON)) {
-                        if (PreferenceHelper.getBoolean(this, DB_keys.ALARM_BEFORE_10)) {
-                            registerAlarm(this, item, 10)
-                        }
-                        if (PreferenceHelper.getBoolean(this, DB_keys.ALARM_BEFORE_30)) {
-                            registerAlarm(this, item, 30)
-                        }
-                    } else {
-
-                    }
                     finish()
                 } else {
                     Snackbar.make(

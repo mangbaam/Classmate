@@ -151,10 +151,26 @@ class MyTools {
             return dayDiffMs + timeDiffMs
         }
 
+        fun lastTimeMillis(targetWeekday: Int, targetHour: Int, targetMinute: Int): Long {
+            val format = SimpleDateFormat("EE HH mm", Locale.KOREA)
+            val today = format.format(Date(SystemClock.elapsedRealtime())) // 현재 시간 (요일 시간 분)
+
+            val dateInfo = today.split(" ")
+            val dayOfWeek = dateInfo[0] // 요일
+            val currentHour = dateInfo[1].toInt() // 시
+            val currentMinute = dateInfo[2].toInt() // 분
+            Log.d(TAG, "현재 : ${dayOfWeek}요일 $currentHour : $currentMinute")
+            val dayDiffMs = weekDayDiff(dayOfWeek, targetWeekday) * DAYms
+            val timeDiffMs = timeDiff(currentHour, currentMinute, targetHour, targetMinute)
+            return dayDiffMs + timeDiffMs
+        }
+
         private fun weekDayDiff(from: String, to: String): Int {
             val days = listOf("월", "화", "수", "목", "금", "토", "일")
             return (days.indexOf(to) - days.indexOf(from) + 7) % 7
         }
+
+        private fun weekDayDiff(from: String, to: Int): Int = weekDayDiff(from, getWeekDay(to)+7) % 7
 
         private fun timeDiff(fromHour: Int, fromMinute: Int, toHour: Int, toMinute: Int): Long {
             val fHour = fromHour * HOURms
@@ -182,6 +198,8 @@ class MyTools {
             val format = SimpleDateFormat("yy/MM/DD EE요일 HH:mm:ss", Locale.KOREA)
             return format.format(Date(SystemClock.elapsedRealtime())) // 현재 시간 (O요일 시간:분:초)
         }
+
+        fun getWeekDay(index: Int): String = arrayOf("월","화","수","목","금","토","일")[index]
 
         // 상수 값들
         const val TAG: String = "로그"

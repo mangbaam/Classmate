@@ -34,6 +34,18 @@ class PreferenceHelper {
             return prefs.getString(key, DEFAULT_STRING_VALUE)
         }
 
+        fun setInt(context: Context, key: String, value: Int) {
+            val prefs = getPreferences(context)
+            val editor = prefs.edit()
+            editor.putInt(key, value)
+            editor.apply()
+        }
+
+        fun getInt(context: Context, key: String): Int? {
+            val prefs = getPreferences(context)
+            return prefs.getInt(key, DEFAULT_INT_VALUE)
+        }
+
         fun removeKey(context: Context, key: String) {
             val prefs = getPreferences(context)
             val edit = prefs.edit()
@@ -50,6 +62,6 @@ class PreferenceHelper {
         private const val PREFERENCE_NAME = "APP_SETTINGS"
         private const val DEFAULT_BOOLEAN_VALUE = false
         private const val DEFAULT_STRING_VALUE = ""
-
+        private const val DEFAULT_INT_VALUE = 30
     }
 }

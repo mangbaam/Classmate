@@ -7,7 +7,6 @@ class DB_keys {
         const val LECTURES = "Lectures"
         const val TERM = "TERM"
         const val ALARM_ON = "AlarmOn"
-        const val ALARM_BEFORE_10 = "AlarmBefore10Minutes"
-        const val ALARM_BEFORE_30 = "AlarmBefore30Minutes"
+        const val ALARM_MINUTE = "MinutesToAlarm"
     }
 }

@@ -1,5 +1,8 @@
 package mangbaam.classmate.ui.more
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +13,27 @@ import android.view.View
 import android.view.ViewGroup
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
-import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_10
-import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_30
+import mangbaam.classmate.R
+import mangbaam.classmate.dao.AlarmDao
+import mangbaam.classmate.dao.ScheduleDao
+import mangbaam.classmate.database.DB_keys.Companion.ALARM_MINUTE
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
+import mangbaam.classmate.database.getAlarmDB
+import mangbaam.classmate.database.getScheduleDB
+import mangbaam.classmate.databinding.DialogDayOfWeekBinding
+import mangbaam.classmate.databinding.DialogMinuteSettingBinding
 import mangbaam.classmate.databinding.FragmentMoreBinding
+import mangbaam.classmate.model.AlarmModel
+import mangbaam.classmate.model.ScheduleModel
+import mangbaam.classmate.notification.NotificationHelper
 
 class MoreFragment : Fragment() {
     private var mBinding: FragmentMoreBinding? = null
     private val binding get() = mBinding!!
+    private lateinit var scheduleDao: ScheduleDao
+    private lateinit var alarmDao: AlarmDao
+    private val alarms = mutableListOf<AlarmModel>()
+    private val schedules = arrayListOf<ScheduleModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,47 +42,49 @@ class MoreFragment : Fragment() {
         Log.d(TAG, "SettingFragment - onCreateView() called")
         mBinding = FragmentMoreBinding.inflate(inflater)
 
-        initSwitchLayout()
+        scheduleDao = getScheduleDB(requireContext()).scheduleDao()
+        alarmDao = getAlarmDB(requireContext()).alarmDao()
+
+        schedules.addAll(scheduleDao.getAll())
+        alarms.addAll(alarmDao.getAll())
+
+        initViews()
         initLinks()
 
         return binding.root
     }
 
-    private fun initSwitchLayout() {
-        // SharePreference에서 값을 가져와 초기화
-        initSwitchValues()
+    private fun initViews() {
+        initValues() // SharedPreference 값을 가져와 초기화
         val context = requireContext()
         if (PreferenceHelper.getBoolean(context, ALARM_ON).not()) {
-            binding.before10Switch.isEnabled = false
-            binding.before30Switch.isEnabled = false
+            binding.minuteTextView.isEnabled = false
         }
-        // '알람 켜기' 스위치가 false라면 다른 스위치들 설정 불가
+        // '알람 켜기' 스위치가 false -> 다른 스위치들 설정 불가
         binding.alarmOnSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                binding.before10Switch.isEnabled = true
-                binding.before30Switch.isEnabled = true
+                binding.minuteTextView.isEnabled = true
+                binding.minuteTextView.text = PreferenceHelper.getString(context, ALARM_MINUTE)
+                // TODO 30분 전 알림 켜기
+
             } else {
-                binding.before10Switch.isEnabled = false
-                binding.before30Switch.isEnabled = false
+                binding.minuteTextView.isEnabled = false
+                // TODO 모든 알림 끄기
             }
             PreferenceHelper.setBoolean(context, ALARM_ON, isChecked)
             Log.d(TAG, "알람켜기 스위치 - ${PreferenceHelper.getBoolean(context, ALARM_ON)}")
         }
-        binding.before10Switch.setOnCheckedChangeListener { buttonView, isChecked ->
-            PreferenceHelper.setBoolean(context, ALARM_BEFORE_10, isChecked)
-            Log.d(TAG, "10분 스위치 - ${PreferenceHelper.getBoolean(context, ALARM_BEFORE_10)}")
+
+        binding.editButton.setOnClickListener {
+            showSettingDialog(context)
         }
-        binding.before30Switch.setOnCheckedChangeListener { buttonView, isChecked ->
-            PreferenceHelper.setBoolean(context, ALARM_BEFORE_30, isChecked)
-            Log.d(TAG, "30분 스위치 - ${PreferenceHelper.getBoolean(context, ALARM_BEFORE_30)}")
-        }
+
     }
 
-    private fun initSwitchValues() {
+    private fun initValues() {
         val context = requireContext()
         binding.alarmOnSwitch.isChecked = PreferenceHelper.getBoolean(context, ALARM_ON)
-        binding.before10Switch.isChecked = PreferenceHelper.getBoolean(context, ALARM_BEFORE_10)
-        binding.before30Switch.isChecked = PreferenceHelper.getBoolean(context, ALARM_BEFORE_30)
+        binding.minuteTextView.text = PreferenceHelper.getInt(context, ALARM_MINUTE).toString()
     }
 
     private fun initLinks() {
@@ -100,9 +118,34 @@ class MoreFragment : Fragment() {
         startActivity(webIntent)
     }
 
+    private fun showSettingDialog(context: Context) {
+        val minutesArray = resources.getStringArray(R.array.setting_minutes)
+        val dialogView = DialogMinuteSettingBinding.inflate(layoutInflater)
+        val picker = dialogView.picker
+        with(picker) {
+            minValue = 0
+            maxValue = minutesArray.size - 1
+            displayedValues = minutesArray
+            wrapSelectorWheel = false
+            value = (PreferenceHelper.getInt(context, ALARM_MINUTE)?.div(10)?.minus(1)) ?: 2
+        }
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context).apply {
+            setTitle("수업 몇 분 전에 알려드릴까요?")
+            setMessage("다이얼을 돌려 설정하세요")
+            setView(dialogView.root)
+            setPositiveButton(R.string.ok) { _, _ ->
+                val value = (dialogView.picker.value+1) * 10
+                binding.minuteTextView.text = value.toString()
+                PreferenceHelper.setInt(context, ALARM_MINUTE, value)
+            }
+            setNegativeButton(R.string.cancel) { _, _ -> }
+        }
+        dialogBuilder.create().show()
+    }
+
     override fun onResume() {
         super.onResume()
-        initSwitchValues()
+        initValues()
     }
 
     override fun onDestroyView() {

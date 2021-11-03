@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class AlarmModel(
     @PrimaryKey val id: Int,
+    val name: String,
+    val place: String,
     val weekDay: String,
     val hour: Int,
     val minute: Int,

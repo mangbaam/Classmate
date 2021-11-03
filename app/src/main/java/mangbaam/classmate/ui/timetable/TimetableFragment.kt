@@ -194,9 +194,6 @@ class TimetableFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun deleteSchedule(entity: ScheduleEntity) {
-        /*schedules.removeIf {
-            it.originId == entity.originId
-        } // schedule Array 에서 제거*/
         scheduleDao.delete(entity.originId) // Schedule DB에서 제거
         synchronizeSchedules()
 
@@ -225,6 +222,7 @@ class TimetableFragment : Fragment() {
     }
 
     private fun synchronizeSchedules() {
+        Log.d(TAG, "TimetableFragment - synchronizeSchedules() called")
         schedules.clear()
         schedules.addAll(getSchedules())
     }

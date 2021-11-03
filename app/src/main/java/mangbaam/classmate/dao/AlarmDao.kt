@@ -6,7 +6,7 @@ import mangbaam.classmate.model.AlarmModel
 @Dao
 interface AlarmDao {
     @Query("SELECT * FROM AlarmModel")
-    fun getAll(): AlarmModel
+    fun getAll(): List<AlarmModel>
 
     @Delete
     fun delete(model: AlarmModel)

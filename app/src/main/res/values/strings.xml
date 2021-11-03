@@ -103,6 +103,15 @@
         <item>15교시 (~00:20)</item>
     </string-array>
 
+    <string-array name="setting_minutes">
+        <item>10분 전</item>
+        <item>20분 전</item>
+        <item>30분 전</item>
+        <item>40분 전</item>
+        <item>50분 전</item>
+        <item>1시간 전</item>
+    </string-array>
+
     <string name="cancel">취소</string>
     <string name="add">추가</string>
     <string name="ok">완료</string>
@@ -122,4 +131,6 @@
     <string name="address_email">pmb0836+classmate@gmail.com</string>
     <string name="address_github">github.com/mangbaam</string>
     <string name="developer_information">개발자 정보</string>
+    <string name="edit_button_description">button to edit minute</string>
+    <string name="_30">30</string>
 </resources>
