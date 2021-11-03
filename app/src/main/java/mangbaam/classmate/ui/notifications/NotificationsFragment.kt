@@ -1,5 +1,6 @@
 package mangbaam.classmate.ui.notifications
 
+import android.app.ActionBar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import mangbaam.classmate.BaseActivity
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.FragmentNotificationsBinding
 
@@ -25,7 +27,7 @@ class NotificationsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "NotificationsFragment - onCreateView() called")
         notificationsViewModel =
             ViewModelProvider(this).get(NotificationsViewModel::class.java)

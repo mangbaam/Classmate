@@ -2,7 +2,6 @@ package mangbaam.classmate
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -11,19 +10,19 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import mangbaam.classmate.Verify.Companion.verifyTime
 import mangbaam.classmate.adapter.AddLectureAdapter
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.*
+import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
 import mangbaam.classmate.model.Lecture
-import mangbaam.classmate.ui.timetable.TimetableFragment
+import mangbaam.classmate.notification.NotificationHelper.Companion.registerAlarm
 
 class AddLectureActivity : AppCompatActivity() {
     private lateinit var adapter: AddLectureAdapter
@@ -31,8 +30,6 @@ class AddLectureActivity : AppCompatActivity() {
     private lateinit var tableDB: TableDB
     private lateinit var lectureDAO: LectureDao
     private lateinit var tableDao: LectureDao
-
-    private val verify = Verify()
 
     private var lectureList = mutableListOf<Lecture>()
     private val resultList = mutableListOf<Lecture>()
@@ -126,8 +123,19 @@ class AddLectureActivity : AppCompatActivity() {
             if (which == DialogInterface.BUTTON_POSITIVE) {
                 Log.d(TAG, "AddLectureActivity - [${item.id}]${item.name} 추가 버튼 클릭")
                 val originLectures = tableDao.getAll()
-                if(verify.verifyTime(originLectures, item)) {
+                if(verifyTime(originLectures, item)) {
                     tableDao.insertLecture(item) // TableDB에 저장, 이미 추가된 강의라면 무시
+                    // TODO 알람 등록
+                    if (PreferenceHelper.getBoolean(this, ALARM_ON)) {
+                        if (PreferenceHelper.getBoolean(this, DB_keys.ALARM_BEFORE_10)) {
+                            registerAlarm(this, item, 10)
+                        }
+                        if (PreferenceHelper.getBoolean(this, DB_keys.ALARM_BEFORE_30)) {
+                            registerAlarm(this, item, 30)
+                        }
+                    } else {
+
+                    }
                     finish()
                 } else {
                     Snackbar.make(this.resultRecyclerView, "시간이 겹치는 강의가 존재합니다.", Snackbar.LENGTH_LONG).show()

@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.islandparadise14.mintable.MinTimeTableView
@@ -20,6 +19,8 @@ import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import mangbaam.classmate.AddLectureActivity
 import mangbaam.classmate.MyTools
+import mangbaam.classmate.MyTools.Companion.findLectureById
+import mangbaam.classmate.MyTools.Companion.parseTimeAndPlace
 import mangbaam.classmate.R
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.TableDB
@@ -38,7 +39,6 @@ class TimetableFragment : Fragment() {
     private lateinit var tableDao: LectureDao
     private lateinit var myLectures: Array<Lecture>
     private var tableSize = 0
-    private val tools = MyTools()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -127,7 +127,7 @@ class TimetableFragment : Fragment() {
         var index = 0
         schedules.clear()
         myLectures.forEach { lecture ->
-            val timeAndPlaceData = tools.parseTimeAndPlace(lecture.timeAndPlace)
+            val timeAndPlaceData = parseTimeAndPlace(lecture.timeAndPlace)
             Log.d(TAG, "시간표 업데이트: [${lecture.id}]${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
@@ -151,7 +151,7 @@ class TimetableFragment : Fragment() {
 
     /* Schedule clicked */
     private fun showTableDetailDialog(id: Int) {
-        val selectedLecture = tools.findLectureById(id, myLectures)
+        val selectedLecture = findLectureById(id, myLectures)
         Log.d(TAG, "[${selectedLecture.id}]$selectedLecture show")
         val message = "id: ${selectedLecture.id}\n" +
                 "과목명: ${selectedLecture.name}\n" +
@@ -186,7 +186,7 @@ class TimetableFragment : Fragment() {
         schedules.removeIf {
             it.originId == entity.originId
         }
-        tableDao.deleteLecture(tools.findLectureById(entity.originId, myLectures))
+        tableDao.deleteLecture(findLectureById(entity.originId, myLectures))
         myLectures = tableDao.getAll()
         table.updateSchedules(schedules)
     }

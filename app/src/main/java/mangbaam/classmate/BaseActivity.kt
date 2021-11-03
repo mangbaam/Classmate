@@ -1,28 +1,25 @@
 package mangbaam.classmate
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import mangbaam.classmate.database.DB_keys.Companion.LECTURES
 import mangbaam.classmate.database.DB_keys.Companion.SCHOOL_NAME
 import mangbaam.classmate.database.DB_keys.Companion.TERM
-import mangbaam.classmate.database.DB_keys.Companion.SUWON_UNIV
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.AppDatabase
 import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.notification.NotificationHelper
 import java.text.SimpleDateFormat
 import java.util.*
 

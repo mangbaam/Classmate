@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.fragment_more.*
+import mangbaam.classmate.BaseActivity
 import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_10
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_30

@@ -1,5 +1,6 @@
 package mangbaam.classmate.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import mangbaam.classmate.model.Lecture
 

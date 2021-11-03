@@ -8,6 +8,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_custom_lecture.*
+import mangbaam.classmate.MyTools.Companion.timeAndPlaceToLecture
+import mangbaam.classmate.Verify.Companion.verifyTime
 import mangbaam.classmate.adapter.AddCustomLectureAdapter
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.TableDB
@@ -29,7 +31,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
     private lateinit var tableDao: LectureDao
 
     private val verify = Verify()
-    private val tools = MyTools()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,8 +129,8 @@ class AddCustomLectureActivity : AppCompatActivity() {
             val originLectures = tableDao.getAll()
 
             places.forEach { (position, text) -> timeAndPlaceList[position].place = text } // 장소 데이터 이 시점에 추가
-            val newCustomLecture = tools.timeAndPlaceToLecture(getLectureName(), getProfessorName(), timeAndPlaceList)
-            if(verify.verifyTime(originLectures, newCustomLecture)) {
+            val newCustomLecture = timeAndPlaceToLecture(getLectureName(), getProfessorName(), timeAndPlaceList)
+            if(verifyTime(originLectures, newCustomLecture)) {
                 Log.d(TAG, "Custom 시간표 추가")
                 Log.d(TAG, "-> [${newCustomLecture.id}] $newCustomLecture")
                 tableDao.insertLecture(newCustomLecture) // TableDB에 저장, 이미 추가된 강의라면 무시
