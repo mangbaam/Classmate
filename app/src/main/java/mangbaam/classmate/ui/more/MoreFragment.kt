@@ -58,17 +58,16 @@ class MoreFragment : Fragment() {
         initValues() // SharedPreference 값을 가져와 초기화
         val context = requireContext()
         if (PreferenceHelper.getBoolean(context, ALARM_ON).not()) {
-            binding.minuteTextView.isEnabled = false
+            binding.editButton.isEnabled = false
         }
         // '알람 켜기' 스위치가 false -> 다른 스위치들 설정 불가
         binding.alarmOnSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                binding.minuteTextView.isEnabled = true
-                binding.minuteTextView.text = PreferenceHelper.getString(context, ALARM_MINUTE)
+                binding.editButton.isEnabled = isChecked
                 // TODO 30분 전 알림 켜기
 
             } else {
-                binding.minuteTextView.isEnabled = false
+                binding.editButton.isEnabled = isChecked
                 // TODO 모든 알림 끄기
             }
             PreferenceHelper.setBoolean(context, ALARM_ON, isChecked)
