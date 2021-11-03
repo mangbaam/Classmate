@@ -123,7 +123,7 @@ class AddLectureActivity : AppCompatActivity() {
             if (which == DialogInterface.BUTTON_POSITIVE) {
                 Log.d(TAG, "AddLectureActivity - [${item.id}]${item.name} 추가 버튼 클릭")
                 val originLectures = tableDao.getAll()
-                if(verifyTime(originLectures, item)) {
+                if (verifyTime(originLectures, item)) {
                     tableDao.insertLecture(item) // TableDB에 저장, 이미 추가된 강의라면 무시
                     // TODO 알람 등록
                     if (PreferenceHelper.getBoolean(this, ALARM_ON)) {
@@ -138,7 +138,11 @@ class AddLectureActivity : AppCompatActivity() {
                     }
                     finish()
                 } else {
-                    Snackbar.make(this.resultRecyclerView, "시간이 겹치는 강의가 존재합니다.", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        this.resultRecyclerView,
+                        "시간이 겹치는 강의가 존재합니다.",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -147,13 +151,14 @@ class AddLectureActivity : AppCompatActivity() {
             .setTitle("과목을 추가하시겠습니까")
             .setIcon(R.drawable.ic_library_add)
             .setMessage(
+                "id: ${item.id}\n" +
                 "과목명: ${item.name}\n" +
-                        "시간 및 장소: ${item.timeAndPlace}\n" +
-                        "교수명: ${item.professor}\n" +
-                        "개설 부서: ${item.department}\n" +
-                        "이수 구분: ${item.classify}\n" +
-                        "학점: ${item.point}\n\n" +
-                        "선택된 과목을 추가하려면 추가 버튼을 누르세요"
+                "시간 및 장소: ${item.timeAndPlace}\n" +
+                "교수명: ${item.professor}\n" +
+                "개설 부서: ${item.department}\n" +
+                "이수 구분: ${item.classify}\n" +
+                "학점: ${item.point}\n\n" +
+                "선택된 과목을 추가하려면 추가 버튼을 누르세요"
             )
             .setPositiveButton("추가", listener)
             .create()

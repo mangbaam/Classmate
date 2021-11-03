@@ -18,15 +18,18 @@ import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import mangbaam.classmate.AddLectureActivity
-import mangbaam.classmate.MyTools
 import mangbaam.classmate.MyTools.Companion.findLectureById
 import mangbaam.classmate.MyTools.Companion.parseTimeAndPlace
 import mangbaam.classmate.R
 import mangbaam.classmate.dao.LectureDao
+import mangbaam.classmate.dao.ScheduleDao
+import mangbaam.classmate.database.ScheduleDB
 import mangbaam.classmate.database.TableDB
+import mangbaam.classmate.database.getScheduleDB
 import mangbaam.classmate.database.getTableDB
 import mangbaam.classmate.databinding.FragmentTimetableBinding
 import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.model.ScheduleModel
 
 
 class TimetableFragment : Fragment() {
@@ -34,9 +37,11 @@ class TimetableFragment : Fragment() {
     private var mBinding: FragmentTimetableBinding? = null
     private val binding get() = mBinding!!
     private lateinit var tableDB: TableDB
+    private lateinit var scheduleDB: ScheduleDB
     private val schedules = arrayListOf<ScheduleEntity>()
     private lateinit var table: MinTimeTableView
     private lateinit var tableDao: LectureDao
+    private lateinit var scheduleDao: ScheduleDao
     private lateinit var myLectures: Array<Lecture>
     private var tableSize = 0
 
@@ -45,6 +50,8 @@ class TimetableFragment : Fragment() {
 
         tableDB = getTableDB(context)
         tableDao = tableDB.tableDao()
+        scheduleDB = getScheduleDB(context)
+        scheduleDao = scheduleDB.scheduleDao()
     }
 
     override fun onCreateView(
@@ -71,7 +78,7 @@ class TimetableFragment : Fragment() {
         Log.d(TAG, "TimetableFragment - onResume() called")
         if (tableDao.getSize() != tableSize) {
             Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : tableSize: $tableSize")
-            updateSchedules()
+            synchronizeSchedules()
         }
         table.updateSchedules(schedules)
     }
@@ -88,14 +95,14 @@ class TimetableFragment : Fragment() {
     }
 
     private fun initTimeTable() {
-        val day = resources.getStringArray(R.array.days)
+        val days = resources.getStringArray(R.array.days)
         table = binding.timetableView
-        table.initTable(day)
+        table.initTable(days)
         /* 시간표 Room에서 불러와 초기화 */
         updateSchedules()
         /* 클릭 리스너 */
         table.setOnScheduleClickListener(
-            object: OnScheduleClickListener {
+            object : OnScheduleClickListener {
                 override fun scheduleClicked(entity: ScheduleEntity) {
                     showTableDetailDialog(entity.originId)
                 }
@@ -103,7 +110,7 @@ class TimetableFragment : Fragment() {
         )
         /* 롱클릭 리스너 */
         table.setOnScheduleLongClickListener(
-            object: OnScheduleLongClickListener {
+            object : OnScheduleLongClickListener {
                 @RequiresApi(Build.VERSION_CODES.N)
                 override fun scheduleLongClicked(entity: ScheduleEntity) {
                     Log.d(TAG, "${entity.scheduleName} 롱클릭")
@@ -113,7 +120,7 @@ class TimetableFragment : Fragment() {
         )
         /* 셀 클릭 리스너 */
         table.setOnTimeCellClickListener(
-            object: OnTimeCellClickListener {
+            object : OnTimeCellClickListener {
                 override fun timeCellClicked(scheduleDay: Int, time: Int) {
                     Log.d(TAG, "scheduleDay: ${scheduleDay}, time: $time")
                 }
@@ -124,15 +131,16 @@ class TimetableFragment : Fragment() {
     private fun updateSchedules() {
         val colors = resources.getStringArray(R.array.cell_colors)
         myLectures = tableDao.getAll()
+        scheduleDao.clear()
         var index = 0
-        schedules.clear()
         myLectures.forEach { lecture ->
             val timeAndPlaceData = parseTimeAndPlace(lecture.timeAndPlace)
             Log.d(TAG, "시간표 업데이트: [${lecture.id}]${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
-                if(timeInfo.isNotEmpty()) {
-                    val schedule = ScheduleEntity(
+                if (timeInfo.isNotEmpty()) {
+                    val scheduleModel = ScheduleModel(
+                        0,
                         lecture.id,
                         lecture.name,
                         timeInfo[0],
@@ -141,10 +149,11 @@ class TimetableFragment : Fragment() {
                         timeInfo[3],
                         colors[index % (colors.size - 1)]
                     )
-                    schedules.add(schedule)
+                    scheduleDao.insert(scheduleModel)
                 }
             }
         }
+        synchronizeSchedules()
         tableSize = tableDao.getSize()
         table.updateSchedules(schedules)
     }
@@ -167,13 +176,14 @@ class TimetableFragment : Fragment() {
         }
         dialog.create().show()
     }
+
     /* Schedule long clicked */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showTableMenuDialog(entity: ScheduleEntity) {
         val dialog = AlertDialog.Builder(context).apply {
             setTitle("울랄라~")
             setMessage("삭제하시겠습니까?")
-            setNegativeButton(getString(R.string.delete)) {_, _ ->
+            setNegativeButton(getString(R.string.delete)) { _, _ ->
                 deleteSchedule(entity)
                 Log.d(TAG, "$entity 삭제 완료")
             }
@@ -181,14 +191,42 @@ class TimetableFragment : Fragment() {
         }
         dialog.create().show()
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun deleteSchedule(entity: ScheduleEntity) {
-        schedules.removeIf {
+        /*schedules.removeIf {
             it.originId == entity.originId
-        }
-        tableDao.deleteLecture(findLectureById(entity.originId, myLectures))
+        } // schedule Array 에서 제거*/
+        scheduleDao.delete(entity.originId) // Schedule DB에서 제거
+        synchronizeSchedules()
+
+        tableDao.deleteLecture(findLectureById(entity.originId, myLectures)) // Table DB에서 제거
         myLectures = tableDao.getAll()
         table.updateSchedules(schedules)
+    }
+
+    private fun getSchedules(): ArrayList<ScheduleEntity> {
+        val schedules = arrayListOf<ScheduleEntity>()
+        scheduleDao.getAll().forEach {
+            schedules.add(
+                ScheduleEntity(
+                    it.originId,
+                    it.scheduleName,
+                    it.roomInfo,
+                    it.scheduleDay,
+                    it.startTime,
+                    it.endTime,
+                    it.backgroundColor,
+                    it.textColor
+                )
+            )
+        }
+        return schedules
+    }
+
+    private fun synchronizeSchedules() {
+        schedules.clear()
+        schedules.addAll(getSchedules())
     }
 
     // 확장 함수

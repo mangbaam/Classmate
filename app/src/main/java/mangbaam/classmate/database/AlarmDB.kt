@@ -11,15 +11,15 @@ import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
 
-@Database(entities = [Lecture::class], version = 1)
-abstract class AppDatabase: RoomDatabase() {
-    abstract fun lectureDao(): LectureDao
+@Database(entities = [AlarmModel::class], version = 1)
+abstract class AlarmDB: RoomDatabase() {
+    abstract fun alarmDao(): AlarmDao
 }
 
-fun getAppDatabase(context: Context): AppDatabase {
+fun getAlarmDB(context: Context): AlarmDB {
     return Room.databaseBuilder(
         context,
-        AppDatabase::class.java,
-        "ClassmateDB"
-    ).build()
+        AlarmDB::class.java,
+        "AlarmDB"
+    ).allowMainThreadQueries().build()
 }

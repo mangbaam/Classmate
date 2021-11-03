@@ -1,7 +1,6 @@
 package mangbaam.classmate.ui.more
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import kotlinx.android.synthetic.main.fragment_more.*
-import mangbaam.classmate.BaseActivity
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_10
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_BEFORE_30
@@ -30,7 +27,7 @@ class MoreFragment : Fragment() {
         mBinding = FragmentMoreBinding.inflate(inflater)
 
         initSwitchLayout()
-        initButtons()
+        initLinks()
 
         return binding.root
     }
@@ -72,7 +69,7 @@ class MoreFragment : Fragment() {
         binding.before30Switch.isChecked = PreferenceHelper.getBoolean(context, ALARM_BEFORE_30)
     }
 
-    private fun initButtons() {
+    private fun initLinks() {
         binding.emailAddress.setOnClickListener {
             sendEmail()
         }
@@ -120,7 +117,6 @@ class MoreFragment : Fragment() {
     }
 
     companion object {
-        const val TAG: String = "로그"
         const val EMAIL_ADDRESS: String = "pmb0836+classmate@gmail.com"
         const val BLOG_ADDRESS: String = "https://latte-is-horse.tistory.com"
         const val GITHUB_ADDRESS: String = "https://github.com/mangbaam"

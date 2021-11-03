@@ -135,7 +135,7 @@ class NotificationHelper {
         }
 
         fun checkAlarm(context: Context, alarmModel: AlarmModel):AlarmModel {
-            val pendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_CODE_START, Intent(context, AlarmReceiver::class.java), PendingIntent.FLAG_NO_CREATE)
+            val pendingIntent = PendingIntent.getBroadcast(context, alarmModel.id, Intent(context, AlarmReceiver::class.java), PendingIntent.FLAG_NO_CREATE)
             if ((pendingIntent == null) and alarmModel.onOff) {
                 // 알람은 꺼져있는데 데이터는 켜져있는 경우 -> 데이터 수정
                 alarmModel.onOff = false
@@ -145,6 +145,11 @@ class NotificationHelper {
                 pendingIntent.cancel()
             }
             return alarmModel
+        }
+
+        fun removeAlarm(context: Context, alarmModel: AlarmModel) {
+            val pendingIntent = PendingIntent.getBroadcast(context, alarmModel.id, Intent(context, AlarmReceiver::class.java), PendingIntent.FLAG_NO_CREATE)
+            pendingIntent?.cancel()
         }
     }
 }

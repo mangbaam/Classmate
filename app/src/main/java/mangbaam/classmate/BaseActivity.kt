@@ -95,7 +95,7 @@ class BaseActivity : AppCompatActivity() {
             } else {
                 Log.d(TAG, "BaseActivity -  lectureDB Fail: $it")
                 PreferenceHelper.setString(this, TERM, "")
-                Toast.makeText(this, "과목 업데이트에 실패했습니다. 네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "과목 업데이트에 실패했습니다. 네트워크 연결을 확인하세요", Toast.LENGTH_LONG).show()
             }
         }
     }
