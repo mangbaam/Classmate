@@ -46,7 +46,6 @@
         <item>12교시 (20:30~)</item>
         <item>13교시 (21:30~)</item>
         <item>14교시 (22:30~)</item>
-        <item>15교시 (23:30~)</item>
     </string-array>
 
     <string-array name="start_clock">
@@ -64,7 +63,6 @@
         <item>20:30</item>
         <item>21:30</item>
         <item>22:30</item>
-        <item>23:30</item>
     </string-array>
 
     <string-array name="end_clock">
@@ -82,7 +80,6 @@
         <item>21:20</item>
         <item>22:20</item>
         <item>23:20</item>
-        <item>00:20</item>
     </string-array>
 
     <string-array name="end_times">
@@ -100,7 +97,6 @@
         <item>12교시 (~21:20)</item>
         <item>13교시 (~22:20)</item>
         <item>14교시 (~23:20)</item>
-        <item>15교시 (~00:20)</item>
     </string-array>
 
     <string-array name="setting_minutes">
@@ -133,4 +129,29 @@
     <string name="developer_information">개발자 정보</string>
     <string name="edit_button_description">button to edit minute</string>
     <string name="_30">30</string>
+
+    <string name="mit_license">
+        MIT License\n\n
+        Copyright © 2019 Junghyun Park
+\n\n
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+\n\n
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+\n\n
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+    </string>
+    <string name="license_mintimetable">▶ MinTimetable\n(github.com/islandparadise14/MinTimetable)</string>
 </resources>

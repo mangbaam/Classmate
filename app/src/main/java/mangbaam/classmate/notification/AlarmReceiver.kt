@@ -20,7 +20,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
         Log.d(TAG, "AlarmReceiver - onReceive() called")
         createNotification(context, id, lectureName, "${hour}:${minute}")
-        // TODO 일주일 뒤 새로 알람 등록
-        registerAlarm(context, model)
+//        registerAlarm(context, model)
     }
 }

@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_more.*
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
@@ -90,6 +92,15 @@ class MoreFragment : Fragment() {
             showSettingDialog(context)
         }
 
+        /* 라이선스 더 보기 클릭 */
+        binding.loadMoreTextView.setOnClickListener {
+            if (binding.licenseContainer.isGone) {
+                binding.loadMoreTextView.text = "간략히"
+            } else {
+                binding.loadMoreTextView.text = "더 보기"
+            }
+            binding.licenseContainer.isGone = binding.licenseContainer.isGone.not()
+        }
     }
 
     private fun initValues() {

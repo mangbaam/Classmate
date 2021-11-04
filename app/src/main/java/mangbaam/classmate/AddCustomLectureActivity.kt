@@ -170,7 +170,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
         dialogBuilder.create().show()
     }
 
-    // TODO 스피너 형식으로 변경
     private fun showStartTimeDialog(position: Int) {
         val startTimesArray = resources.getStringArray(R.array.start_times)
         val startClocksArray  = resources.getStringArray(R.array.start_clock)
@@ -196,7 +195,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
         dialogBuilder.create().show()
     }
 
-    // TODO 스피너 형식으로 변경
     private fun showEndTimeDialog(position: Int) {
         val endTimesArray = resources.getStringArray(R.array.end_times)
         val endClocksArray = resources.getStringArray(R.array.end_clock)

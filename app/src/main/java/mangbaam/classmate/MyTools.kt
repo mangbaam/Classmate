@@ -149,7 +149,8 @@ class MyTools {
             Log.d(TAG, "현재 : ${dayOfWeek}요일 $currentHour : $currentMinute")
             val dayDiffMs = weekDayDiff(dayOfWeek, targetWeekday) * DAYms
             val timeDiffMs = timeDiff(currentHour, currentMinute, targetHour, targetMinute)
-            return dayDiffMs + timeDiffMs
+            val lastTime = dayDiffMs + timeDiffMs
+            return if (lastTime>=0) dayDiffMs + timeDiffMs else dayDiffMs + timeDiffMs + 7*DAYms
         }
 
         fun lastTimeMillis(targetWeekday: Int, targetHour: Int, targetMinute: Int): Long {

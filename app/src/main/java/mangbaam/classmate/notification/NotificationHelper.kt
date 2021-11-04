@@ -153,7 +153,7 @@ class NotificationHelper {
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT // 이미 생성된 PendingIntent가 있으면 Extra Data만 교체(업데이트)
             )
-            val triggerTime = SystemClock.elapsedRealtime()+lastMillisToStart
+            val triggerTime = System.currentTimeMillis()+lastMillisToStart
             alarmManager.set(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,   // 디바이스 부팅 시간을 기준으로 함 (절전 모드일 때도 알람 발생)
                 triggerTime,

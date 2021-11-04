@@ -1,161 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:paddingHorizontal="8dp"
     tools:context=".ui.more.MoreFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingHorizontal="8dp">
 
-        <TextView
-            android:id="@+id/timetableTextView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/title_more"
-            android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/settingArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/gray_round_corner_border"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="16dp">
+            <TextView
+                android:id="@+id/timetableTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/title_more"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <RelativeLayout
+                android:id="@+id/settingArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/gray_round_corner_border"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/alarmOnSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alarm_on" />
+
+                    <TextView
+                        android:id="@+id/minuteTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:maxLength="3"
+                        android:text="@string/_30"
+                        android:textColor="@color/blue"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="분 전"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/editButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/edit_button_description"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/ic_edit" />
+            </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/alarmOnSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/alarm_on" />
-
-                <TextView
-                    android:id="@+id/minuteTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:maxLength="3"
-                    android:text="@string/_30"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold" />
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_round_corner_border"
+                android:orientation="vertical"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="분 전"
-                    android:textColor="@color/black" />
+                    android:text="@string/developer_information"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="수원대학교 정보보호학과 \n15학번 박명범입니다~^^" />
+
+                <TextView
+                    android:id="@+id/emailAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:text="이메일"
+                    android:textColor="@color/electron_blue"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/logo_gmail" />
+
+                <TextView
+                    android:id="@+id/blogAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:text="블로그"
+                    android:textColor="@color/exodus_fruit"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/logo_tistory" />
+
+                <TextView
+                    android:id="@+id/githubAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:text="깃허브"
+                    android:textColor="@color/orangeville"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/logo_github" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/editButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/edit_button_description"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:src="@drawable/ic_edit" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_round_corner_border"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/developer_information"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="수원대학교 정보보호학과 \n15학번 박명범입니다~^^" />
+                android:background="@drawable/gray_round_corner_border"
+                android:orientation="vertical"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="16dp">
 
-            <TextView
-                android:id="@+id/emailAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="8dp"
-                android:text="이메일"
-                android:textColor="@color/electron_blue"
-                android:textSize="16sp"
-                app:drawableStartCompat="@drawable/logo_gmail" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Licences"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/blogAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
-                android:text="블로그"
-                android:textColor="@color/exodus_fruit"
-                android:textSize="16sp"
-                app:drawableStartCompat="@drawable/logo_tistory" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/license_mintimetable" />
 
-            <TextView
-                android:id="@+id/githubAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
-                android:text="깃허브"
-                android:textColor="@color/orangeville"
-                android:textSize="16sp"
-                app:drawableStartCompat="@drawable/logo_github" />
+                <TextView
+                    android:id="@+id/loadMoreTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:textColor="@color/blue" />
+
+                <FrameLayout
+                    android:id="@+id/licenseContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="64dp"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    android:background="@color/light_gray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mit_license" />
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_round_corner_border"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="16dp">
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="64dp"
+            android:enabled="false"
+            android:text="데이터 모두 지우기" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Licences"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="라이선스 정보가 들어갈 공간입니다." />
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="64dp"
-        android:enabled="false"
-        android:text="데이터 모두 지우기" />
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
