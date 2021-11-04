@@ -2,29 +2,38 @@ package mangbaam.classmate.ui.more
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_more.*
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.R
+import mangbaam.classmate.Verify
 import mangbaam.classmate.dao.AlarmDao
+import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.ScheduleDao
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_MINUTE
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
 import mangbaam.classmate.database.getAlarmDB
+import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.database.getScheduleDB
+import mangbaam.classmate.database.getTableDB
 import mangbaam.classmate.databinding.DialogMinuteSettingBinding
 import mangbaam.classmate.databinding.FragmentMoreBinding
 import mangbaam.classmate.model.AlarmModel
+import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
 import mangbaam.classmate.notification.NotificationHelper.Companion.activateAllAlarms
 import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAlarms
@@ -34,6 +43,7 @@ class MoreFragment : Fragment() {
     private val binding get() = mBinding!!
     private lateinit var scheduleDao: ScheduleDao
     private lateinit var alarmDao: AlarmDao
+    private lateinit var tableDao: LectureDao
     private val alarms = mutableListOf<AlarmModel>()
     private val schedules = arrayListOf<ScheduleModel>()
 
@@ -46,6 +56,7 @@ class MoreFragment : Fragment() {
 
         scheduleDao = getScheduleDB(requireContext()).scheduleDao()
         alarmDao = getAlarmDB(requireContext()).alarmDao()
+        tableDao = getTableDB(requireContext()).tableDao()
 
         schedules.addAll(scheduleDao.getAll())
         alarms.addAll(alarmDao.getAll())
@@ -100,6 +111,16 @@ class MoreFragment : Fragment() {
                 binding.loadMoreTextView.text = "더 보기"
             }
             binding.licenseContainer.isGone = binding.licenseContainer.isGone.not()
+        }
+
+        /* 데이터 모두 지우기 버튼 */
+        binding.clearAllDataButton.setOnClickListener {
+            val toast = Toast.makeText(requireContext(), "길게 누르면 동작합니다", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.BOTTOM, 0, 500)
+            toast.show()
+        }
+        binding.clearAllDataButton.setOnLongClickListener {
+            showDeleteAllDataDialog()
         }
     }
 
@@ -176,6 +197,29 @@ class MoreFragment : Fragment() {
         removeAllAlarms(context, alarms)
         activateAllAlarms(context, alarms)
         Log.d(TAG, "${alarms.size}개의 알림 시간이 변경되었습니다")
+    }
+
+    private fun showDeleteAllDataDialog(): Boolean {
+        val listener = DialogInterface.OnClickListener { _, which ->
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                alarmDao.clear()
+                scheduleDao.clear()
+                tableDao.clear()
+                Snackbar.make(
+                    this.clearAllDataButton,
+                    "데이터가 초기화되었습니다.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle("데이터를 초기화하겠습니까?")
+            .setIcon(R.drawable.ic_warning)
+            .setMessage("저장된 시간표 정보와 예약된 알람이 모두 제거되며 복구할 수 없습니다.")
+            .setPositiveButton("그래도 제거", listener)
+            .create()
+            .show()
+        return true
     }
 
     override fun onResume() {
