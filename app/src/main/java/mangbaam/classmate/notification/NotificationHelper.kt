@@ -4,6 +4,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -56,7 +57,8 @@ class NotificationHelper {
         fun createNotification(
             context: Context,
             requestCode: Int,
-            lectureName: String?
+            lectureName: String?,
+            time: String?
         ) {
             val intent = Intent(context, BaseActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) // 대기열에 있다면 MainActivity 가 아닌 앱 활성화
@@ -67,20 +69,20 @@ class NotificationHelper {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             val notificationBuilder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            notificationBuilder
-                .setSmallIcon(R.drawable.ic_logo)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true) // 클릭시 Notification 제거
 
             val pendingIntent = PendingIntent.getActivity(
                 context,
                 requestCode,
                 intent,
-                PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT // 이전에 생성한 PendingIntent 취소 후 새로 생성
             )
             notificationBuilder
                 .setContentTitle("${lectureName}이(가) 곧 시작합니다")
-                .setContentText("수업 준비하세요")
+                .setContentText("${time}에 수업이 시작합니다! 수업 준비하세요")
+                .setSmallIcon(R.drawable.ic_logo)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true) // 클릭시 Notification 제거
                 .setContentIntent(pendingIntent)
             notificationManager.notify(NOTIFICATION_CODE_START, notificationBuilder.build())
 
@@ -104,22 +106,25 @@ class NotificationHelper {
 
         // 알람을 활성화 하지만 AlarmDB에는 Activity/Fragment에서 갱신 필요
         fun activateAllAlarms(context: Context, alarms: List<AlarmModel>) {
-            val minutes = PreferenceHelper.getInt(context, ALARM_MINUTE) ?: 30
             alarms.forEach { alarm ->
-                registerAlarm(context, alarm, minutes)
+                registerAlarm(context, alarm)
             }
         }
 
         // 알람을 비활성화 하지만 AlarmDB 에는 Activity/Fragment 에서 갱신 필요
-        fun removeAllAlarms(context:Context, alarms: List<AlarmModel>) {
+        fun removeAllAlarms(context: Context, alarms: List<AlarmModel>) {
             alarms.forEach { alarm ->
                 removeAlarm(context, alarm)
             }
         }
 
         // 알람을 등록해도 AlarmDB 에는 Activity/Fragment 에서 추가 필요
-        private fun registerAlarm(context: Context, item: AlarmModel, previousMinutes: Int) {
-            Log.d(TAG, "[${item.id}] ${item.name} - ${item.hour}:${item.minute} ${previousMinutes}분 전 알람 생성")
+        fun registerAlarm(context: Context, item: AlarmModel) {
+            val previousMinutes = PreferenceHelper.getInt(context, ALARM_MINUTE) ?: 30
+            Log.d(
+                TAG,
+                "[${item.id}] ${item.name} - ${item.hour}:${item.minute} ${previousMinutes}분 전 알람 생성"
+            )
             val lectureName = item.name
             val place = item.place
             val hour = item.hour
@@ -138,14 +143,20 @@ class NotificationHelper {
             intent.putExtra("id", item.id)
             intent.putExtra("lectureName", lectureName)
             intent.putExtra("place", place)
-            intent.putExtra("time", "${hour}시 ${minute}분")
+            intent.putExtra("hour", hour)
+            intent.putExtra("minute", minute)
+            intent.putExtra("model", item)
 
             val pendingIntent = PendingIntent.getBroadcast(
-                context, item.id, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                context,
+                item.id,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT // 이미 생성된 PendingIntent가 있으면 Extra Data만 교체(업데이트)
             )
+            val triggerTime = SystemClock.elapsedRealtime()+lastMillisToStart
             alarmManager.set(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                lastMillisToStart,
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,   // 디바이스 부팅 시간을 기준으로 함 (절전 모드일 때도 알람 발생)
+                triggerTime,
                 pendingIntent
             )
             Log.d(

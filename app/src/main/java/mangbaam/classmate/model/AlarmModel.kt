@@ -2,6 +2,7 @@ package mangbaam.classmate.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity
 data class AlarmModel(
@@ -13,4 +14,4 @@ data class AlarmModel(
     val hour: Int,
     val minute: Int,
     var onOff: Boolean
-)
+): Serializable

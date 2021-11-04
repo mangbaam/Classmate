@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -37,10 +38,11 @@ class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // 다크 모드 비활성화
         mBinding = ActivityBaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Handler().postDelayed({animationContainer.isGone = true}, 5000)
+        Handler().postDelayed({animationContainer.isGone = true}, 4500)
 
         appDB = getAppDatabase(this)
         lectureDAO = appDB.lectureDao()

@@ -186,6 +186,6 @@ class MoreFragment : Fragment() {
     companion object {
         const val EMAIL_ADDRESS: String = "pmb0836+classmate@gmail.com"
         const val BLOG_ADDRESS: String = "https://latte-is-horse.tistory.com"
-        const val GITHUB_ADDRESS: String = "https://github.com/mangbaam"
+        const val GITHUB_ADDRESS: String = "https://github.com/mangbaam/Classmate"
     }
 }

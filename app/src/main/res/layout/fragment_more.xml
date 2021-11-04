@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:drawablePadding="8dp"
-                android:text="@string/address_email"
+                android:text="이메일"
                 android:textColor="@color/electron_blue"
                 android:textSize="16sp"
                 app:drawableStartCompat="@drawable/logo_gmail" />
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
-                android:text="@string/address_blog"
+                android:text="블로그"
                 android:textColor="@color/exodus_fruit"
                 android:textSize="16sp"
                 app:drawableStartCompat="@drawable/logo_tistory" />
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
-                android:text="@string/address_github"
+                android:text="깃허브"
                 android:textColor="@color/orangeville"
                 android:textSize="16sp"
                 app:drawableStartCompat="@drawable/logo_github" />
