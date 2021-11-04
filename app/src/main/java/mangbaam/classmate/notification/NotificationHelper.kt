@@ -8,21 +8,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import mangbaam.classmate.BaseActivity
-import mangbaam.classmate.Constants.Companion.ALARM_AFTER_LECTURE
-import mangbaam.classmate.Constants.Companion.ALARM_BEFORE_LECTURE
 import mangbaam.classmate.Constants.Companion.NOTIFICATION_CHANNEL_ID
-import mangbaam.classmate.Constants.Companion.NOTIFICATION_CODE_END
 import mangbaam.classmate.Constants.Companion.NOTIFICATION_CODE_START
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.MyTools
 import mangbaam.classmate.MyTools.Companion.DAYms
+import mangbaam.classmate.MyTools.Companion.MINUITEms
 import mangbaam.classmate.MyTools.Companion.checkMillis
 import mangbaam.classmate.MyTools.Companion.getCurrentTime
 import mangbaam.classmate.MyTools.Companion.lastTimeMillis
-import mangbaam.classmate.MyTools.Companion.parseTimeAndPlace
+import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.R
+import mangbaam.classmate.database.DB_keys.Companion.ALARM_MINUTE
 import mangbaam.classmate.model.AlarmModel
-import mangbaam.classmate.model.Lecture
 import java.lang.NullPointerException
 
 class NotificationHelper {
@@ -61,7 +59,7 @@ class NotificationHelper {
             lectureName: String?
         ) {
             val intent = Intent(context, BaseActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) // 대기열에 있다면 MainActivity가 아닌 앱 활성화
+            intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) // 대기열에 있다면 MainActivity 가 아닌 앱 활성화
             intent.action = Intent.ACTION_MAIN
             intent.addCategory(Intent.CATEGORY_LAUNCHER)
 
@@ -104,55 +102,36 @@ class NotificationHelper {
             }
         }
 
-        /*fun registerAlarm(context: Context, item: Lecture, previousMinutes: Int) {
-            val lectureName = item.name
-            val tapList = parseTimeAndPlace(item.timeAndPlace)
-            tapList.forEach {
-                val place = it[0]
-                val hour = it[2].split(":")[0].toInt()
-                val minute = it[2].split(":")[1].toInt()
-                val lastMillis = lastTimeMillis(it[1], hour, minute)
-                var lastMillisToStart = lastMillis - previousMinutes * MyTools.MINUITEms
-                if (lastMillisToStart < 0) {
-                    lastMillisToStart += DAYms * 7
-                }
-                Log.d(
-                    MyTools.TAG,
-                    "-> ${it[1]}요일 ${hour}:${minute}까지 ${checkMillis(lastMillis)}만큼 남음. ${previousMinutes}분 전 알림"
-                )
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val intent = Intent(context, AlarmReceiver::class.java)
-                intent.putExtra("lectureName", lectureName)
-                intent.putExtra("place", place)
-                intent.putExtra("time", "${hour}시 ${minute}분")
-
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context, NOTIFICATION_CODE_START, intent, PendingIntent.FLAG_UPDATE_CURRENT
-                )
-                alarmManager.set(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    lastMillisToStart,
-                    pendingIntent
-                )
-                Log.d(
-                    MyTools.TAG,
-                    "$lectureName 알람 ${it[1]}요일 ${hour}:${minute - previousMinutes}에 등록됨"
-                )
+        // 알람을 활성화 하지만 AlarmDB에는 Activity/Fragment에서 갱신 필요
+        fun activateAllAlarms(context: Context, alarms: List<AlarmModel>) {
+            val minutes = PreferenceHelper.getInt(context, ALARM_MINUTE) ?: 30
+            alarms.forEach { alarm ->
+                registerAlarm(context, alarm, minutes)
             }
-        }*/
-        fun registerAlarm(context: Context, item: AlarmModel, previousMinutes: Int) {
+        }
+
+        // 알람을 비활성화 하지만 AlarmDB 에는 Activity/Fragment 에서 갱신 필요
+        fun removeAllAlarms(context:Context, alarms: List<AlarmModel>) {
+            alarms.forEach { alarm ->
+                removeAlarm(context, alarm)
+            }
+        }
+
+        // 알람을 등록해도 AlarmDB 에는 Activity/Fragment 에서 추가 필요
+        private fun registerAlarm(context: Context, item: AlarmModel, previousMinutes: Int) {
+            Log.d(TAG, "[${item.id}] ${item.name} - ${item.hour}:${item.minute} ${previousMinutes}분 전 알람 생성")
             val lectureName = item.name
             val place = item.place
             val hour = item.hour
             val minute = item.minute
             val lastMillis = lastTimeMillis(item.weekDay, hour, minute)
-            var lastMillisToStart = lastMillis - previousMinutes * MyTools.MINUITEms
+            var lastMillisToStart = lastMillis - previousMinutes * MINUITEms
             if (lastMillisToStart < 0) {
                 lastMillisToStart += DAYms * 7
             }
             Log.d(
                 MyTools.TAG,
-                "-> ${item.weekDay}요일 ${hour}:${minute}까지 ${checkMillis(lastMillis)}만큼 남음. ${previousMinutes}분 전 알림"
+                "-> 강의 시간(${item.weekDay}요일 ${hour}:${minute})까지 ${checkMillis(lastMillis)}만큼 남음. ${previousMinutes}분 전 알림"
             )
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmReceiver::class.java)
@@ -171,9 +150,8 @@ class NotificationHelper {
             )
             Log.d(
                 MyTools.TAG,
-                "$lectureName 알람 ${item.weekDay}요일 ${hour}:${minute - previousMinutes}에 등록됨"
+                "$lectureName 알람 ${item.weekDay}요일 ${checkMillis(lastMillisToStart)}후에 울리도록 등록됨"
             )
-
         }
 
         fun checkAlarm(context: Context, alarmModel: AlarmModel): AlarmModel {
@@ -194,7 +172,8 @@ class NotificationHelper {
             return alarmModel
         }
 
-        fun removeAlarm(context: Context, alarmModel: AlarmModel) {
+        private fun removeAlarm(context: Context, alarmModel: AlarmModel) {
+            Log.d(TAG, "알람 제거 -> [${alarmModel.id}] ${alarmModel.name}")
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 alarmModel.id,

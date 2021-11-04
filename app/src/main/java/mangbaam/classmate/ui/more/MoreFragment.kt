@@ -1,7 +1,6 @@
 package mangbaam.classmate.ui.more
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_more.*
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.R
@@ -20,12 +20,12 @@ import mangbaam.classmate.database.DB_keys.Companion.ALARM_MINUTE
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
 import mangbaam.classmate.database.getAlarmDB
 import mangbaam.classmate.database.getScheduleDB
-import mangbaam.classmate.databinding.DialogDayOfWeekBinding
 import mangbaam.classmate.databinding.DialogMinuteSettingBinding
 import mangbaam.classmate.databinding.FragmentMoreBinding
 import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.ScheduleModel
-import mangbaam.classmate.notification.NotificationHelper
+import mangbaam.classmate.notification.NotificationHelper.Companion.activateAllAlarms
+import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAlarms
 
 class MoreFragment : Fragment() {
     private var mBinding: FragmentMoreBinding? = null
@@ -62,19 +62,31 @@ class MoreFragment : Fragment() {
         }
         // '알람 켜기' 스위치가 false -> 다른 스위치들 설정 불가
         binding.alarmOnSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            Log.d(TAG, "알람켜기 스위치 - $isChecked")
             if (isChecked) {
                 binding.editButton.isEnabled = isChecked
-                // TODO 30분 전 알림 켜기
-
+                // TODO 모든 알림 켜기
+                activateAllAlarms(context, alarmDao.getAll())
+                alarms.forEach {
+                    val model = it.copy()
+                    model.onOff = true
+                    alarmDao.update(model)
+                }
             } else {
                 binding.editButton.isEnabled = isChecked
                 // TODO 모든 알림 끄기
+                removeAllAlarms(context, alarmDao.getAll())
+                alarms.forEach {
+                    val model = it.copy()
+                    model.onOff = false
+                    alarmDao.update(model)
+                }
             }
             PreferenceHelper.setBoolean(context, ALARM_ON, isChecked)
-            Log.d(TAG, "알람켜기 스위치 - ${PreferenceHelper.getBoolean(context, ALARM_ON)}")
         }
 
         binding.editButton.setOnClickListener {
+            Log.d(TAG, "Setting 모드 진입")
             showSettingDialog(context)
         }
 
@@ -121,6 +133,7 @@ class MoreFragment : Fragment() {
         val minutesArray = resources.getStringArray(R.array.setting_minutes)
         val dialogView = DialogMinuteSettingBinding.inflate(layoutInflater)
         val picker = dialogView.picker
+        val originValue = minuteTextView.text.toString().toInt()
         with(picker) {
             minValue = 0
             maxValue = minutesArray.size - 1
@@ -133,13 +146,25 @@ class MoreFragment : Fragment() {
             setMessage("다이얼을 돌려 설정하세요")
             setView(dialogView.root)
             setPositiveButton(R.string.ok) { _, _ ->
-                val value = (dialogView.picker.value+1) * 10
-                binding.minuteTextView.text = value.toString()
-                PreferenceHelper.setInt(context, ALARM_MINUTE, value)
+                val value = (dialogView.picker.value + 1) * 10
+                if (originValue != value) {
+                    binding.minuteTextView.text = value.toString()
+                    PreferenceHelper.setInt(context, ALARM_MINUTE, value)
+                    changeAlarmTime()
+                    Log.d(TAG, "Setting 완료")
+                }
             }
             setNegativeButton(R.string.cancel) { _, _ -> }
         }
         dialogBuilder.create().show()
+    }
+
+    private fun changeAlarmTime() {
+        val context = requireContext()
+        val alarms = alarmDao.getAll()
+        removeAllAlarms(context, alarms)
+        activateAllAlarms(context, alarms)
+        Log.d(TAG, "${alarms.size}개의 알림 시간이 변경되었습니다")
     }
 
     override fun onResume() {

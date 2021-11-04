@@ -16,21 +16,22 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.Verify.Companion.verifyTime
 import mangbaam.classmate.adapter.AddLectureAdapter
+import mangbaam.classmate.dao.AlarmDao
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.*
-import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
-import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
-import mangbaam.classmate.notification.NotificationHelper.Companion.registerAlarm
 
 class AddLectureActivity : AppCompatActivity() {
     private lateinit var adapter: AddLectureAdapter
     private lateinit var appDB: AppDatabase
     private lateinit var tableDB: TableDB
+    private lateinit var alarmDB: AlarmDB
     private lateinit var lectureDAO: LectureDao
     private lateinit var tableDao: LectureDao
+    private lateinit var alarmDao: AlarmDao
 
     private var lectureList = mutableListOf<Lecture>()
     private val resultList = mutableListOf<Lecture>()
@@ -57,6 +58,10 @@ class AddLectureActivity : AppCompatActivity() {
         // 시간표에 추가된 강의 DB
         tableDB = getTableDB(this)
         tableDao = tableDB.tableDao()
+
+        // 알람 DB
+        alarmDB = getAlarmDB(this)
+        alarmDao = alarmDB.alarmDao()
 
         addCustomLectureButton.setOnClickListener {
             val intent = Intent(this, AddCustomLectureActivity::class.java)
@@ -153,9 +158,5 @@ class AddLectureActivity : AppCompatActivity() {
             .setPositiveButton("추가", listener)
             .create()
             .show()
-    }
-
-    companion object {
-        const val TAG: String = "로그"
     }
 }

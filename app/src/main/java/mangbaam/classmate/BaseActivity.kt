@@ -16,6 +16,7 @@ import mangbaam.classmate.database.DB_keys.Companion.SCHOOL_NAME
 import mangbaam.classmate.database.DB_keys.Companion.TERM
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.database.AppDatabase
+import mangbaam.classmate.database.DB_keys.Companion.SUWON_UNIV
 import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
@@ -47,7 +48,6 @@ class BaseActivity : AppCompatActivity() {
         val term = PreferenceHelper.getString(this, TERM).toString()
         Log.d(TAG, "SharedPreference - $term")
         if (term != getThisTerm()) {
-            Log.d(TAG, "새로운 강의 업데이트 중...")
             updateLectures()
             PreferenceHelper.setString(this, TERM, getThisTerm())
         } else {
@@ -65,7 +65,12 @@ class BaseActivity : AppCompatActivity() {
     }
 
     private fun updateLectures() {
-        val schoolName = PreferenceHelper.getString(this, SCHOOL_NAME).toString()
+        var schoolName = PreferenceHelper.getString(this, SCHOOL_NAME).toString()
+        if (schoolName.isEmpty()) {
+            // TODO 다이얼로그를 띄워 학교 입력 받기
+            schoolName = SUWON_UNIV
+            PreferenceHelper.setString(this, SCHOOL_NAME, SUWON_UNIV)
+        }
         Log.d(TAG, ">> SchoolName: $schoolName")
         Log.d(TAG, ">> Term: ${getThisTerm()}")
 
@@ -79,7 +84,7 @@ class BaseActivity : AppCompatActivity() {
         Thread {
             appDB.lectureDao().clear()
         }
-
+        Log.d(TAG, "새로운 강의 업데이트 중...")
         lectureDB.get().addOnCompleteListener {
             if (it.isSuccessful) {
                 it.addOnSuccessListener { snapShot ->

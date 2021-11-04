@@ -18,18 +18,23 @@ import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import mangbaam.classmate.AddLectureActivity
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.MyTools.Companion.findLectureById
+import mangbaam.classmate.MyTools.Companion.getWeekDay
 import mangbaam.classmate.MyTools.Companion.parseTimeAndPlace
+import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.R
+import mangbaam.classmate.dao.AlarmDao
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.ScheduleDao
-import mangbaam.classmate.database.ScheduleDB
-import mangbaam.classmate.database.TableDB
-import mangbaam.classmate.database.getScheduleDB
-import mangbaam.classmate.database.getTableDB
+import mangbaam.classmate.database.*
+import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
 import mangbaam.classmate.databinding.FragmentTimetableBinding
+import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
+import mangbaam.classmate.notification.NotificationHelper.Companion.activateAllAlarms
+import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAlarms
 
 
 class TimetableFragment : Fragment() {
@@ -38,20 +43,26 @@ class TimetableFragment : Fragment() {
     private val binding get() = mBinding!!
     private lateinit var tableDB: TableDB
     private lateinit var scheduleDB: ScheduleDB
-    private val schedules = arrayListOf<ScheduleEntity>()
+    private lateinit var alarmDB: AlarmDB
     private lateinit var table: MinTimeTableView
     private lateinit var tableDao: LectureDao
     private lateinit var scheduleDao: ScheduleDao
-    private lateinit var myLectures: Array<Lecture>
+    private lateinit var alarmDao: AlarmDao
+    private lateinit var myLectures: Array<Lecture> // Room 에 저장된 나의 시간표
+
+    private var schedules = arrayListOf<ScheduleEntity>()
     private var tableSize = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        /* Init DBs */
         tableDB = getTableDB(context)
         tableDao = tableDB.tableDao()
         scheduleDB = getScheduleDB(context)
         scheduleDao = scheduleDB.scheduleDao()
+        alarmDB = getAlarmDB(context)
+        alarmDao = alarmDB.alarmDao()
     }
 
     override fun onCreateView(
@@ -77,8 +88,9 @@ class TimetableFragment : Fragment() {
         super.onResume()
         Log.d(TAG, "TimetableFragment - onResume() called")
         if (tableDao.getSize() != tableSize) {
-            Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : tableSize: $tableSize")
-            synchronizeSchedules()
+            Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : 원래 tableSize: $tableSize, 스케줄개수: ${schedules.size}")
+            updateSchedules()
+//            synchronizeSchedules()
         }
         table.updateSchedules(schedules)
     }
@@ -131,16 +143,15 @@ class TimetableFragment : Fragment() {
     private fun updateSchedules() {
         val colors = resources.getStringArray(R.array.cell_colors)
         myLectures = tableDao.getAll()
-        scheduleDao.clear()
         var index = 0
+        schedules.clear()
         myLectures.forEach { lecture ->
             val timeAndPlaceData = parseTimeAndPlace(lecture.timeAndPlace)
             Log.d(TAG, "시간표 업데이트: [${lecture.id}]${lecture.name} - $timeAndPlaceData")
             index++
             timeAndPlaceData.forEach { timeInfo ->
                 if (timeInfo.isNotEmpty()) {
-                    val scheduleModel = ScheduleModel(
-                        0,
+                    val schedule = ScheduleEntity(
                         lecture.id,
                         lecture.name,
                         timeInfo[0],
@@ -149,13 +160,14 @@ class TimetableFragment : Fragment() {
                         timeInfo[3],
                         colors[index % (colors.size - 1)]
                     )
-                    scheduleDao.insert(scheduleModel)
+                    schedules.add(schedule)
                 }
             }
         }
-        synchronizeSchedules()
         tableSize = tableDao.getSize()
         table.updateSchedules(schedules)
+
+        synchronize()
     }
 
     /* Schedule clicked */
@@ -172,7 +184,7 @@ class TimetableFragment : Fragment() {
         val dialog = AlertDialog.Builder(context).apply {
             setTitle("강의 세부 정보")
             setMessage(message)
-            setNeutralButton("닫기") { dialog, which -> dialog?.dismiss() }
+            setNeutralButton("닫기") { dialog, _ -> dialog?.dismiss() }
         }
         dialog.create().show()
     }
@@ -187,26 +199,29 @@ class TimetableFragment : Fragment() {
                 deleteSchedule(entity)
                 Log.d(TAG, "$entity 삭제 완료")
             }
-            setNeutralButton("닫기") { dialog, which -> dialog?.dismiss() }
+            setNeutralButton("닫기") { dialog, _ -> dialog?.dismiss() }
         }
         dialog.create().show()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun deleteSchedule(entity: ScheduleEntity) {
-        scheduleDao.delete(entity.originId) // Schedule DB에서 제거
-        synchronizeSchedules()
-
-        tableDao.deleteLecture(findLectureById(entity.originId, myLectures)) // Table DB에서 제거
+        scheduleDao.delete(entity.originId) // Schedule DB 에서 제거
+        tableDao.deleteLecture(findLectureById(entity.originId, myLectures)) // Table DB 에서 제거
         myLectures = tableDao.getAll()
+        schedules.removeIf { it.originId == entity.originId }
+        alarmDao.delete(entity.originId)
         table.updateSchedules(schedules)
     }
 
-    private fun getSchedules(): ArrayList<ScheduleEntity> {
-        val schedules = arrayListOf<ScheduleEntity>()
-        scheduleDao.getAll().forEach {
-            schedules.add(
-                ScheduleEntity(
+    private fun synchronize() {
+        /*Thread {
+            val onOff = PreferenceHelper.getBoolean(table.context, ALARM_ON)
+            scheduleDao.clear()
+            alarmDao.clear()
+            schedules.forEach {
+                val scheduleModel = ScheduleModel(
+                    0,
                     it.originId,
                     it.scheduleName,
                     it.roomInfo,
@@ -216,15 +231,62 @@ class TimetableFragment : Fragment() {
                     it.backgroundColor,
                     it.textColor
                 )
+                scheduleDao.insert(scheduleModel)
+            }
+            scheduleDao.getAll().forEach {
+                val timeData = it.startTime.split(":")
+                val alarmModel = AlarmModel(
+                    it.id,
+                    it.originId,
+                    it.scheduleName,
+                    it.roomInfo,
+                    getWeekDay(it.scheduleDay),
+                    timeData[0].toInt(),
+                    timeData[1].toInt(),
+                    onOff
+                )
+                alarmDao.insert(alarmModel)
+            }
+            if (onOff) {
+                removeAllAlarms(table.context, alarmDao.getAll())
+                activateAllAlarms(table.context, alarmDao.getAll())
+            }
+        }*/
+        val onOff = PreferenceHelper.getBoolean(table.context, ALARM_ON)
+        scheduleDao.clear()
+        alarmDao.clear()
+        schedules.forEach {
+            val scheduleModel = ScheduleModel(
+                0,
+                it.originId,
+                it.scheduleName,
+                it.roomInfo,
+                it.scheduleDay,
+                it.startTime,
+                it.endTime,
+                it.backgroundColor,
+                it.textColor
             )
+            scheduleDao.insert(scheduleModel)
         }
-        return schedules
-    }
-
-    private fun synchronizeSchedules() {
-        Log.d(TAG, "TimetableFragment - synchronizeSchedules() called")
-        schedules.clear()
-        schedules.addAll(getSchedules())
+        scheduleDao.getAll().forEach {
+            val timeData = it.startTime.split(":")
+            val alarmModel = AlarmModel(
+                it.id,
+                it.originId,
+                it.scheduleName,
+                it.roomInfo,
+                getWeekDay(it.scheduleDay),
+                timeData[0].toInt(),
+                timeData[1].toInt(),
+                onOff
+            )
+            alarmDao.insert(alarmModel)
+        }
+        if (onOff) {
+            removeAllAlarms(table.context, alarmDao.getAll())
+            activateAllAlarms(table.context, alarmDao.getAll())
+        }
     }
 
     // 확장 함수
@@ -238,9 +300,5 @@ class TimetableFragment : Fragment() {
             "토", "토요일", "SATURDAY", "SAT" -> SATURDAY
             else -> 9999
         }
-    }
-
-    companion object {
-        const val TAG: String = "로그"
     }
 }

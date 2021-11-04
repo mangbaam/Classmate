@@ -2,7 +2,6 @@ package mangbaam.classmate.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
 
 @Entity
 data class ScheduleModel(
@@ -15,4 +14,4 @@ data class ScheduleModel(
     var endTime: String,
     var backgroundColor: String = "#dddddd",
     var textColor: String = "#ffffff"
-): Serializable
+)

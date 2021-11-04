@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import mangbaam.classmate.model.Lecture
+import mangbaam.classmate.model.ScheduleModel
 import mangbaam.classmate.model.TimeAndPlace
 import mangbaam.classmate.notification.AlarmReceiver
 import mangbaam.classmate.notification.NotificationHelper
@@ -139,7 +140,7 @@ class MyTools {
 
         fun lastTimeMillis(targetWeekday: String, targetHour: Int, targetMinute: Int): Long {
             val format = SimpleDateFormat("EE HH mm", Locale.KOREA)
-            val today = format.format(Date(SystemClock.elapsedRealtime())) // 현재 시간 (요일 시간 분)
+            val today = format.format(Date(System.currentTimeMillis())) // 현재 시간 (요일 시간 분)
 
             val dateInfo = today.split(" ")
             val dayOfWeek = dateInfo[0] // 요일

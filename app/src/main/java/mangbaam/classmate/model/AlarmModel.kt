@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class AlarmModel(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    val originId: Int,
     val name: String,
     val place: String,
     val weekDay: String,
