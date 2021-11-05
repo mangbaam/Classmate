@@ -128,9 +128,8 @@
     <string name="address_github">github.com/mangbaam</string>
     <string name="developer_information">개발자 정보</string>
     <string name="edit_button_description">button to edit minute</string>
-    <string name="_30">30</string>
 
-    <string name="mit_license">
+    <string name="mit_license_min_timetable">
         MIT License\n\n
         Copyright © 2019 Junghyun Park
 \n\n
@@ -153,7 +152,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
     </string>
+
+    <string name="apache_license_nice_spinner">
+        Copyright (C) 2015 Angelo Marchesin.
+    \n\n
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    \n\n
+    http://www.apache.org/licenses/LICENSE-2.0
+    \n\n
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    </string>
     <string name="license_mintimetable">▶ MinTimetable\n(github.com/islandparadise14/MinTimetable)</string>
+    <string name="license_nice_spinner">▶ nice-spinner\n(github.com/arcadefire/nice-spinner)</string>
 
     <string name="introduce_myself">
         안녕하세요 수원대학교 정보보호학과 박명범입니다\n\n
@@ -162,14 +178,15 @@ SOFTWARE.
         이 앱의 소스 코드와 개발 과정은 깃허브에서 확인할 수 있습니다.\n\n
     </string>
     <string name="all">전체</string>
-    <string name="menu_button">menuButton</string>
-    <string name="add_todo_button">addTodoButton</string>
+    <string name="menu_button">메뉴 버튼</string>
+    <string name="add_todo_button">과제 추가 버튼</string>
     <string name="todo_detail_content">과제 세부 내용</string>
     <string name="no_deadline">마감 날짜 없음</string>
     <string name="todo_title">과제 제목</string>
     <string name="input_todo">과제 입력</string>
     <string name="priority_high">우선순위 높음</string>
     <string name="priority_mid">우선순위 보통</string>
-    <string name="priority_low">우선순위 낮음</string>
-    <string name="priority_complete">완료 혹은 기한 없음</string>
+    <string name="priority_low">우선순위 낮음 (기한 없음)</string>
+    <string name="priority_complete">완료됨</string>
+    <string name="load_more">더 보기</string>
 </resources>

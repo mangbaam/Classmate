@@ -35,6 +35,7 @@ import mangbaam.classmate.databinding.FragmentMoreBinding
 import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
+import mangbaam.classmate.model.TodoModel
 import mangbaam.classmate.notification.NotificationHelper.Companion.activateAllAlarms
 import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAlarms
 
@@ -104,13 +105,23 @@ class MoreFragment : Fragment() {
         }
 
         /* 라이선스 더 보기 클릭 */
+        // mintimetable
         binding.loadMoreTextView.setOnClickListener {
-            if (binding.licenseContainer.isGone) {
+            if (binding.licenseInformation1.isGone) {
                 binding.loadMoreTextView.text = "간략히"
             } else {
                 binding.loadMoreTextView.text = "더 보기"
             }
-            binding.licenseContainer.isGone = binding.licenseContainer.isGone.not()
+            binding.licenseInformation1.isGone = binding.licenseInformation1.isGone.not()
+        }
+        // nice-spinner
+        binding.loadMoreTextView2.setOnClickListener {
+            if (binding.licenseInformation2.isGone) {
+                binding.loadMoreTextView2.text = "간략히"
+            } else {
+                binding.loadMoreTextView2.text = "더 보기"
+            }
+            binding.licenseInformation2.isGone = binding.licenseInformation2.isGone.not()
         }
 
         /* 데이터 모두 지우기 버튼 */

@@ -54,13 +54,14 @@
             android:layout_width="30dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/priority_complete" />
+            android:background="@color/priority_low" />
 
-        <Spinner
+        <org.angmarch.views.NiceSpinner
             android:id="@+id/todoCategorySpinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:layout_gravity="center" />
 
     </LinearLayout>

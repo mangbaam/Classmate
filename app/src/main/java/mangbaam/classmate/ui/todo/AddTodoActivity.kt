@@ -6,14 +6,12 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.islandparadise14.mintable.utils.dpToPx
-import mangbaam.classmate.MyTools.Companion.pxToDp
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.ActivityAddTodoBinding
 import mangbaam.classmate.model.Priority
@@ -23,7 +21,6 @@ class AddTodoActivity : AppCompatActivity() {
 
     private var _binding: ActivityAddTodoBinding? = null
     private val binding get() = _binding!!
-    private val context get() = applicationContext
 
     private lateinit var popupWindow: PopupWindow
 
@@ -36,6 +33,8 @@ class AddTodoActivity : AppCompatActivity() {
     private var priority = Priority.COMPLETE
     private var deadline = ""
     private var detailContent = ""
+
+    private val categoryList = listOf("과목1", "과목2", "과목3", "과목4", "과목5")
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,17 +49,21 @@ class AddTodoActivity : AppCompatActivity() {
     private fun initViews() {
         /* 우선순위 선택 팝업 초기화 */
         setPopUpWindow()
+        binding.todoPriorityButton.setOnClickListener {
+            popupWindow.showAsDropDown(
+                it,
+                dpToPx(this, 30F).toInt(),
+                -dpToPx(this, 48F).toInt()
+            )
+        }
         /* 과제 제목 Required -> 추가 버튼 활성화 */
         binding.todoTitleEditText.addTextChangedListener {
             binding.updateButton.isEnabled = binding.todoTitleEditText.text.isNotEmpty()
         }
 
-        binding.todoPriorityButton.setOnClickListener {
-            popupWindow.showAsDropDown(
-                it,
-                dpToPx(context, 30F).toInt(),
-                -dpToPx(context, 48F).toInt()
-            )
+        binding.todoCategorySpinner.attachDataSource(categoryList)
+        binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
+            Toast.makeText(applicationContext, "id: ${id}, position: ${position}, ${categoryList[position]}", Toast.LENGTH_SHORT).show()
         }
 
         binding.todoDeadlineButton.setOnClickListener {
@@ -80,27 +83,27 @@ class AddTodoActivity : AppCompatActivity() {
         priorityCompleteTextView = view.findViewById(R.id.priorityComplete)
         /* 터치하여 우선순위 변경 */
         priorityHighTextView.setOnClickListener {
-            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(context, R.color.priority_high))
+            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_high))
             priority = Priority.HIGH
             popupWindow.dismiss()
         }
         priorityMidTextView.setOnClickListener {
-            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(context, R.color.priority_mid))
+            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_mid))
             priority = Priority.MID
             popupWindow.dismiss()
         }
         priorityLowTextView.setOnClickListener {
-            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(context, R.color.priority_low))
+            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_low))
             priority = Priority.LOW
             popupWindow.dismiss()
         }
         priorityCompleteTextView.setOnClickListener {
-            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(context, R.color.priority_complete))
+            binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_complete))
             priority = Priority.COMPLETE
             popupWindow.dismiss()
         }
         /* 팝업 윈도우 생성 */
-        popupWindow = PopupWindow(view, 600, RelativeLayout.LayoutParams.WRAP_CONTENT, true)
+        popupWindow = PopupWindow(view, 800, RelativeLayout.LayoutParams.WRAP_CONTENT, true)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
