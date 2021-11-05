@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/priorityHigh"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/priority_high"
+        android:gravity="center"
+        android:text="@string/priority_high"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/priorityMid"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/priority_mid"
+        android:gravity="center"
+        android:text="@string/priority_mid"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/priorityLow"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/priority_low"
+        android:gravity="center"
+        android:text="@string/priority_low"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/priorityComplete"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/priority_complete"
+        android:gravity="center"
+        android:text="@string/priority_complete"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

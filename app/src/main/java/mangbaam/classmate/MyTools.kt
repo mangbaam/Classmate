@@ -7,6 +7,7 @@ import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
+import android.util.TypedValue
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
@@ -203,6 +204,21 @@ class MyTools {
         }
 
         fun getWeekDay(index: Int): String = arrayOf("월","화","수","목","금","토","일")[index]
+
+        fun pxToDp(context: Context, px:Float): Float {
+            var density = context.resources.displayMetrics.density
+            when (density) {
+                1.0F -> density *= 4.0F
+                1.5F -> density *= (8 / 3)
+                2.0F -> density *= 2.0F
+            }
+            return px / density
+        }
+
+        fun dpToPx(context: Context, dp: Float): Float {
+            val dm = context.resources.displayMetrics
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, dm)
+        }
 
         // 상수 값들
         const val MINUITEms = 60 * 1000
