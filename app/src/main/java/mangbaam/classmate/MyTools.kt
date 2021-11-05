@@ -147,6 +147,7 @@ class MyTools {
             val currentHour = dateInfo[1].toInt() // 시
             val currentMinute = dateInfo[2].toInt() // 분
             Log.d(TAG, "현재 : ${dayOfWeek}요일 $currentHour : $currentMinute")
+            Log.d(TAG, "TEST - currentTimeMillis : ${System.currentTimeMillis()}, elapsedRealtime : ${SystemClock.elapsedRealtime()}")
             val dayDiffMs = weekDayDiff(dayOfWeek, targetWeekday) * DAYms
             val timeDiffMs = timeDiff(currentHour, currentMinute, targetHour, targetMinute)
             val lastTime = dayDiffMs + timeDiffMs

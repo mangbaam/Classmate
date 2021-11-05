@@ -16,10 +16,9 @@ class TodoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "HomeFragment - onCreateView() called")
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
-        binding.lectureInfoTextView.text = "강의가 없습니다"
         return binding.root
     }
 

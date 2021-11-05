@@ -6,22 +6,16 @@
     app:startDestination="@id/navigation_timetable">
 
     <fragment
-        android:id="@+id/navigation_todo"
-        android:name="mangbaam.classmate.ui.todo.TodoFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_todo" />
-
-    <fragment
         android:id="@+id/navigation_timetable"
         android:name="mangbaam.classmate.ui.timetable.TimetableFragment"
         android:label="@string/title_timetable"
         tools:layout="@layout/fragment_timetable"/>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="mangbaam.classmate.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_todo"
+        android:name="mangbaam.classmate.ui.todo.TodoFragment"
+        android:label="@string/title_todo"
+        tools:layout="@layout/fragment_todo" />
 
     <fragment
         android:id="@+id/navigation_more"

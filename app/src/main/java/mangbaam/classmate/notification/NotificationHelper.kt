@@ -41,7 +41,7 @@ class NotificationHelper {
 
                     notificationChannel.description = "수업 시작 전 알림을 띄웁니다."
                     notificationChannel.enableLights(true) // 화면 활성화
-                    notificationChannel.vibrationPattern = longArrayOf(0, 300, 300, 300)
+                    notificationChannel.vibrationPattern = longArrayOf(0, 100, 100, 100, 100, 100)
                     notificationManager.createNotificationChannel(notificationChannel)
                 }
             } catch (nullException: NullPointerException) {
@@ -135,7 +135,7 @@ class NotificationHelper {
                 lastMillisToStart += DAYms * 7
             }
             Log.d(
-                MyTools.TAG,
+                TAG,
                 "-> 강의 시간(${item.weekDay}요일 ${hour}:${minute})까지 ${checkMillis(lastMillis)}만큼 남음. ${previousMinutes}분 전 알림"
             )
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -145,7 +145,6 @@ class NotificationHelper {
             intent.putExtra("place", place)
             intent.putExtra("hour", hour)
             intent.putExtra("minute", minute)
-            intent.putExtra("model", item)
 
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -153,9 +152,10 @@ class NotificationHelper {
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT // 이미 생성된 PendingIntent가 있으면 Extra Data만 교체(업데이트)
             )
-            val triggerTime = System.currentTimeMillis()+lastMillisToStart
+//            val triggerTime = System.currentTimeMillis() + lastMillisToStart
+            val triggerTime = SystemClock.elapsedRealtime() + lastMillisToStart
             alarmManager.set(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,   // 디바이스 부팅 시간을 기준으로 함 (절전 모드일 때도 알람 발생)
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,   // 기기 부팅 시간을 기준으로 함 (절전 모드일 때도 알람 발생)
                 triggerTime,
                 pendingIntent
             )

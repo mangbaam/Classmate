@@ -4,30 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFEB3B"
+    android:paddingHorizontal="8dp"
     tools:context=".ui.todo.TodoFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topLectureInfoPanel"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@color/light_gray"
-        android:elevation="10dp"
-        android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/timetableTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:text="@string/title_todo"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/lectureInfoTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="등록된 강의가 없습니다" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,11 +12,6 @@
         android:title="@string/title_todo" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="@string/title_notifications" />
-
-    <item
         android:id="@+id/navigation_more"
         android:icon="@drawable/ic_more"
         android:title="@string/title_more" />
