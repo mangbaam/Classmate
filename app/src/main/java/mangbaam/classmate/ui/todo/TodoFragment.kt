@@ -1,11 +1,13 @@
 package mangbaam.classmate.ui.todo
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.databinding.FragmentTodoBinding
 
 class TodoFragment : Fragment() {
@@ -19,7 +21,20 @@ class TodoFragment : Fragment() {
     ): View {
         Log.d(TAG, "HomeFragment - onCreateView() called")
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
+
+        initViews()
+
         return binding.root
+    }
+
+    private fun initViews() {
+        binding.addTodoButton.setOnClickListener {
+            val intent = Intent(binding.addTodoButton.context, AddTodoActivity::class.java)
+            startActivity(intent)
+        }
+        binding.menuButton.setOnClickListener {
+            // TODO Drawable 메뉴 구성
+        }
     }
 
     override fun onDestroyView() {
@@ -31,9 +46,5 @@ class TodoFragment : Fragment() {
     override fun onDestroy() {
         Log.d(TAG, "HomeFragment - onDestroy() called")
         super.onDestroy()
-    }
-
-    companion object {
-        const val TAG: String = "로그"
     }
 }

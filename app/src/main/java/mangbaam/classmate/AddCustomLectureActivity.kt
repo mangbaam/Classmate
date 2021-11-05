@@ -8,6 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_custom_lecture.*
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.MyTools.Companion.timeAndPlaceToLecture
 import mangbaam.classmate.Verify.Companion.verifyTime
 import mangbaam.classmate.adapter.AddCustomLectureAdapter
@@ -30,8 +31,6 @@ class AddCustomLectureActivity : AppCompatActivity() {
     private lateinit var tableDB: TableDB
     private lateinit var tableDao: LectureDao
 
-    private val verify = Verify()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityAddCustomLectureBinding.inflate(layoutInflater)
@@ -49,7 +48,7 @@ class AddCustomLectureActivity : AppCompatActivity() {
                 TimeItem.END_TIME -> showEndTimeDialog(position)
             }
         }, { position ->
-            // TODO Snakbar를 띄워 삭제를 취소할 수 있는 기능
+            // TODO Snackbar를 띄워 삭제를 취소할 수 있는 기능
             timeAndPlaceList.removeAt(position)
             adapter.notifyItemRemoved(position)
         }, { position, text ->
@@ -223,8 +222,4 @@ class AddCustomLectureActivity : AppCompatActivity() {
 
     private fun getLectureName(): String = binding.lectureNameEditText.text.toString()
     private fun getProfessorName(): String = binding.professorNameEditText.text.toString()
-
-    companion object {
-        const val TAG: String = "로그"
-    }
 }

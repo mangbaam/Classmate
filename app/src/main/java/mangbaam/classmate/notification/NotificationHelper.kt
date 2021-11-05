@@ -160,7 +160,7 @@ class NotificationHelper {
                 pendingIntent
             )
             Log.d(
-                MyTools.TAG,
+                TAG,
                 "$lectureName 알람 ${item.weekDay}요일 ${checkMillis(lastMillisToStart)}후에 울리도록 등록됨"
             )
         }

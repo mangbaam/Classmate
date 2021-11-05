@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.database.DB_keys.Companion.LECTURES
 import mangbaam.classmate.database.DB_keys.Companion.SCHOOL_NAME
 import mangbaam.classmate.database.DB_keys.Companion.TERM
@@ -126,9 +127,5 @@ class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mBinding = null
-    }
-
-    companion object {
-        const val TAG: String = "로그"
     }
 }

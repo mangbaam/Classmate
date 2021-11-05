@@ -158,7 +158,7 @@ class TimetableFragment : Fragment() {
                         ScheduleDay.getDay(timeInfo[1]),
                         timeInfo[2],
                         timeInfo[3],
-                        colors[index % (colors.size - 1)]
+                        colors[index % (colors.size - 1)].toString()
                     )
                     schedules.add(schedule)
                 }

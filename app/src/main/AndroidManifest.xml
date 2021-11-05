@@ -11,8 +11,11 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Classmate"
-        tools:replace="android:theme"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup"
+        tools:replace="android:theme">
+        <activity
+            android:name=".ui.todo.AddTodoActivity"
+            android:exported="false" />
         <activity
             android:name=".AddLectureActivity"
             android:exported="false" />
@@ -30,7 +33,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".notification.AlarmReceiver" android:exported="false" />
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

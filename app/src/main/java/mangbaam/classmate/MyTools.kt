@@ -7,6 +7,7 @@ import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
 import mangbaam.classmate.model.TimeAndPlace
@@ -147,7 +148,6 @@ class MyTools {
             val currentHour = dateInfo[1].toInt() // 시
             val currentMinute = dateInfo[2].toInt() // 분
             Log.d(TAG, "현재 : ${dayOfWeek}요일 $currentHour : $currentMinute")
-            Log.d(TAG, "TEST - currentTimeMillis : ${System.currentTimeMillis()}, elapsedRealtime : ${SystemClock.elapsedRealtime()}")
             val dayDiffMs = weekDayDiff(dayOfWeek, targetWeekday) * DAYms
             val timeDiffMs = timeDiff(currentHour, currentMinute, targetHour, targetMinute)
             val lastTime = dayDiffMs + timeDiffMs
@@ -205,7 +205,6 @@ class MyTools {
         fun getWeekDay(index: Int): String = arrayOf("월","화","수","목","금","토","일")[index]
 
         // 상수 값들
-        const val TAG: String = "로그"
         const val MINUITEms = 60 * 1000
         const val HOURms = 60 * 60 * 1000
         const val DAYms = 24 * 60 * 60 * 1000

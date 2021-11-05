@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/timetableTextView"
+                android:id="@+id/todoTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -98,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="수원대학교 정보보호학과 \n15학번 박명범입니다~^^" />
+                    android:text="@string/introduce_myself" />
 
                 <TextView
                     android:id="@+id/emailAddress"

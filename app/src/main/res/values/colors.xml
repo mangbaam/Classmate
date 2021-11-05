@@ -25,7 +25,7 @@
     <color name="exodus_fruit">#736c5ce7</color>
     <color name="sour_lemon">#73ffeaa7</color>
     <color name="first_date">#73fab1a0</color>
-    <color name="bright_yarrow">#73fdcb6e</color>
+    <color name="bright_yarrow">#73FDE672</color>
     <color name="orangeville">#73e17055</color>
     <color name="pink_glamour">#73ff7675</color>
     <color name="pico_8_pink">#73fd79a8</color>
@@ -33,23 +33,35 @@
     <color name="prunus_avium">#73e84393</color>
 
     <string-array name="cell_colors">
-        <item>#7300b894</item>
-        <item>#730984e3</item>
-        <item>#73fdcb6e</item>
-        <item>#73d63031</item>
-        <item>#7300cec9</item>
-        <item>#736c5ce7</item>
-        <item>#73e17055</item>
-        <item>#73e84393</item>
-        <item>#7355efc4</item>
-        <item>#7374b9ff</item>
-        <item>#73FDE672</item>
-        <item>#73ff7675</item>
-        <item>#7381ecec</item>
-        <item>#73a29bfe</item>
-        <item>#73fab1a0</item>
-        <item>#73fd79a8</item>
+        <item>#7700b894</item>
+        <item>#770984e3</item>
+        <item>#77FDE672</item>
+        <item>#77d63031</item>
+        <item>#7700cec9</item>
+        <item>#776c5ce7</item>
+        <item>#77e17055</item>
+        <item>#77e84393</item>
+        <item>#7755efc4</item>
+        <item>#7774b9ff</item>
+        <item>#77FDE672</item>
+        <item>#77ff7675</item>
+        <item>#7781ecec</item>
+        <item>#77a29bfe</item>
+        <item>#77fab1a0</item>
+        <item>#77fd79a8</item>
+    </string-array>
 
+    <!-- To-Do Priority colors -->
+    <color name="priority_high">#e74c3c</color>
+    <color name="priority_mid">#f1c40f</color>
+    <color name="priority_low">#1abc9c</color>
+    <color name="priority_complete">#34495e</color>
+
+    <string-array name="priority_colors">
+        <item>#e74c3c</item>
+        <item>#f1c40f</item>
+        <item>#1abc9c</item>
+        <item>#34495e</item>
     </string-array>
 
 </resources>

@@ -154,4 +154,18 @@ SOFTWARE.
 
     </string>
     <string name="license_mintimetable">▶ MinTimetable\n(github.com/islandparadise14/MinTimetable)</string>
+
+    <string name="introduce_myself">
+        안녕하세요 수원대학교 정보보호학과 박명범입니다\n\n
+        문의 사항이 있다면 밑에 이메일 버튼을 눌러 저에게 이메일을 보낼 수 있어요!\n\n
+        저에 대해 더 궁금하다면 블로그를 방문해주세요\n\n
+        이 앱의 소스 코드와 개발 과정은 깃허브에서 확인할 수 있습니다.\n\n
+    </string>
+    <string name="all">전체</string>
+    <string name="menu_button">menuButton</string>
+    <string name="add_todo_button">addTodoButton</string>
+    <string name="todo_detail_content">과제 세부 내용</string>
+    <string name="no_deadline">마감 날짜 없음</string>
+    <string name="todo_title">과제 제목</string>
+    <string name="input_todo">과제 입력</string>
 </resources>
