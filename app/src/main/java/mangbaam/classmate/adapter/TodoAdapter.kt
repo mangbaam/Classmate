@@ -1,12 +1,10 @@
 package mangbaam.classmate.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import mangbaam.classmate.MyTools.Companion.DAYms
 import mangbaam.classmate.R
@@ -16,7 +14,6 @@ import mangbaam.classmate.model.SwipeButton
 import mangbaam.classmate.model.TodoModel
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TodoAdapter(
     private val listener: OnClickListener,
@@ -63,15 +60,15 @@ class TodoAdapter(
         override fun onClick(v: View?) {
             with(binding) {
                 when (v) {
-                    editButton -> listener.onClick(this, SwipeButton.EDIT)
-                    completeButton -> listener.onClick(this, SwipeButton.COMPLETE)
+                    editButton -> listener.onClick(this, SwipeButton.EDIT, adapterPosition)
+                    completeButton -> listener.onClick(this, SwipeButton.COMPLETE, adapterPosition)
                 }
             }
         }
     }
 
     interface OnClickListener {
-        fun onClick(binding: ItemTodoBinding, type: SwipeButton)
+        fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

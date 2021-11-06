@@ -12,5 +12,8 @@ class Constants {
         const val NOTIFICATION_CODE_END = 102
         const val TODO_DEFAULT_HOUR = 16
         const val TODO_DEFAULT_MINUTE = 0
+        const val MODE_ADDITION = "Addition"
+        const val MODE_EDIT = "Edit"
+
     }
 }

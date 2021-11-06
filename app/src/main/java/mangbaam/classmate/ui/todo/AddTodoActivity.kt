@@ -8,15 +8,18 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.islandparadise14.mintable.utils.dpToPx
+import mangbaam.classmate.Constants.Companion.MODE_ADDITION
+import mangbaam.classmate.Constants.Companion.MODE_EDIT
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_HOUR
 import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_MINUTE
-import mangbaam.classmate.MyTools.Companion.DAYms
 import mangbaam.classmate.R
 import mangbaam.classmate.database.TodoDB
 import mangbaam.classmate.database.getTableDB
@@ -49,6 +52,10 @@ class AddTodoActivity : AppCompatActivity() {
     private var categoryIdList = mutableListOf(0)
     private var categoryNameList = mutableListOf("선택 안함")
 
+    private var openMode = MODE_ADDITION
+    private var exportPosition = 0
+    private lateinit var todoModel: TodoModel
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +63,33 @@ class AddTodoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initData()
-
         initViews()
+
+        if (openMode == MODE_EDIT) editMode()
+
     }
 
     private fun initData() {
+        // 모드 확인
+        openMode = intent.getStringExtra("mode").toString()
+        Log.d(TAG, "AddTodoActivity - initData(${openMode}) called")
+
+        when (openMode) {
+            MODE_ADDITION -> {
+                todoModel = TodoModel()
+                Log.d(TAG, "AddTodoActivity: MODE_ADDITION - $todoModel")
+            }
+            MODE_EDIT -> {
+                todoModel = intent.getSerializableExtra("model") as TodoModel
+                exportPosition = intent.getIntExtra("position", 0)
+                Log.d(TAG, "AddTodoActivity: MODE_EDIT - $todoModel")
+            }
+            else -> {
+                todoModel = TodoModel()
+                Log.d(TAG, "AddTodoActivity - 아무것도 안넘어옴($openMode)")
+            }
+        }
+        // DB (Room)
         val tableDB = getTableDB(this)
         todoDB = getTodoDB(this)
         val myLectures = tableDB.tableDao().getAll()
@@ -88,7 +117,11 @@ class AddTodoActivity : AppCompatActivity() {
 
         binding.todoCategorySpinner.attachDataSource(categoryNameList)
         binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
-            Toast.makeText(applicationContext, "id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                applicationContext,
+                "id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}",
+                Toast.LENGTH_SHORT
+            ).show()
             category = categoryIdList[position]
             categoryName = categoryNameList[position]
         }
@@ -100,22 +133,48 @@ class AddTodoActivity : AppCompatActivity() {
             showTimePicker()
         }
 
+        // 추가 버튼
         binding.updateButton.setOnClickListener {
-            val todoModel = TodoModel()
             todoModel.title = binding.todoTitleEditText.text.toString()
             todoModel.priority = priority
             todoModel.detail = binding.todoContentEditText.text.toString()
             todoModel.deadline = deadline?.timeInMillis ?: 0
-            todoModel.category = category ?: 0
-            todoModel.categoryName = if(categoryName.isEmpty()) "선택 안함" else categoryName
+            todoModel.category = category
+            todoModel.categoryName = if (categoryName.isEmpty()) "선택 안함" else categoryName
 
-            Toast.makeText(this, "$todoModel 추가됨", Toast.LENGTH_LONG).show()
             todoDB.todoDao().insert(todoModel)
 
             val resultIntent = Intent()
             resultIntent.putExtra("newModel", todoModel)
+            if (openMode == MODE_EDIT) resultIntent.putExtra("position", exportPosition)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
+        }
+    }
+
+    private fun editMode() {
+        if (openMode == MODE_EDIT) {
+            with(binding) {
+                updateButton.text = "업데이트"
+                todoTitleEditText.setText(todoModel.title)
+                setPriority(todoModel.priority)
+                todoCategorySpinner.selectedIndex = categoryIdList.indexOf(todoModel.category)
+                if (todoModel.deadline > 0) {
+                    todoDateButton.text =
+                        SimpleDateFormat(
+                            "yyyy/MM/dd",
+                            Locale.getDefault()
+                        ).format(todoModel.deadline)
+                    todoTimeButton.text =
+                        SimpleDateFormat("a hh:mm", Locale.getDefault()).format(todoModel.deadline)
+                    todoTimeButton.isEnabled = true
+                } else {
+                    todoDateButton.text = "마감 날짜 없음"
+                    todoTimeButton.text = "하루 종일"
+                    todoTimeButton.isEnabled = false
+                }
+                todoContentEditText.setText(todoModel.detail)
+            }
         }
     }
 
@@ -152,13 +211,20 @@ class AddTodoActivity : AppCompatActivity() {
         val cal = Calendar.getInstance()
         val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             cal.set(year, month, dayOfMonth, TODO_DEFAULT_HOUR, TODO_DEFAULT_MINUTE)
-            binding.todoDateButton.text = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(cal.time)
+            binding.todoDateButton.text =
+                SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(cal.time)
             deadline = cal
             binding.todoTimeButton.isEnabled = true
             setPriority(Priority.MID)
         }
         val dialog =
-            DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
+            DatePickerDialog(
+                this,
+                listener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
         dialog.show()
     }
 
@@ -167,17 +233,46 @@ class AddTodoActivity : AppCompatActivity() {
             if (deadline == null) return@OnTimeSetListener
             deadline?.set(Calendar.HOUR_OF_DAY, hour)
             deadline?.set(Calendar.MINUTE, minute)
-            binding.todoTimeButton.text = SimpleDateFormat("a hh:mm", Locale.getDefault()).format(deadline!!.time)
+            binding.todoTimeButton.text =
+                SimpleDateFormat("a hh:mm", Locale.getDefault()).format(deadline!!.time)
         }
-        deadline?.let { TimePickerDialog(this, listener, it.get(Calendar.HOUR_OF_DAY), deadline!!.get(Calendar.MINUTE), false).show() }
+        deadline?.let {
+            TimePickerDialog(
+                this,
+                listener,
+                it.get(Calendar.HOUR_OF_DAY),
+                deadline!!.get(Calendar.MINUTE),
+                false
+            ).show()
+        }
     }
 
     private fun setPriority(item: Priority) {
         when (item) {
-            Priority.HIGH -> binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_high))
-            Priority.MID -> binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_mid))
-            Priority.LOW -> binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_low))
-            Priority.COMPLETE -> binding.todoPriorityButton.setBackgroundColor(ContextCompat.getColor(this, R.color.priority_complete))
+            Priority.HIGH -> binding.todoPriorityButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.priority_high
+                )
+            )
+            Priority.MID -> binding.todoPriorityButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.priority_mid
+                )
+            )
+            Priority.LOW -> binding.todoPriorityButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.priority_low
+                )
+            )
+            Priority.COMPLETE -> binding.todoPriorityButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.priority_complete
+                )
+            )
         }
         priority = item
     }

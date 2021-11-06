@@ -12,7 +12,7 @@ data class TodoModel(
     var category: Int, // 과목의 id
     var categoryName: String, // 과목명
     var detail: String,
-    var deadline: Long
+    var deadline: Long // ms
 ):Serializable {
     constructor() : this(
         System.currentTimeMillis(),

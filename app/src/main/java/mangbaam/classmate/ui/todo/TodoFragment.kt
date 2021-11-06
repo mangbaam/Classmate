@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_todo.*
+import mangbaam.classmate.Constants.Companion.MODE_ADDITION
+import mangbaam.classmate.Constants.Companion.MODE_EDIT
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.adapter.TodoAdapter
 import mangbaam.classmate.database.TodoDB
@@ -53,10 +55,15 @@ class TodoFragment : Fragment() {
         Log.d(TAG, "TodoFragment - initViews($todoList 룸에서 받아옴) called")
 
         todoAdapter = TodoAdapter(object: TodoAdapter.OnClickListener {
-            override fun onClick(binding: ItemTodoBinding, type: SwipeButton) {
+            override fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int) {
                 when(type) {
                     SwipeButton.EDIT -> {
                         Log.d(TAG, "TodoFragment - onClick(EDIT) called")
+                        val intent = Intent(requireContext(), AddTodoActivity::class.java)
+                        intent.putExtra("mode", MODE_EDIT)
+                        intent.putExtra("model", todoList[position])
+                        intent.putExtra("position", position)
+                        startActivityForResult(intent, editModeCode)
                     }
                     SwipeButton.COMPLETE -> {
                         Log.d(TAG, "TodoFragment - onClick(COMPLETE) called")
@@ -67,7 +74,8 @@ class TodoFragment : Fragment() {
         binding.nothingToShowView.isGone = true // 로티 임시 제거
 
         binding.addTodoButton.setOnClickListener {
-            val intent = Intent(binding.addTodoButton.context, AddTodoActivity::class.java)
+            val intent = Intent(requireContext(), AddTodoActivity::class.java)
+            intent.putExtra("mode", MODE_ADDITION)
             startActivityForResult(intent, additionModeCode)
         }
         binding.menuButton.setOnClickListener {
@@ -96,7 +104,13 @@ class TodoFragment : Fragment() {
                     }
                 }
                 editModeCode -> {
-
+                    val model = data?.getSerializableExtra("newModel") as TodoModel
+                    val position = data.getIntExtra("position", 0)
+                    todoList[position] = model
+                    todoAdapter.notifyItemChanged(position)
+                    Toast.makeText(context, "${model.title}받아옴", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "TodoFragment - onActivityResult($model) 결과로 받아옴")
+                    Log.d(TAG, "TodoFragment - Data: $todoList called")
                 }
             }
         }
