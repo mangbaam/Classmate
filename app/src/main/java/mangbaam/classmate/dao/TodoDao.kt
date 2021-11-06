@@ -6,14 +6,11 @@ import mangbaam.classmate.model.TodoModel
 
 @Dao
 interface TodoDao {
-    @Query("SELECT * FROM AlarmModel")
-    fun getAll(): ArrayList<TodoModel>
+    @Query("SELECT * FROM TodoModel")
+    fun getAll(): List<TodoModel>
 
     @Delete
     fun delete(model: TodoModel)
-
-    @Delete
-    fun delete(id: Long)
 
     @Query("DELETE FROM TodoModel")
     fun clear()

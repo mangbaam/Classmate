@@ -1,8 +1,10 @@
 package mangbaam.classmate.ui.todo
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -41,7 +43,8 @@ class AddTodoActivity : AppCompatActivity() {
 
     private var priority = Priority.LOW
     private var deadline: Calendar? = null
-    private var category: Int? = null
+    private var category: Int = 0
+    private var categoryName: String = ""
 
     private var categoryIdList = mutableListOf(0)
     private var categoryNameList = mutableListOf("선택 안함")
@@ -87,6 +90,7 @@ class AddTodoActivity : AppCompatActivity() {
         binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
             Toast.makeText(applicationContext, "id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}", Toast.LENGTH_SHORT).show()
             category = categoryIdList[position]
+            categoryName = categoryNameList[position]
         }
 
         binding.todoDateButton.setOnClickListener {
@@ -103,9 +107,14 @@ class AddTodoActivity : AppCompatActivity() {
             todoModel.detail = binding.todoContentEditText.text.toString()
             todoModel.deadline = deadline?.timeInMillis ?: 0
             todoModel.category = category ?: 0
+            todoModel.categoryName = if(categoryName.isEmpty()) "선택 안함" else categoryName
 
             Toast.makeText(this, "$todoModel 추가됨", Toast.LENGTH_LONG).show()
             todoDB.todoDao().insert(todoModel)
+
+            val resultIntent = Intent()
+            resultIntent.putExtra("newModel", todoModel)
+            setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
     }

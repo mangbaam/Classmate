@@ -8,10 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_todo.*
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.adapter.TodoAdapter
 import mangbaam.classmate.database.TodoDB
@@ -25,7 +27,8 @@ class TodoFragment : Fragment() {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
     private lateinit var todoDB: TodoDB
-    private lateinit var todoArray: ArrayList<TodoModel>
+    private val todoList = mutableListOf<TodoModel>()
+    private lateinit var todoAdapter: TodoAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,9 +49,10 @@ class TodoFragment : Fragment() {
     }
 
     private fun initViews() {
-        todoArray.addAll(todoDB.todoDao().getAll())
+        todoList.addAll(todoDB.todoDao().getAll())
+        Log.d(TAG, "TodoFragment - initViews($todoList 룸에서 받아옴) called")
 
-        val adapter = TodoAdapter(requireContext(), object: TodoAdapter.OnClickListener {
+        todoAdapter = TodoAdapter(object: TodoAdapter.OnClickListener {
             override fun onClick(binding: ItemTodoBinding, type: SwipeButton) {
                 when(type) {
                     SwipeButton.EDIT -> {
@@ -59,12 +63,12 @@ class TodoFragment : Fragment() {
                     }
                 }
             }
-        }, todoArray)
+        }, todoList)
         binding.nothingToShowView.isGone = true // 로티 임시 제거
 
         binding.addTodoButton.setOnClickListener {
             val intent = Intent(binding.addTodoButton.context, AddTodoActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, additionModeCode)
         }
         binding.menuButton.setOnClickListener {
             // TODO Drawable 메뉴 구성
@@ -72,15 +76,30 @@ class TodoFragment : Fragment() {
         binding.todoRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, 1))
-            this.adapter = adapter
+            this.adapter = todoAdapter
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "TodoFragment - onActivityResult($requestCode, $resultCode, $data) called")
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                additionModeCode -> {
+                    data?.getSerializableExtra("newModel").apply {
+                        val insertIndex = 0
+                        todoList.add(insertIndex, this as TodoModel)
+                        todoAdapter.notifyItemInserted(insertIndex)
+                        Toast.makeText(context, "${this}받아옴", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "TodoFragment - onActivityResult($this) 결과로 받아옴")
+                        Log.d(TAG, "TodoFragment - Data: $todoList called")
+                    }
+                }
+                editModeCode -> {
 
-        todoArray.clear()
-        todoDB.todoDao().getAll()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -92,5 +111,10 @@ class TodoFragment : Fragment() {
     override fun onDestroy() {
         Log.d(TAG, "HomeFragment - onDestroy() called")
         super.onDestroy()
+    }
+
+    companion object {
+        const val additionModeCode = 101
+        const val editModeCode = 102
     }
 }

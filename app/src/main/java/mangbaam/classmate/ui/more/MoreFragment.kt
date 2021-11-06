@@ -24,12 +24,10 @@ import mangbaam.classmate.Verify
 import mangbaam.classmate.dao.AlarmDao
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.ScheduleDao
+import mangbaam.classmate.dao.TodoDao
+import mangbaam.classmate.database.*
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_MINUTE
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
-import mangbaam.classmate.database.getAlarmDB
-import mangbaam.classmate.database.getAppDatabase
-import mangbaam.classmate.database.getScheduleDB
-import mangbaam.classmate.database.getTableDB
 import mangbaam.classmate.databinding.DialogMinuteSettingBinding
 import mangbaam.classmate.databinding.FragmentMoreBinding
 import mangbaam.classmate.model.AlarmModel
@@ -45,19 +43,23 @@ class MoreFragment : Fragment() {
     private lateinit var scheduleDao: ScheduleDao
     private lateinit var alarmDao: AlarmDao
     private lateinit var tableDao: LectureDao
+    private lateinit var todoDao: TodoDao
     private val alarms = mutableListOf<AlarmModel>()
     private val schedules = arrayListOf<ScheduleModel>()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        scheduleDao = getScheduleDB(context).scheduleDao()
+        alarmDao = getAlarmDB(context).alarmDao()
+        tableDao = getTableDB(context).tableDao()
+        todoDao = getTodoDB(context).todoDao()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         Log.d(TAG, "SettingFragment - onCreateView() called")
         mBinding = FragmentMoreBinding.inflate(inflater)
-
-        scheduleDao = getScheduleDB(requireContext()).scheduleDao()
-        alarmDao = getAlarmDB(requireContext()).alarmDao()
-        tableDao = getTableDB(requireContext()).tableDao()
 
         schedules.addAll(scheduleDao.getAll())
         alarms.addAll(alarmDao.getAll())
@@ -122,6 +124,15 @@ class MoreFragment : Fragment() {
                     loadMoreTextView2.text = "더 보기"
                 }
                 licenseInformation2.isGone = licenseInformation2.isGone.not()
+            }
+            // SwipeRevealLayout
+            loadMoreTextView3.setOnClickListener {
+                if (licenseInformation3.isGone) {
+                    loadMoreTextView3.text = "간략히"
+                } else {
+                    loadMoreTextView3.text = "더 보기"
+                }
+                licenseInformation3.isGone = licenseInformation3.isGone.not()
             }
 
             /* 데이터 모두 지우기 버튼 */
@@ -217,6 +228,8 @@ class MoreFragment : Fragment() {
                 alarmDao.clear()
                 scheduleDao.clear()
                 tableDao.clear()
+                todoDao.clear()
+
                 Snackbar.make(
                     this.clearAllDataButton,
                     "데이터가 초기화되었습니다.",

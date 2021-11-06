@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.chauthai.swipereveallayout.SwipeRevealLayout
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import mangbaam.classmate.MyTools.Companion.DAYms
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.ItemTodoBinding
@@ -17,13 +19,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class TodoAdapter(
-    val context: Context,
     private val listener: OnClickListener,
-    todoList: ArrayList<TodoModel>
+    todoList: List<TodoModel>
 ) :
     RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
-    private var todos = todoList
+    private var todos: List<TodoModel> = todoList
+    private var viewBinderHelper = ViewBinderHelper()
 
     inner class ViewHolder(
         private val binding: ItemTodoBinding,
@@ -32,10 +34,11 @@ class TodoAdapter(
 
         fun bind(item: TodoModel) {
             val sdFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+            val context = binding.categoryTextView.context
             with(binding) {
                 todoTitleTextView.text = item.title
-                categoryTextView.text = todos[item.category].toString()
-                deadlineTextView.text = sdFormat.format(item.deadline)
+                deadlineTextView.text =
+                    if (item.deadline > 0) sdFormat.format(item.deadline) else "마감일 없음"
                 priorityColorView.setBackgroundColor(
                     when (item.priority) {
                         Priority.HIGH -> ContextCompat.getColor(context, R.color.priority_high)
@@ -51,6 +54,9 @@ class TodoAdapter(
                     "D-${
                         item.deadline.minus(System.currentTimeMillis()).div(DAYms).toInt()
                     }" else "기한 없음"
+                categoryTextView.text = item.categoryName
+                editButton.setOnClickListener(this@ViewHolder)
+                completeButton.setOnClickListener(this@ViewHolder)
             }
         }
 
@@ -70,6 +76,7 @@ class TodoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(todos[position])
+        viewBinderHelper.setOpenOnlyOne(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

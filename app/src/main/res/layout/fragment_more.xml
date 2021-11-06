@@ -105,8 +105,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="32dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="32dp">
 
                     <TextView
                         android:id="@+id/emailAddress"
@@ -177,7 +177,7 @@
                     android:id="@+id/licenseInformation1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="64dp"
+                    android:layout_marginBottom="48dp"
                     android:background="@color/light_gray"
                     android:padding="8dp"
                     android:visibility="gone">
@@ -205,6 +205,7 @@
                     android:id="@+id/licenseInformation2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
                     android:background="@color/light_gray"
                     android:padding="8dp"
                     android:visibility="gone">
@@ -213,6 +214,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/apache_license_nice_spinner" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/license_swipe_reveal_layout" />
+
+                <TextView
+                    android:id="@+id/loadMoreTextView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/load_more"
+                    android:textColor="@color/blue" />
+
+                <FrameLayout
+                    android:id="@+id/licenseInformation3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
+                    android:background="@color/light_gray"
+                    android:padding="8dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mit_license_swipe_reveal_layout" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

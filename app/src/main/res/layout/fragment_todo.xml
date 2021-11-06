@@ -6,54 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".ui.todo.TodoFragment">
 
-    <TextView
-        android:id="@+id/todoTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/title_todo"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/todoSubtitleTextView"
+    <RelativeLayout
+        android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="30dp"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:text="@string/all"
-        android:textColor="@color/sky_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/todoTitleTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/todoTitleTextView"
-        app:layout_constraintTop_toTopOf="@+id/todoTitleTextView" />
-
-    <ImageView
-        android:id="@+id/menuButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:contentDescription="@string/menu_button"
-        android:src="@drawable/ic_menu"
-        app:layout_constraintBottom_toBottomOf="@+id/todoTitleTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/todoTitleTextView" />
+        android:elevation="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/todoTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginVertical="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/title_todo"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/todoSubtitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="30dp"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:text="@string/all"
+            android:textColor="@color/sky_blue" />
+
+        <ImageView
+            android:id="@+id/menuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/menu_button"
+            android:src="@drawable/ic_menu" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoRecyclerView"
         android:layout_width="0dp"
+        android:overScrollMode="ifContentScrolls"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todoTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
         tools:listitem="@layout/item_todo" />
 
     <RelativeLayout
@@ -83,8 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="64dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
@@ -95,7 +102,8 @@
         android:id="@+id/addTodoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/add_todo_button"
         android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"

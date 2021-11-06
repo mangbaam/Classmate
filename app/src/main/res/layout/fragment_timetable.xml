@@ -58,10 +58,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/add_lecture_button"
         android:src="@drawable/ic_plus" />
 </RelativeLayout>
