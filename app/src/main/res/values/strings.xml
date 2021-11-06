@@ -154,7 +154,7 @@ SOFTWARE.
     </string>
 
     <string name="apache_license_nice_spinner">
-        Copyright (C) 2015 Angelo Marchesin.
+        Copyright © 2015 Angelo Marchesin.
     \n\n
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -189,4 +189,7 @@ SOFTWARE.
     <string name="priority_low">우선순위 낮음 (기한 없음)</string>
     <string name="priority_complete">완료됨</string>
     <string name="load_more">더 보기</string>
+    <string name="add_lecture_button">시간표 추가 버튼</string>
+    <string name="all_day">하루 종일</string>
+    <string name="nothing">Tung...</string>
 </resources>

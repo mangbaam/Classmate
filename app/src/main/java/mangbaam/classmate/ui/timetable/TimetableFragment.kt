@@ -29,6 +29,7 @@ import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.ScheduleDao
 import mangbaam.classmate.database.*
 import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
+import mangbaam.classmate.database.DB_keys.Companion.TERM
 import mangbaam.classmate.databinding.FragmentTimetableBinding
 import mangbaam.classmate.model.AlarmModel
 import mangbaam.classmate.model.Lecture
@@ -75,6 +76,7 @@ class TimetableFragment : Fragment() {
 
         initTimeTable() // 시간표 초기화 (시간표 로딩 및 이벤트 리스너 부착)
 
+        binding.termTextView.text = PreferenceHelper.getString(binding.termTextView.context, TERM)
         binding.addLectureButton.setOnClickListener {
             Log.d(TAG, "TimetableFragment - onCreateView() called : 과목 추가 버튼 눌림")
             val intent = Intent(context, AddLectureActivity::class.java)

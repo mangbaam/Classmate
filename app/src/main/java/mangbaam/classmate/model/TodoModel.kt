@@ -7,10 +7,9 @@ data class TodoModel(
     var id: Long, // 생성 시간 ms
     var priority: Priority,
     var title: String,
-    var category: Int?,
-    var content: String?,
-    var deadline: String?,
-    var d_day: Int?
+    var category: Int?, // 과목의 id
+    var detail: String?,
+    var deadline: Long?
 ) {
     constructor() : this(
         System.currentTimeMillis(),
@@ -18,7 +17,6 @@ data class TodoModel(
         "",
         0,
         "",
-        "",
-        0
+        0L
     )
 }

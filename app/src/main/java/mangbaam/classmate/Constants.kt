@@ -10,5 +10,7 @@ class Constants {
         const val TAG: String = "로그"
         const val NOTIFICATION_CODE_START = 101
         const val NOTIFICATION_CODE_END = 102
+        const val TODO_DEFAULT_HOUR = 16
+        const val TODO_DEFAULT_MINUTE = 0
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,9 +39,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:hint="@string/todo_title"
-        android:textStyle="bold"
+        android:importantForAutofill="no"
         android:inputType="text"
-        android:importantForAutofill="no" />
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,17 +59,32 @@
             android:id="@+id/todoCategorySpinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:layout_gravity="center" />
+            android:textAlignment="center" />
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/todoDeadlineButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_deadline"/>
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/todoDateButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/no_deadline" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/todoTimeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/all_day" />
+    </LinearLayout>
 
     <View
         android:id="@+id/divider"
@@ -84,13 +98,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="@string/todo_detail_content"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="16dp"
-        android:gravity="top"
         android:background="@drawable/rectangle_border"
+        android:gravity="top"
+        android:hint="@string/todo_detail_content"
+        android:importantForAutofill="no"
         android:inputType="textLongMessage"
-        android:importantForAutofill="no" />
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="16dp" />
 
 
 </LinearLayout>
