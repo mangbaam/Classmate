@@ -16,7 +16,9 @@ import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_HOUR
 import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_MINUTE
 import mangbaam.classmate.MyTools.Companion.DAYms
 import mangbaam.classmate.R
+import mangbaam.classmate.database.TodoDB
 import mangbaam.classmate.database.getTableDB
+import mangbaam.classmate.database.getTodoDB
 import mangbaam.classmate.databinding.ActivityAddTodoBinding
 import mangbaam.classmate.model.Priority
 import mangbaam.classmate.model.TodoModel
@@ -27,6 +29,8 @@ class AddTodoActivity : AppCompatActivity() {
 
     private var _binding: ActivityAddTodoBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var todoDB: TodoDB
 
     private lateinit var popupWindow: PopupWindow
 
@@ -55,6 +59,7 @@ class AddTodoActivity : AppCompatActivity() {
 
     private fun initData() {
         val tableDB = getTableDB(this)
+        todoDB = getTodoDB(this)
         val myLectures = tableDB.tableDao().getAll()
         myLectures.forEach {
             categoryIdList.add(it.id)
@@ -100,7 +105,8 @@ class AddTodoActivity : AppCompatActivity() {
             todoModel.category = category ?: 0
 
             Toast.makeText(this, "$todoModel 추가됨", Toast.LENGTH_LONG).show()
-//            finish()
+            todoDB.todoDao().insert(todoModel)
+            finish()
         }
     }
 

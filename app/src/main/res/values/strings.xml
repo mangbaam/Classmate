@@ -192,4 +192,6 @@ SOFTWARE.
     <string name="add_lecture_button">시간표 추가 버튼</string>
     <string name="all_day">하루 종일</string>
     <string name="nothing">Tung...</string>
+    <string name="edit">수정</string>
+    <string name="complete">완료</string>
 </resources>
