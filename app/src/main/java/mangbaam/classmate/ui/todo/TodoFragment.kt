@@ -195,11 +195,11 @@ class TodoFragment : Fragment(), TodoMenuInterface {
         Log.d(TAG, "원래 데이터: $todoList")
         currentList = if(completeChecked.not()) todoList.filter { it.priority != Priority.COMPLETE } else todoList
         // 카테고리 필터링
-        if(categoryId != 0) currentList = currentList.filter { it.category == categoryId } else currentList
+        if(categoryId != 0) currentList = currentList.filter { it.category == categoryId }// else currentList
         // 정렬 기준 필터링
-        currentList = if (isDeadline) currentList.sortedBy { it.deadline }  else currentList.sortedByDescending { it.priority }
+        currentList = if (isDeadline) currentList.sortedByDescending { it.deadline }  else currentList.sortedByDescending { it.priority }
         // 내림차순
-        if (isAscend.not()) currentList.reversed() else currentList
+        if (isAscend.not()) currentList = currentList.reversed()// else currentList
 
         binding.nothingToShowView.isGone = currentList.isNotEmpty()
     }

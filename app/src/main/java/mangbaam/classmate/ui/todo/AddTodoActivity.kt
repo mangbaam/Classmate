@@ -27,6 +27,7 @@ import mangbaam.classmate.database.getTodoDB
 import mangbaam.classmate.databinding.ActivityAddTodoBinding
 import mangbaam.classmate.model.Priority
 import mangbaam.classmate.model.TodoModel
+import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -70,6 +71,14 @@ class AddTodoActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        // DB (Room)
+        val tableDB = getTableDB(this)
+        todoDB = getTodoDB(this)
+        val myLectures = tableDB.tableDao().getAll()
+        myLectures.forEach {
+            categoryIdList.add(it.id)
+            categoryNameList.add(it.name)
+        }
         // 모드 확인
         openMode = intent.getStringExtra("mode").toString()
         Log.d(TAG, "AddTodoActivity - initData(${openMode}) called")
@@ -88,14 +97,6 @@ class AddTodoActivity : AppCompatActivity() {
                 todoModel = TodoModel()
                 Log.d(TAG, "AddTodoActivity - 아무것도 안넘어옴($openMode)")
             }
-        }
-        // DB (Room)
-        val tableDB = getTableDB(this)
-        todoDB = getTodoDB(this)
-        val myLectures = tableDB.tableDao().getAll()
-        myLectures.forEach {
-            categoryIdList.add(it.id)
-            categoryNameList.add(it.name)
         }
     }
 
@@ -116,12 +117,13 @@ class AddTodoActivity : AppCompatActivity() {
         }
 
         binding.todoCategorySpinner.attachDataSource(categoryNameList)
-        binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
+        binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
             Toast.makeText(
                 applicationContext,
                 "id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}",
                 Toast.LENGTH_SHORT
             ).show()
+            Log.d(TAG, "AddTodoActivity - initViews(얘꺼id: $id, id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}) called")
             category = categoryIdList[position]
             categoryName = categoryNameList[position]
         }
@@ -165,7 +167,10 @@ class AddTodoActivity : AppCompatActivity() {
                 updateButton.text = "업데이트"
                 todoTitleEditText.setText(todoModel.title)
                 setPriority(todoModel.priority)
-                todoCategorySpinner.selectedIndex = categoryIdList.indexOf(todoModel.category)
+                val storedSpinnerIndex = categoryIdList.indexOf(todoModel.category)
+                Log.d(TAG, "테스트: ${storedSpinnerIndex}번째 아이템 선택되었었었음")
+                todoCategorySpinner.selectedIndex = if (storedSpinnerIndex <= 0) 0 else storedSpinnerIndex
+//                todoCategorySpinner.selectedIndex = categoryIdList.indexOf(todoModel.category)
                 if (todoModel.deadline > 0) {
                     todoDateButton.text =
                         SimpleDateFormat(
@@ -223,7 +228,7 @@ class AddTodoActivity : AppCompatActivity() {
                 SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(cal.time)
             deadline = cal
             binding.todoTimeButton.isEnabled = true
-            setPriority(Priority.MID)
+            if(priority != Priority.HIGH) setPriority(Priority.MID)
         }
         val dialog =
             DatePickerDialog(
