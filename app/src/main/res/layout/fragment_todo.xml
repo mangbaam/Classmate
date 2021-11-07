@@ -10,9 +10,9 @@
         android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:elevation="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:elevation="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -40,23 +40,24 @@
             android:ellipsize="end"
             android:gravity="end"
             android:text="@string/all"
-            android:textColor="@color/sky_blue" />
+            android:textColor="@color/sky_blue"
+            tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/menuButton"
+            android:id="@+id/sortButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:contentDescription="@string/menu_button"
-            android:src="@drawable/ic_menu" />
+            android:src="@drawable/ic_sort" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoRecyclerView"
         android:layout_width="0dp"
-        android:overScrollMode="ifContentScrolls"
         android:layout_height="0dp"
+        android:overScrollMode="ifContentScrolls"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todoTitleTextView">
+        app:layout_constraintTop_toBottomOf="@+id/toolBar">
 
         <TextView
             android:layout_width="wrap_content"
@@ -109,5 +110,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="@color/colorPrimary" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

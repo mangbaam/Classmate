@@ -138,7 +138,8 @@ class AddTodoActivity : AppCompatActivity() {
             todoModel.title = binding.todoTitleEditText.text.toString()
             todoModel.priority = priority
             todoModel.detail = binding.todoContentEditText.text.toString()
-            todoModel.deadline = deadline?.timeInMillis ?: 0
+            todoModel.deadline = if (openMode == MODE_ADDITION) deadline?.timeInMillis
+                ?: 0 else if (openMode == MODE_EDIT) todoModel.deadline else 0
             todoModel.category = category
             todoModel.categoryName = if (categoryName.isEmpty()) "선택 안함" else categoryName
 
@@ -146,7 +147,9 @@ class AddTodoActivity : AppCompatActivity() {
 
             val resultIntent = Intent()
             resultIntent.putExtra("newModel", todoModel)
-            if (openMode == MODE_EDIT) resultIntent.putExtra("position", exportPosition)
+            if (openMode == MODE_EDIT) {
+                resultIntent.putExtra("position", exportPosition)
+            }
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
@@ -175,6 +178,7 @@ class AddTodoActivity : AppCompatActivity() {
                 }
                 todoContentEditText.setText(todoModel.detail)
             }
+            category = categoryIdList.indexOf(todoModel.category)
         }
     }
 

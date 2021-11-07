@@ -1,7 +1,9 @@
 package mangbaam.classmate.ui.todo
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,11 +15,16 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_todo.*
+import kotlinx.android.synthetic.main.dialog_todo_menu.*
 import mangbaam.classmate.Constants.Companion.MODE_ADDITION
 import mangbaam.classmate.Constants.Companion.MODE_EDIT
 import mangbaam.classmate.Constants.Companion.TAG
+import mangbaam.classmate.PreferenceHelper
+import mangbaam.classmate.R
 import mangbaam.classmate.adapter.TodoAdapter
+import mangbaam.classmate.database.DB_keys.Companion.CHECKED_SORT_BY_ID
+import mangbaam.classmate.database.DB_keys.Companion.CHECKED_SORT_ORDER_ID
+import mangbaam.classmate.database.DB_keys.Companion.IS_DISPLAY_COMPLETED
 import mangbaam.classmate.database.TodoDB
 import mangbaam.classmate.database.getTodoDB
 import mangbaam.classmate.databinding.FragmentTodoBinding
@@ -25,16 +32,18 @@ import mangbaam.classmate.databinding.ItemTodoBinding
 import mangbaam.classmate.model.SwipeButton
 import mangbaam.classmate.model.TodoModel
 
-class TodoFragment : Fragment() {
+class TodoFragment : Fragment(), TodoMenuInterface {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
     private lateinit var todoDB: TodoDB
     private val todoList = mutableListOf<TodoModel>()
     private lateinit var todoAdapter: TodoAdapter
+    private lateinit var menuDialog: TodoMenuCustomDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         todoDB = getTodoDB(context)
+        menuDialog = TodoMenuCustomDialog(context, this)
     }
 
     override fun onCreateView(
@@ -78,8 +87,9 @@ class TodoFragment : Fragment() {
             intent.putExtra("mode", MODE_ADDITION)
             startActivityForResult(intent, additionModeCode)
         }
-        binding.menuButton.setOnClickListener {
+        binding.sortButton.setOnClickListener {
             // TODO Drawable 메뉴 구성
+            menuDialog.show()
         }
         binding.todoRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -107,6 +117,7 @@ class TodoFragment : Fragment() {
                     val model = data?.getSerializableExtra("newModel") as TodoModel
                     val position = data.getIntExtra("position", 0)
                     todoList[position] = model
+                    todoDB.todoDao().update(model)
                     todoAdapter.notifyItemChanged(position)
                     Toast.makeText(context, "${model.title}받아옴", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "TodoFragment - onActivityResult($model) 결과로 받아옴")
@@ -114,6 +125,25 @@ class TodoFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showSortDialog(context: Context) {
+        val listener = DialogInterface.OnClickListener { dialog, which ->
+            when (which) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    // TODO 정렬하여 표시
+                    // TODO SharedPreference에 저장
+                }
+            }
+        }
+        val view = layoutInflater.inflate(R.layout.dialog_todo_menu, null)
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("정렬 및 필터")
+            .setIcon(R.drawable.ic_sort)
+            .setView(view)
+            .setPositiveButton("적용", listener)
+            .create()
+        dialog.show()
     }
 
     override fun onDestroyView() {
@@ -130,5 +160,18 @@ class TodoFragment : Fragment() {
     companion object {
         const val additionModeCode = 101
         const val editModeCode = 102
+    }
+
+    override fun onApplyButtonClicked() {
+        Log.d(TAG, "TodoFragment - onApplyButtonClicked() called")
+        Toast.makeText(context, "적용 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+        // TODO 실제로 목록 갱신
+        val standard = menuDialog.standardRadioGroup.checkedRadioButtonId
+        val order = menuDialog.orderRadioGroup.checkedRadioButtonId
+        Log.d(TAG, "정렬 기준: $standard, 정렬 순서: $order")
+        PreferenceHelper.setInt(requireContext(), CHECKED_SORT_BY_ID, standard)
+        PreferenceHelper.setInt(requireContext(), CHECKED_SORT_ORDER_ID, order)
+        PreferenceHelper.setBoolean(requireContext(), IS_DISPLAY_COMPLETED,  menuDialog.completedTodoCheckbox.isChecked)
+        menuDialog.dismiss()
     }
 }
