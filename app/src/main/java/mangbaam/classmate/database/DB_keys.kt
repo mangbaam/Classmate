@@ -11,5 +11,7 @@ class DB_keys {
         const val CHECKED_SORT_BY_ID = "checkedStandardId"
         const val CHECKED_SORT_ORDER_ID = "checkedOrderId"
         const val IS_DISPLAY_COMPLETED = "isDisplayCompletedChecked"
+        const val RADIO_STANDARD_INDEX = "sortByStandardRadioButtonIndex"
+        const val RADIO_ORDER_INDEX = "sortByOrderRadioButtonIndex"
     }
 }

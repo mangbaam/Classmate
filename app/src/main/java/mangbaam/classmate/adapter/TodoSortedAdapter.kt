@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chauthai.swipereveallayout.ViewBinderHelper
-import mangbaam.classmate.MyTools.Companion.DAYms
+import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.ItemTodoBinding
 import mangbaam.classmate.model.Priority
@@ -16,20 +17,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.absoluteValue
 
-class TodoAdapter(
-    private val listener: OnClickListener,
-    todoList: List<TodoModel>
-) :
-    RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
-
-    private var todos: List<TodoModel> = todoList
-    private var viewBinderHelper = ViewBinderHelper()
-
+class TodoSortedAdapter(private val listener: TodoSortedAdapter.OnClickListener,) : ListAdapter<TodoModel, TodoSortedAdapter.ViewHolder>(diffUtil) {
     inner class ViewHolder(
-        private val binding: ItemTodoBinding,
+        val binding: ItemTodoBinding,
         private val listener: OnClickListener
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-
         fun bind(item: TodoModel) {
             val sdFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
             val context = binding.categoryTextView.context
@@ -48,8 +40,9 @@ class TodoAdapter(
                         )
                     }
                 )
-                if (item.deadline > 0) {
-                    val dDay = item.deadline.minus(System.currentTimeMillis()).div(DAYms).toInt()
+                if (item.deadline >= 0) {
+                    val dDay =
+                        item.deadline.minus(System.currentTimeMillis()).div(MyTools.DAYms).toInt()
                     dDayTextView.text = if (dDay > 0) "D-$dDay" else "D+${dDay.absoluteValue}"
                 } else dDayTextView.text = "유효하지 않은 날짜"
 
@@ -73,16 +66,25 @@ class TodoAdapter(
         fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(todos[position])
-        viewBinderHelper.setOpenOnlyOne(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener
         )
     }
 
-    override fun getItemCount() = todos.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(currentList[position])
+    }
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<TodoModel>() {
+            override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }

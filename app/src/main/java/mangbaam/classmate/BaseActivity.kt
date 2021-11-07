@@ -25,6 +25,7 @@ import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.notification.NotificationHelper
+import mangbaam.classmate.ui.todo.TodoFragment
 import java.text.SimpleDateFormat
 import java.util.*
 

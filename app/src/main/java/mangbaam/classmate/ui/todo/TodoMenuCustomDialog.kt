@@ -30,11 +30,7 @@ class TodoMenuCustomDialog(context: Context, todoMenuInterface: TodoMenuInterfac
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_todo_menu)
 
-//        /* 설정값 세팅 */
-//        val checkedSortById = PreferenceHelper.getInt(context, CHECKED_SORT_BY_ID)
-//        val checkedOrderById = PreferenceHelper.getInt(context, CHECKED_SORT_ORDER_ID)
-//        if(checkedSortById != -1) checkedSortById?.let { standardRadioGroup.check(it) }
-//        if(checkedOrderById != -1) checkedOrderById?.let { standardRadioGroup.check(it) }
+        /* 설정값 세팅 */
         if(checkedSortById != -1) {
             findViewById<RadioButton>(checkedSortById!!).isChecked = true
         }

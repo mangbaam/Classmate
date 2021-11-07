@@ -138,8 +138,12 @@ class AddTodoActivity : AppCompatActivity() {
             todoModel.title = binding.todoTitleEditText.text.toString()
             todoModel.priority = priority
             todoModel.detail = binding.todoContentEditText.text.toString()
-            todoModel.deadline = if (openMode == MODE_ADDITION) deadline?.timeInMillis
-                ?: 0 else if (openMode == MODE_EDIT) todoModel.deadline else 0
+            todoModel.deadline = when (openMode) {
+                MODE_ADDITION -> deadline?.timeInMillis
+                    ?: System.currentTimeMillis()
+                MODE_EDIT -> todoModel.deadline
+                else -> 0
+            }
             todoModel.category = category
             todoModel.categoryName = if (categoryName.isEmpty()) "선택 안함" else categoryName
 
