@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.ItemTodoBinding
@@ -17,7 +18,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.absoluteValue
 
-class TodoSortedAdapter(private val listener: TodoSortedAdapter.OnClickListener,) : ListAdapter<TodoModel, TodoSortedAdapter.ViewHolder>(diffUtil) {
+class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<TodoModel, TodoSortedAdapter.ViewHolder>(diffUtil) {
+    val viewBinderHelper = object: ViewBinderHelper() {}
+
     inner class ViewHolder(
         val binding: ItemTodoBinding,
         private val listener: OnClickListener
@@ -57,6 +60,9 @@ class TodoSortedAdapter(private val listener: TodoSortedAdapter.OnClickListener,
                 when (v) {
                     editButton -> listener.onClick(this, SwipeButton.EDIT, adapterPosition)
                     completeButton -> listener.onClick(this, SwipeButton.COMPLETE, adapterPosition)
+                    todoItem -> listener.itemClick(this, adapterPosition)
+                    todoTitleTextView -> listener.itemClick(this, adapterPosition)
+                    itemTodoRoot -> listener.itemClick(this, adapterPosition)
                 }
             }
         }
@@ -64,6 +70,7 @@ class TodoSortedAdapter(private val listener: TodoSortedAdapter.OnClickListener,
 
     interface OnClickListener {
         fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int)
+        fun itemClick(binding: ItemTodoBinding, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -74,6 +81,8 @@ class TodoSortedAdapter(private val listener: TodoSortedAdapter.OnClickListener,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(currentList[position])
+        viewBinderHelper.bind(holder.binding.root, currentList[position].id.toString())
+        viewBinderHelper.setOpenOnlyOne(true)
     }
 
     companion object {

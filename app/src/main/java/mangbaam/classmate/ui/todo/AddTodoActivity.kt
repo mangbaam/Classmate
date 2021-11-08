@@ -17,6 +17,7 @@ import androidx.core.widget.addTextChangedListener
 import com.islandparadise14.mintable.utils.dpToPx
 import mangbaam.classmate.Constants.Companion.MODE_ADDITION
 import mangbaam.classmate.Constants.Companion.MODE_EDIT
+import mangbaam.classmate.Constants.Companion.MODE_VIEW
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_HOUR
 import mangbaam.classmate.Constants.Companion.TODO_DEFAULT_MINUTE
@@ -64,7 +65,7 @@ class AddTodoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initData()
-        initViews()
+        if(openMode != MODE_VIEW) initViews() else viewMode()
 
         if (openMode == MODE_EDIT) editMode()
 
@@ -93,6 +94,10 @@ class AddTodoActivity : AppCompatActivity() {
                 exportPosition = intent.getIntExtra("position", 0)
                 Log.d(TAG, "AddTodoActivity: MODE_EDIT - $todoModel")
             }
+            MODE_VIEW -> {
+                todoModel = intent.getSerializableExtra("model") as TodoModel
+                Log.d(TAG, "AddTodoActivity: MODE_VIEW - $todoModel")
+            }
             else -> {
                 todoModel = TodoModel()
                 Log.d(TAG, "AddTodoActivity - 아무것도 안넘어옴($openMode)")
@@ -118,12 +123,6 @@ class AddTodoActivity : AppCompatActivity() {
 
         binding.todoCategorySpinner.attachDataSource(categoryNameList)
         binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
-            Toast.makeText(
-                applicationContext,
-                "id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}",
-                Toast.LENGTH_SHORT
-            ).show()
-            Log.d(TAG, "AddTodoActivity - initViews(얘꺼id: $id, id: ${categoryIdList[position]}, position: ${position}, ${categoryNameList[position]}) called")
             category = categoryIdList[position]
             categoryName = categoryNameList[position]
         }
@@ -165,12 +164,12 @@ class AddTodoActivity : AppCompatActivity() {
         if (openMode == MODE_EDIT) {
             with(binding) {
                 updateButton.text = "업데이트"
+                titleTextView.text = "과제 수정"
                 todoTitleEditText.setText(todoModel.title)
                 setPriority(todoModel.priority)
                 val storedSpinnerIndex = categoryIdList.indexOf(todoModel.category)
-                Log.d(TAG, "테스트: ${storedSpinnerIndex}번째 아이템 선택되었었었음")
-                todoCategorySpinner.selectedIndex = if (storedSpinnerIndex <= 0) 0 else storedSpinnerIndex
-//                todoCategorySpinner.selectedIndex = categoryIdList.indexOf(todoModel.category)
+                todoCategorySpinner.selectedIndex =
+                    if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
                 if (todoModel.deadline > 0) {
                     todoDateButton.text =
                         SimpleDateFormat(
@@ -188,6 +187,51 @@ class AddTodoActivity : AppCompatActivity() {
                 todoContentEditText.setText(todoModel.detail)
             }
             category = categoryIdList.indexOf(todoModel.category)
+        }
+    }
+
+    private fun viewMode() {
+        if (openMode == MODE_VIEW) {
+            binding.todoCategorySpinner.attachDataSource(categoryNameList)
+            binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
+                category = categoryIdList[position]
+                categoryName = categoryNameList[position]
+            }
+            with(binding) {
+                // 업데이트 버튼
+                updateButton.text = "닫기"
+                updateButton.setOnClickListener { finish() }
+                // 상단 텍스트
+                titleTextView.text = "과제"
+                // 과제 제목
+                todoTitleEditText.setText(todoModel.title)
+                todoTitleEditText.isClickable = false
+                // 우선 순위
+                setPriority(todoModel.priority)
+                // 과목 선택
+                val storedSpinnerIndex = categoryIdList.indexOf(todoModel.category)
+                todoCategorySpinner.selectedIndex =
+                    if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
+                todoCategorySpinner.isClickable = false
+                // 마감 시간
+                if (todoModel.deadline > 0) {
+                    todoDateButton.text =
+                        SimpleDateFormat(
+                            "yyyy/MM/dd",
+                            Locale.getDefault()
+                        ).format(todoModel.deadline)
+                    todoTimeButton.text =
+                        SimpleDateFormat("a hh:mm", Locale.getDefault()).format(todoModel.deadline)
+                } else {
+                    todoDateButton.text = "마감 날짜 없음"
+                    todoTimeButton.text = "하루 종일"
+                    todoTimeButton.isEnabled = false
+                }
+                todoDateButton.isClickable = false
+                // 과제 세부 내용
+                todoContentEditText.setText(todoModel.detail)
+                todoContentEditText.isClickable = false
+            }
         }
     }
 
@@ -228,7 +272,7 @@ class AddTodoActivity : AppCompatActivity() {
                 SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(cal.time)
             deadline = cal
             binding.todoTimeButton.isEnabled = true
-            if(priority != Priority.HIGH) setPriority(Priority.MID)
+            if (priority != Priority.HIGH) setPriority(Priority.MID)
         }
         val dialog =
             DatePickerDialog(

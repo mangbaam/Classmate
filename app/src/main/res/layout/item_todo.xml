@@ -7,7 +7,10 @@
     android:elevation="16dp"
     app:dragEdge="left"
     app:flingVelocity="400"
-    app:mode="same_level">
+    android:id="@+id/itemTodoRoot"
+    android:clickable="true"
+    app:mode="same_level"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="180dp"
@@ -36,6 +39,7 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/todoItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">

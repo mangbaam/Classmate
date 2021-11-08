@@ -14,6 +14,6 @@ class Constants {
         const val TODO_DEFAULT_MINUTE = 0
         const val MODE_ADDITION = "Addition"
         const val MODE_EDIT = "Edit"
-
+        const val MODE_VIEW = "View"
     }
 }
