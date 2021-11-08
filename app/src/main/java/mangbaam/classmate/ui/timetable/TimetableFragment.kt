@@ -176,13 +176,11 @@ class TimetableFragment : Fragment() {
     private fun showTableDetailDialog(id: Int) {
         val selectedLecture = findLectureById(id, myLectures)
         Log.d(TAG, "[${selectedLecture.id}]$selectedLecture show")
-        val message = "id: ${selectedLecture.id}\n" +
-                "과목명: ${selectedLecture.name}\n" +
+        val message = "과목명: ${selectedLecture.name}\n" +
                 "교수명: ${selectedLecture.professor}\n" +
                 "시간 및 장소: ${selectedLecture.timeAndPlace}\n" +
                 "학점: ${selectedLecture.point}\n" +
-                "이수 구분: ${selectedLecture.classify}\n" +
-                "교양 영역: ${selectedLecture.electives}"
+                "이수 구분: ${selectedLecture.classify}\n"
         val dialog = AlertDialog.Builder(context).apply {
             setTitle("강의 세부 정보")
             setMessage(message)

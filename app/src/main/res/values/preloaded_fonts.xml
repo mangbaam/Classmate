@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/fruktur</item>
+        <item>@font/maven_pro</item>
         <item>@font/open_sans_condensed_light</item>
     </array>
 </resources>

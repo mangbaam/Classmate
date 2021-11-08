@@ -44,6 +44,10 @@ import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.Priority
 import mangbaam.classmate.model.SwipeButton
 import mangbaam.classmate.model.TodoModel
+import java.util.ArrayList
+
+
+
 
 class TodoFragment : Fragment(), TodoMenuInterface {
     private var _binding: FragmentTodoBinding? = null
@@ -57,7 +61,7 @@ class TodoFragment : Fragment(), TodoMenuInterface {
     private lateinit var menuDialog: TodoMenuCustomDialog
     private val todoList = mutableListOf<TodoModel>()
     private var currentList = listOf<TodoModel>()
-    private val categoryNameList = mutableListOf("선택 안함")
+    private val categoryNameList:MutableList<String> = ArrayList<String>()
     private val categoryIdList = mutableListOf(0)
     private lateinit var lectureData: Array<Lecture>
 
@@ -150,7 +154,7 @@ class TodoFragment : Fragment(), TodoMenuInterface {
             this.adapter = todoSortedAdapter
         }
 
-        binding.todoSubtitleTextView.setOnClickListener {
+        binding.todoCategoryTextView.setOnClickListener {
             showCategoryDialog(context)
         }
 
@@ -249,21 +253,26 @@ class TodoFragment : Fragment(), TodoMenuInterface {
     }
 
     private fun showCategoryDialog(context: Context) {
-        val categoryNameList2 = arrayOf("선택 안함")
+        categoryNameList.clear()
+        categoryNameList.add("모두")
+
         lectureData.forEach {
-            categoryNameList2.plus(it.name)
+            categoryNameList.add(it.name)
             categoryIdList.add(it.id)
         }
+
         val listener = DialogInterface.OnClickListener { _, which ->
             categoryId = categoryIdList[which]
+            binding.todoCategoryTextView.text = categoryNameList[which]
             refreshAdapter()
+            Log.d(TAG, "TodoFragment - showCategoryDialog($which 번 째 선택) called")
         }
-        val arr = arrayOf("1","2","3")
-        Log.d(TAG, "TodoFragment - showCategoryDialog(${categoryNameList2}) called")
+        val items = categoryNameList.toTypedArray()
+
+        Log.d(TAG, "TodoFragment - showCategoryDialog(${items}) called")
         val builder = AlertDialog.Builder(context)
             .setTitle("카테고리 선택")
-            .setMessage("필터링 할 과목을 선택하세요")
-            .setItems(arr, listener)
+            .setItems(items, listener)
             .create()
         builder.show()
     }

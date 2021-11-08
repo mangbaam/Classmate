@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.todo.TodoFragment">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:elevation="16dp"
+        android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -19,39 +21,41 @@
             android:id="@+id/todoTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginVertical="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginHorizontal="16dp"
             android:gravity="center"
             android:text="@string/title_todo"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/todoSubtitleTextView"
+            android:id="@+id/todoCategoryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="30dp"
             android:ellipsize="end"
-            android:gravity="end"
+            android:maxWidth="100dp"
+            android:maxLines="1"
             android:text="@string/all"
             android:textColor="@color/sky_blue"
-            tools:ignore="RelativeOverlap" />
+            app:layout_constraintBottom_toBottomOf="@id/todoTitleTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/todoTitleTextView" />
 
         <ImageView
             android:id="@+id/sortButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:contentDescription="@string/menu_button"
-            android:src="@drawable/ic_sort" />
-    </RelativeLayout>
+            android:src="@drawable/ic_sort"
+            app:layout_constraintBottom_toBottomOf="@id/todoTitleTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/todoTitleTextView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoRecyclerView"
@@ -68,9 +72,8 @@
         android:id="@+id/nothingToShowView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:background="@color/white"
-        android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +84,10 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/nothingToShowLottie"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/open_sans_condensed_light"
+            android:fontFamily="@font/maven_pro"
             android:text="@string/nothing"
             android:textAlignment="center"
-            android:textSize="64sp" />
+            android:textSize="32sp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/nothingToShowLottie"
