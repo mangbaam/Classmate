@@ -12,7 +12,6 @@ import mangbaam.classmate.BaseActivity
 import mangbaam.classmate.Constants.Companion.NOTIFICATION_CHANNEL_ID
 import mangbaam.classmate.Constants.Companion.NOTIFICATION_CODE_START
 import mangbaam.classmate.Constants.Companion.TAG
-import mangbaam.classmate.MyTools
 import mangbaam.classmate.MyTools.Companion.DAYms
 import mangbaam.classmate.MyTools.Companion.MINUITEms
 import mangbaam.classmate.MyTools.Companion.checkMillis
@@ -30,20 +29,18 @@ class NotificationHelper {
 
         fun createNotificationChannel(context: Context) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val notificationManager =
-                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val notificationChannel = NotificationChannel(
-                        NOTIFICATION_CHANNEL_ID,
-                        "수업시작 알림",
-                        NotificationManager.IMPORTANCE_HIGH
-                    )
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationChannel = NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    "수업시작 알림",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
 
-                    notificationChannel.description = "수업 시작 전 알림을 띄웁니다."
-                    notificationChannel.enableLights(true) // 화면 활성화
-                    notificationChannel.vibrationPattern = longArrayOf(0, 100, 100, 100, 100, 100)
-                    notificationManager.createNotificationChannel(notificationChannel)
-                }
+                notificationChannel.description = "수업 시작 전 알림을 띄웁니다."
+                notificationChannel.enableLights(true) // 화면 활성화
+                notificationChannel.vibrationPattern = longArrayOf(0, 100, 100, 100, 100, 100)
+                notificationManager.createNotificationChannel(notificationChannel)
             } catch (nullException: NullPointerException) {
                 Toast.makeText(
                     context,
@@ -91,11 +88,9 @@ class NotificationHelper {
 
         fun isNotificationChannelCreated(context: Context): Boolean? {
             return try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val notificationManager =
-                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    return notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) != null
-                }
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                return notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) != null
                 true
             } catch (nullException: NullPointerException) {
                 Toast.makeText(context, "푸시 알림 기능에 문제가 발생했습니다. 앱을 재실행해주세요.", Toast.LENGTH_SHORT)

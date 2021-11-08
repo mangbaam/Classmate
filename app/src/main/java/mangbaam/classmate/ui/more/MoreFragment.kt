@@ -14,13 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_more.*
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
 import mangbaam.classmate.R
-import mangbaam.classmate.Verify
 import mangbaam.classmate.dao.AlarmDao
 import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.ScheduleDao
@@ -31,9 +29,7 @@ import mangbaam.classmate.database.DB_keys.Companion.ALARM_ON
 import mangbaam.classmate.databinding.DialogMinuteSettingBinding
 import mangbaam.classmate.databinding.FragmentMoreBinding
 import mangbaam.classmate.model.AlarmModel
-import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.ScheduleModel
-import mangbaam.classmate.model.TodoModel
 import mangbaam.classmate.notification.NotificationHelper.Companion.activateAllAlarms
 import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAlarms
 

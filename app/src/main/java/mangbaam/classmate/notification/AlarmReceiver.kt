@@ -12,19 +12,11 @@ import mangbaam.classmate.notification.NotificationHelper.Companion.registerAlar
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "AlarmReceiver - onReceive() called")
-        /*val model = intent.getSerializableExtra("model") as AlarmModel?
-
-        val id = model?.id ?: 0
-        val lectureName = model?.name
-        val hour = model?.hour
-        val minute = model?.minute*/
-
         val id = intent.getIntExtra("id", 0)
         val lectureName = intent.getStringExtra("lectureName")
         val hour = intent.getIntExtra("hour", 12)
         val minute = intent.getIntExtra("minute", 30)
 
         createNotification(context, id, lectureName, "${hour}:${minute}")
-//        registerAlarm(context, model)
     }
 }

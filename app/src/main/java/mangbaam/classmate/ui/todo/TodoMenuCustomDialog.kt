@@ -74,4 +74,8 @@ class TodoMenuCustomDialog(context: Context, todoMenuInterface: TodoMenuInterfac
             this.dismiss()
         }
     }
+
+    interface TodoMenuInterface {
+        fun onApplyButtonClicked()
+    }
 }

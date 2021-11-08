@@ -88,7 +88,6 @@ class TimetableFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "TimetableFragment - onResume() called")
         if (tableDao.getSize() != tableSize) {
             Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : 원래 tableSize: $tableSize, 스케줄개수: ${schedules.size}")
             updateSchedules()
@@ -215,43 +214,6 @@ class TimetableFragment : Fragment() {
     }
 
     private fun synchronize() {
-        /*Thread {
-            val onOff = PreferenceHelper.getBoolean(table.context, ALARM_ON)
-            scheduleDao.clear()
-            alarmDao.clear()
-            schedules.forEach {
-                val scheduleModel = ScheduleModel(
-                    0,
-                    it.originId,
-                    it.scheduleName,
-                    it.roomInfo,
-                    it.scheduleDay,
-                    it.startTime,
-                    it.endTime,
-                    it.backgroundColor,
-                    it.textColor
-                )
-                scheduleDao.insert(scheduleModel)
-            }
-            scheduleDao.getAll().forEach {
-                val timeData = it.startTime.split(":")
-                val alarmModel = AlarmModel(
-                    it.id,
-                    it.originId,
-                    it.scheduleName,
-                    it.roomInfo,
-                    getWeekDay(it.scheduleDay),
-                    timeData[0].toInt(),
-                    timeData[1].toInt(),
-                    onOff
-                )
-                alarmDao.insert(alarmModel)
-            }
-            if (onOff) {
-                removeAllAlarms(table.context, alarmDao.getAll())
-                activateAllAlarms(table.context, alarmDao.getAll())
-            }
-        }*/
         val onOff = PreferenceHelper.getBoolean(table.context, ALARM_ON)
         scheduleDao.clear()
         alarmDao.clear()

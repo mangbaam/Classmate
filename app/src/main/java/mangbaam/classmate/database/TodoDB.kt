@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import mangbaam.classmate.dao.LectureDao
 import mangbaam.classmate.dao.TodoDao
-import mangbaam.classmate.model.Lecture
 import mangbaam.classmate.model.TodoModel
 
 @Database(entities = [TodoModel::class], version = 1)

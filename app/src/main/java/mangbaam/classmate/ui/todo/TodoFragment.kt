@@ -5,20 +5,15 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chauthai.swipereveallayout.SwipeRevealLayout
 import kotlinx.android.synthetic.main.dialog_todo_menu.*
 import kotlinx.android.synthetic.main.fragment_todo.*
 import mangbaam.classmate.Constants.Companion.MODE_ADDITION
@@ -26,8 +21,6 @@ import mangbaam.classmate.Constants.Companion.MODE_EDIT
 import mangbaam.classmate.Constants.Companion.MODE_VIEW
 import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.PreferenceHelper
-import mangbaam.classmate.R
-import mangbaam.classmate.adapter.TodoAdapter
 import mangbaam.classmate.adapter.TodoSortedAdapter
 import mangbaam.classmate.database.DB_keys.Companion.CHECKED_SORT_BY_ID
 import mangbaam.classmate.database.DB_keys.Companion.CHECKED_SORT_ORDER_ID
@@ -47,9 +40,7 @@ import mangbaam.classmate.model.TodoModel
 import java.util.ArrayList
 
 
-
-
-class TodoFragment : Fragment(), TodoMenuInterface {
+class TodoFragment : Fragment(), TodoMenuCustomDialog.TodoMenuInterface {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
     private var _dBinding: DialogTodoMenuBinding? = null
@@ -61,7 +52,7 @@ class TodoFragment : Fragment(), TodoMenuInterface {
     private lateinit var menuDialog: TodoMenuCustomDialog
     private val todoList = mutableListOf<TodoModel>()
     private var currentList = listOf<TodoModel>()
-    private val categoryNameList:MutableList<String> = ArrayList<String>()
+    private val categoryNameList: MutableList<String> = ArrayList<String>()
     private val categoryIdList = mutableListOf(0)
     private lateinit var lectureData: Array<Lecture>
 
@@ -81,7 +72,6 @@ class TodoFragment : Fragment(), TodoMenuInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "HomeFragment - onCreateView() called")
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         _dBinding = DialogTodoMenuBinding.inflate(inflater)
 
@@ -103,7 +93,7 @@ class TodoFragment : Fragment(), TodoMenuInterface {
         Log.d(TAG, "TodoFragment - initViews($todoList 룸에서 받아옴) called")
 
 
-        todoSortedAdapter = TodoSortedAdapter(object: TodoSortedAdapter.OnClickListener {
+        todoSortedAdapter = TodoSortedAdapter(object : TodoSortedAdapter.OnClickListener {
             override fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int) {
                 when (type) {
                     SwipeButton.EDIT -> {
@@ -162,7 +152,6 @@ class TodoFragment : Fragment(), TodoMenuInterface {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(TAG, "TodoFragment - onActivityResult($requestCode, $resultCode, $data) called")
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -265,11 +254,9 @@ class TodoFragment : Fragment(), TodoMenuInterface {
             categoryId = categoryIdList[which]
             binding.todoCategoryTextView.text = categoryNameList[which]
             refreshAdapter()
-            Log.d(TAG, "TodoFragment - showCategoryDialog($which 번 째 선택) called")
         }
         val items = categoryNameList.toTypedArray()
 
-        Log.d(TAG, "TodoFragment - showCategoryDialog(${items}) called")
         val builder = AlertDialog.Builder(context)
             .setTitle("카테고리 선택")
             .setItems(items, listener)
@@ -279,13 +266,11 @@ class TodoFragment : Fragment(), TodoMenuInterface {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "TodoFragment - onResume($currentList) called")
         lectureData = getTableDB(requireContext()).tableDao().getAll()
         refreshAdapter()
     }
 
     private fun openViewMode(position: Int) {
-        Log.d(TAG, "${currentList[position]} 선택")
         val selected = currentList[position]
         val intent = Intent(requireContext(), AddTodoActivity::class.java)
         intent.putExtra("mode", MODE_VIEW)

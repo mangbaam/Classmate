@@ -28,7 +28,6 @@ import mangbaam.classmate.database.getTodoDB
 import mangbaam.classmate.databinding.ActivityAddTodoBinding
 import mangbaam.classmate.model.Priority
 import mangbaam.classmate.model.TodoModel
-import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,6 +64,7 @@ class AddTodoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initData()
+
         if(openMode != MODE_VIEW) initViews() else viewMode()
 
         if (openMode == MODE_EDIT) editMode()
@@ -105,7 +105,6 @@ class AddTodoActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun initViews() {
         /* 우선순위 선택 팝업 초기화 */
         setPopUpWindow()
@@ -122,7 +121,7 @@ class AddTodoActivity : AppCompatActivity() {
         }
 
         binding.todoCategorySpinner.attachDataSource(categoryNameList)
-        binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
+        binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
             category = categoryIdList[position]
             categoryName = categoryNameList[position]
         }
@@ -163,13 +162,19 @@ class AddTodoActivity : AppCompatActivity() {
     private fun editMode() {
         if (openMode == MODE_EDIT) {
             with(binding) {
+                // 텍스트 설정
                 updateButton.text = "업데이트"
                 titleTextView.text = "과제 수정"
+                // 제목 설정
                 todoTitleEditText.setText(todoModel.title)
+                // 우선순위 설정
                 setPriority(todoModel.priority)
+                // 카테고리 설정
                 val storedSpinnerIndex = categoryIdList.indexOf(todoModel.category)
                 todoCategorySpinner.selectedIndex =
                     if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
+                category = if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
+                // 마감일 설정
                 if (todoModel.deadline > 0) {
                     todoDateButton.text =
                         SimpleDateFormat(
@@ -184,16 +189,16 @@ class AddTodoActivity : AppCompatActivity() {
                     todoTimeButton.text = "하루 종일"
                     todoTimeButton.isEnabled = false
                 }
+                // 세부 내용 설정
                 todoContentEditText.setText(todoModel.detail)
             }
-            category = categoryIdList.indexOf(todoModel.category)
         }
     }
 
     private fun viewMode() {
         if (openMode == MODE_VIEW) {
             binding.todoCategorySpinner.attachDataSource(categoryNameList)
-            binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
+            binding.todoCategorySpinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
                 category = categoryIdList[position]
                 categoryName = categoryNameList[position]
             }

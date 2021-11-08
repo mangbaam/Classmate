@@ -2,9 +2,7 @@ package mangbaam.classmate
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +22,6 @@ import mangbaam.classmate.database.DB_keys.Companion.SUWON_UNIV
 import mangbaam.classmate.database.getAppDatabase
 import mangbaam.classmate.databinding.ActivityBaseBinding
 import mangbaam.classmate.model.Lecture
-import mangbaam.classmate.notification.NotificationHelper
-import mangbaam.classmate.ui.todo.TodoFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
