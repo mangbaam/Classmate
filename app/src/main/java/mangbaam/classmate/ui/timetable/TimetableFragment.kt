@@ -179,7 +179,7 @@ class TimetableFragment : Fragment() {
                 "교수명: ${selectedLecture.professor}\n" +
                 "시간 및 장소: ${selectedLecture.timeAndPlace}\n" +
                 "학점: ${selectedLecture.point}\n" +
-                "이수 구분: ${selectedLecture.classify}\n"
+                "이수 구분: ${selectedLecture.classify}"
         val dialog = AlertDialog.Builder(context).apply {
             setTitle("강의 세부 정보")
             setMessage(message)

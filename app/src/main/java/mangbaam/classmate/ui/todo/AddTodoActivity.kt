@@ -47,7 +47,7 @@ class AddTodoActivity : AppCompatActivity() {
 
     private var priority = Priority.LOW
     private var deadline: Calendar? = null
-    private var category: Int = 0
+    private var category: Int = 0 // 강의 아이디
     private var categoryName: String = ""
 
     private var categoryIdList = mutableListOf(0)
@@ -92,6 +92,8 @@ class AddTodoActivity : AppCompatActivity() {
             MODE_EDIT -> {
                 todoModel = intent.getSerializableExtra("model") as TodoModel
                 exportPosition = intent.getIntExtra("position", 0)
+                category = todoModel.category
+                categoryName = todoModel.categoryName
                 Log.d(TAG, "AddTodoActivity: MODE_EDIT - $todoModel")
             }
             MODE_VIEW -> {
@@ -173,7 +175,7 @@ class AddTodoActivity : AppCompatActivity() {
                 val storedSpinnerIndex = categoryIdList.indexOf(todoModel.category)
                 todoCategorySpinner.selectedIndex =
                     if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
-                category = if (storedSpinnerIndex < 0) 0 else storedSpinnerIndex
+                category = todoModel.category
                 // 마감일 설정
                 if (todoModel.deadline > 0) {
                     todoDateButton.text =

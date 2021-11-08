@@ -162,6 +162,7 @@ class TodoFragment : Fragment(), TodoMenuCustomDialog.TodoMenuInterface {
                 }
                 editModeCode -> {
                     val model = data?.getSerializableExtra("newModel") as TodoModel
+                    Log.d(TAG, "TodoFragment - 수정 된 모델: $model called")
                     val position = data.getIntExtra("position", 0)
                     todoList.forEachIndexed { index, todoModel ->
                         if (todoModel.id == currentList[position].id) {
