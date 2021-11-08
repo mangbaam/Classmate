@@ -195,7 +195,7 @@ class TimetableFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showTableMenuDialog(entity: ScheduleEntity) {
         val dialog = AlertDialog.Builder(context).apply {
-            setTitle("울랄라~")
+            setTitle("과목 삭제")
             setMessage("삭제하시겠습니까?")
             setNegativeButton(getString(R.string.delete)) { _, _ ->
                 deleteSchedule(entity)

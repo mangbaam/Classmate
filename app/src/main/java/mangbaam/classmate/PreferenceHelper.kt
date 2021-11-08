@@ -62,6 +62,6 @@ class PreferenceHelper {
         private const val PREFERENCE_NAME = "APP_SETTINGS"
         private const val DEFAULT_BOOLEAN_VALUE = false
         private const val DEFAULT_STRING_VALUE = ""
-        private const val DEFAULT_INT_VALUE = 30
+        const val DEFAULT_INT_VALUE = 30
     }
 }

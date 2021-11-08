@@ -1,5 +1,6 @@
 package mangbaam.classmate.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
+import mangbaam.classmate.Constants.Companion.TAG
 import mangbaam.classmate.MyTools
 import mangbaam.classmate.R
 import mangbaam.classmate.databinding.ItemTodoBinding
@@ -18,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.absoluteValue
 
-class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<TodoModel, TodoSortedAdapter.ViewHolder>(diffUtil) {
+class TodoSortedAdapter(private val listener: OnClickListener, val onItemClicked: (Int) -> Unit) : ListAdapter<TodoModel, TodoSortedAdapter.ViewHolder>(diffUtil) {
     val viewBinderHelper = object: ViewBinderHelper() {}
 
     inner class ViewHolder(
@@ -29,6 +31,10 @@ class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<Tod
             val sdFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
             val context = binding.categoryTextView.context
             with(binding) {
+                todoItem.setOnClickListener {
+                    onItemClicked(adapterPosition)
+                    Log.d(TAG, "ViewHolder - bind() called")
+                }
                 todoTitleTextView.text = item.title
                 deadlineTextView.text =
                     if (item.deadline > 0) sdFormat.format(item.deadline) else "마감일 없음"
@@ -60,9 +66,6 @@ class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<Tod
                 when (v) {
                     editButton -> listener.onClick(this, SwipeButton.EDIT, adapterPosition)
                     completeButton -> listener.onClick(this, SwipeButton.COMPLETE, adapterPosition)
-                    todoItem -> listener.itemClick(this, adapterPosition)
-                    todoTitleTextView -> listener.itemClick(this, adapterPosition)
-                    itemTodoRoot -> listener.itemClick(this, adapterPosition)
                 }
             }
         }
@@ -70,7 +73,6 @@ class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<Tod
 
     interface OnClickListener {
         fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int)
-        fun itemClick(binding: ItemTodoBinding, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -80,8 +82,9 @@ class TodoSortedAdapter(private val listener: OnClickListener) : ListAdapter<Tod
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(currentList[position])
-        viewBinderHelper.bind(holder.binding.root, currentList[position].id.toString())
+        val pos = holder.adapterPosition
+        holder.bind(currentList[pos])
+        viewBinderHelper.bind(holder.binding.root, currentList[pos].id.toString())
         viewBinderHelper.setOpenOnlyOne(true)
     }
 

@@ -200,12 +200,13 @@ class AddTodoActivity : AppCompatActivity() {
             with(binding) {
                 // 업데이트 버튼
                 updateButton.text = "닫기"
+                updateButton.isEnabled = true
                 updateButton.setOnClickListener { finish() }
                 // 상단 텍스트
                 titleTextView.text = "과제"
                 // 과제 제목
                 todoTitleEditText.setText(todoModel.title)
-                todoTitleEditText.isClickable = false
+                todoTitleEditText.isEnabled = false
                 // 우선 순위
                 setPriority(todoModel.priority)
                 // 과목 선택
@@ -230,7 +231,9 @@ class AddTodoActivity : AppCompatActivity() {
                 todoDateButton.isClickable = false
                 // 과제 세부 내용
                 todoContentEditText.setText(todoModel.detail)
-                todoContentEditText.isClickable = false
+                if (todoContentEditText.text.isBlank()) todoContentEditText.hint = "내용 없음"
+                todoContentEditText.isEnabled = false
+
             }
         }
     }

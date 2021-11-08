@@ -2,15 +2,12 @@
 <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemTodoRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="16dp"
     app:dragEdge="left"
-    app:flingVelocity="400"
-    android:id="@+id/itemTodoRoot"
-    android:clickable="true"
-    app:mode="same_level"
-    android:focusable="true">
+    app:flingVelocity="400">
 
     <LinearLayout
         android:layout_width="180dp"
@@ -20,85 +17,93 @@
         <TextView
             android:id="@+id/editButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="#FD79A8"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:text="@string/edit" />
+            android:text="@string/edit"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/completeButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="#74B9FF"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:text="@string/complete" />
+            android:text="@string/complete"
+            android:textColor="@color/black" />
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/todoItem"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/priorityColorView"
-            android:layout_width="24dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/priority_complete"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/todoItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="todoItemClicked">
 
-        <TextView
-            android:id="@+id/todoTitleTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/priorityColorView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="테스트용 제목입니다. 안녕하세요" />
+            <View
+                android:id="@+id/priorityColorView"
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/priority_complete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/categoryTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/todoTitleTextView"
-            app:layout_constraintStart_toStartOf="@+id/todoTitleTextView"
-            app:layout_constraintTop_toBottomOf="@+id/todoTitleTextView"
-            android:textColor="@color/sky_blue"
-            tools:text="과목에 대한 정보가 들어가는 공간입니다." />
+            <TextView
+                android:id="@+id/todoTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/priorityColorView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="테스트용 제목입니다. 안녕하세요" />
 
-        <TextView
-            android:id="@+id/deadlineTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/todoTitleTextView"
-            app:layout_constraintTop_toBottomOf="@+id/categoryTextView"
-            android:layout_marginBottom="8dp"
-            tools:text="2022/02/02" />
+            <TextView
+                android:id="@+id/categoryTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/sky_blue"
+                app:layout_constraintEnd_toEndOf="@+id/todoTitleTextView"
+                app:layout_constraintStart_toStartOf="@+id/todoTitleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/todoTitleTextView"
+                tools:text="과목에 대한 정보가 들어가는 공간입니다." />
 
-        <TextView
-            android:id="@+id/d_dayTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="#D63031"
-            app:layout_constraintBottom_toBottomOf="@+id/deadlineTextView"
-            app:layout_constraintStart_toEndOf="@+id/deadlineTextView"
-            app:layout_constraintTop_toTopOf="@+id/deadlineTextView"
-            tools:text="D-350" />
+            <TextView
+                android:id="@+id/deadlineTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/todoTitleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/categoryTextView"
+                tools:text="2022/02/02" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/d_dayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="#D63031"
+                app:layout_constraintBottom_toBottomOf="@+id/deadlineTextView"
+                app:layout_constraintStart_toEndOf="@+id/deadlineTextView"
+                app:layout_constraintTop_toTopOf="@+id/deadlineTextView"
+                tools:text="D-350" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

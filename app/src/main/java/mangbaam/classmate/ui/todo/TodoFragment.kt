@@ -18,6 +18,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chauthai.swipereveallayout.SwipeRevealLayout
 import kotlinx.android.synthetic.main.dialog_todo_menu.*
 import kotlinx.android.synthetic.main.fragment_todo.*
 import mangbaam.classmate.Constants.Companion.MODE_ADDITION
@@ -97,6 +98,7 @@ class TodoFragment : Fragment(), TodoMenuInterface {
         listFilter()
         Log.d(TAG, "TodoFragment - initViews($todoList 룸에서 받아옴) called")
 
+
         todoSortedAdapter = TodoSortedAdapter(object: TodoSortedAdapter.OnClickListener {
             override fun onClick(binding: ItemTodoBinding, type: SwipeButton, position: Int) {
                 when (type) {
@@ -107,11 +109,11 @@ class TodoFragment : Fragment(), TodoMenuInterface {
                         intent.putExtra("model", currentList[position])
                         intent.putExtra("position", position)
                         startActivityForResult(intent, editModeCode)
+                        todoSortedAdapter?.viewBinderHelper?.closeLayout(currentList[position].id.toString())
                     }
                     SwipeButton.COMPLETE -> {
                         Log.d(TAG, "TodoFragment - onClick(COMPLETE) called")
                         currentList[position].priority = Priority.COMPLETE
-//                        todoList.find { it.id == currentList[position].id}.apply { this?.priority = Priority.COMPLETE }
                         todoList.forEachIndexed { index, todoModel ->
                             if (todoModel.id == currentList[position].id) {
                                 todoList[index].priority = Priority.COMPLETE
@@ -122,18 +124,17 @@ class TodoFragment : Fragment(), TodoMenuInterface {
                         todoSortedAdapter?.viewBinderHelper?.closeLayout(currentList[position].id.toString())
                         refreshAdapter()
                     }
+                    SwipeButton.VIEW -> {
+                        Log.d(TAG, "${currentList[position]} 선택")
+                        val selected = currentList[position]
+                        val intent = Intent(requireContext(), AddTodoActivity::class.java)
+                        intent.putExtra("mode", MODE_VIEW)
+                        intent.putExtra("model", selected)
+                        startActivityForResult(intent, viewModeCode)
+                    }
                 }
             }
-
-            override fun itemClick(binding: ItemTodoBinding, position: Int) {
-                Log.d(TAG, "${currentList[position]} 선택")
-                val selected = currentList[position]
-                val intent = Intent(requireContext(), AddTodoActivity::class.java)
-                intent.putExtra("mode", MODE_VIEW)
-                intent.putExtra("model", selected)
-                startActivityForResult(intent, viewModeCode)
-            }
-        })
+        }, onItemClicked = { openViewMode(it) })
 
         binding.addTodoButton.setOnClickListener {
             val intent = Intent(requireContext(), AddTodoActivity::class.java)
@@ -272,5 +273,14 @@ class TodoFragment : Fragment(), TodoMenuInterface {
         Log.d(TAG, "TodoFragment - onResume($currentList) called")
         lectureData = getTableDB(requireContext()).tableDao().getAll()
         refreshAdapter()
+    }
+
+    private fun openViewMode(position: Int) {
+        Log.d(TAG, "${currentList[position]} 선택")
+        val selected = currentList[position]
+        val intent = Intent(requireContext(), AddTodoActivity::class.java)
+        intent.putExtra("mode", MODE_VIEW)
+        intent.putExtra("model", selected)
+        startActivityForResult(intent, viewModeCode)
     }
 }
