@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleDay
@@ -40,8 +41,12 @@ import mangbaam.classmate.notification.NotificationHelper.Companion.removeAllAla
 
 class TimetableFragment : Fragment() {
 
-    private var mBinding: FragmentTimetableBinding? = null
-    private val binding get() = mBinding!!
+//    private var mBinding: FragmentTimetableBinding? = null
+//    private val binding get() = mBinding!!
+    private val binding: FragmentTimetableBinding = DataBindingUtil.setContentView(this, R.layout.fragment_timetable)
+    private val viewModel: TimeTableViewModel by lazy {
+        TimeTableViewModel()
+    }
     private lateinit var tableDB: TableDB
     private lateinit var scheduleDB: ScheduleDB
     private lateinit var alarmDB: AlarmDB
@@ -91,7 +96,6 @@ class TimetableFragment : Fragment() {
         if (tableDao.getSize() != tableSize) {
             Log.d(TAG, "TimetableFragment - 시간표 업데이트 called : 원래 tableSize: $tableSize, 스케줄개수: ${schedules.size}")
             updateSchedules()
-//            synchronizeSchedules()
         }
         table.updateSchedules(schedules)
     }
